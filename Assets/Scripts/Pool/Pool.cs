@@ -29,14 +29,21 @@ namespace HellBeavers
             return t;
         }
 
-        public T GetFree()
+        public T Pull()
         {
             var firstOrDefault = _objects.FirstOrDefault(x => !x.GameObject().activeSelf);
 
             if (!firstOrDefault)
                 firstOrDefault = Create();
+            
+            firstOrDefault.GameObject().SetActive(true);
 
             return firstOrDefault;
+        }
+
+        public void Push(T t)
+        {
+            t.GameObject().SetActive(false);
         }
     }
 }

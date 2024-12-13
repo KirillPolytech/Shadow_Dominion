@@ -65,7 +65,7 @@ public class MirrorServer : NetworkRoomManager
     public void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
     {
         //локально на сервере создаем gameObject
-        GameObject go = _playerPool.GetFree().gameObject;
+        GameObject go = _playerPool.Pull().gameObject;
         go.transform.SetPositionAndRotation(positionMessage.pos, Quaternion.identity);
         //присоеднияем gameObject к пулу сетевых объектов и отправляем информацию об этом остальным игрокам
         NetworkServer.AddPlayerForConnection(conn, go);
