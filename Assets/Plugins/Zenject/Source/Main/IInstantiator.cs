@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Object = UnityEngine.Object;
 
 #if !NOT_UNITY3D
 using UnityEngine;
@@ -61,7 +60,7 @@ namespace Zenject
 
         // Same as InstantiatePrefab but returns a component after it's initialized
         // and optionally allows extra arguments for the given component type
-        T InstantiatePrefabForComponent<T>(object o, Object prefab);
+        T InstantiatePrefabForComponent<T>(UnityEngine.Object prefab);
         T InstantiatePrefabForComponent<T>(
             UnityEngine.Object prefab, IEnumerable<object> extraArgs);
         T InstantiatePrefabForComponent<T>(
@@ -105,4 +104,3 @@ namespace Zenject
 #endif
     }
 }
-

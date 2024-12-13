@@ -1,11 +1,10 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ModestTree;
 using ModestTree.Util;
 using Zenject.Internal;
-using Object = UnityEngine.Object;
 #if !NOT_UNITY3D
 using UnityEngine;
 #endif
@@ -839,7 +838,7 @@ namespace Zenject
             }
 
 #if UNITY_EDITOR
-            if (context.MemberType.DerivesFrom<Context>())
+            if (context.MemberType.DerivesFromOrEqual<Context>())
             {
                 // This happens when getting default transform parent so ok
                 return;
@@ -1020,7 +1019,7 @@ namespace Zenject
                     if (memberType.IsGenericType()
                         && (memberType.GetGenericTypeDefinition() == typeof(List<>)
                             || memberType.GetGenericTypeDefinition() == typeof(IList<>)
-#if NET_4_6
+#if NET_4_6 || NET_STANDARD_2_0
                             || memberType.GetGenericTypeDefinition() == typeof(IReadOnlyList<>)
 #endif
                             || memberType.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
@@ -2095,7 +2094,7 @@ namespace Zenject
 
         // Same as InstantiatePrefab but returns a component after it's initialized
         // and optionally allows extra arguments for the given component type
-        public T InstantiatePrefabForComponent<T>(object o, Object prefab)
+        public T InstantiatePrefabForComponent<T>(UnityEngine.Object prefab)
         {
             return (T)InstantiatePrefabForComponent(
                 typeof(T), prefab, null, new object[0]);

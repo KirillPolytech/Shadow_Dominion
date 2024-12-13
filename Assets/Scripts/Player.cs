@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HellBeavers
+namespace HellBeavers.Player
 {
     public class Player : MonoBehaviour
     {

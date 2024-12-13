@@ -65,6 +65,7 @@ namespace Zenject
             get { return _hasInstalled; }
         }
 
+        [Obsolete("Obsolete")]
         public bool IsValidating
         {
             get

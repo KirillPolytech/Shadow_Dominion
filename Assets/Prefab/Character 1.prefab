@@ -286,6 +286,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -423,6 +424,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ee3ff0a489806e446af761c260fbca44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7443453485739066025}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ee3ff0a489806e446af761c260fbca44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8026139919596513442}
     - targetCorrespondingSourceObject: {fileID: 1082271958561512970, guid: ee3ff0a489806e446af761c260fbca44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4750511047303226258}
@@ -774,7 +778,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -809,6 +812,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71be23b1b65dc0246a22f4a94f3ccc37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!114 &7443453485739066025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,7 +831,23 @@ MonoBehaviour:
   animator: {fileID: 5678929105373626971}
   player: {fileID: 6729503769701796946}
   characterController: {fileID: 5162139572792125035}
-  playerAnim: {fileID: 7593780038333959074}
+--- !u!114 &8026139919596513442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397355681583039131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1835778334
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!4 &1440043541595134804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8333627713332763490, guid: ee3ff0a489806e446af761c260fbca44, type: 3}

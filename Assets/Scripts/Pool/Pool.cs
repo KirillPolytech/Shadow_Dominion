@@ -18,15 +18,23 @@ namespace HellBeavers
             
             for (int i = 0; i < _count; i++)
             {
-                _objects.Add(Create());
+                Create();
             }
         }
 
-        private T Create() => _factory.Create();
+        private T Create()
+        {
+            T t = _factory.Create();
+            _objects.Add(t);
+            return t;
+        }
 
         public T GetFree()
         {
-            var firstOrDefault = _objects.First(x => !x.GameObject().activeSelf);
+            var firstOrDefault = _objects.FirstOrDefault(x => !x.GameObject().activeSelf);
+
+            if (!firstOrDefault)
+                firstOrDefault = Create();
 
             return firstOrDefault;
         }

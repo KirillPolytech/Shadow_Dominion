@@ -1,11 +1,11 @@
 using System;
+using HellBeavers;
 using Mirror;
 using UnityEngine;
+using Zenject;
 
 public class MirrorServer : NetworkRoomManager
 {
-    [SerializeField] private Lobby lobby;
-    
     public event Action ActionOnHostStart;
     public event Action ActionOnHostStop;
     public event Action ActionOnServerAddPlayer;
@@ -20,6 +20,8 @@ public class MirrorServer : NetworkRoomManager
     public event Action ActionOnClientDisconnect;
 
     public event Action ActionOnAnyChange;
+
+    private PlayerPool _playerPool;
 
     public override void Awake()
     {
@@ -39,6 +41,12 @@ public class MirrorServer : NetworkRoomManager
 
     private void OnAnyChange() => ActionOnAnyChange?.Invoke();
 
+    [Inject]
+    public void Construct(PlayerPool playerPool)
+    {
+        _playerPool = playerPool;
+    }
+
     public override void OnServerSceneChanged(string sceneName)
     {
         base.OnServerSceneChanged(sceneName);
@@ -57,7 +65,8 @@ public class MirrorServer : NetworkRoomManager
     public void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
     {
         //локально на сервере создаем gameObject
-        GameObject go = Instantiate(playerPrefab, positionMessage.pos, Quaternion.identity);
+        GameObject go = _playerPool.GetFree().gameObject;
+        go.transform.SetPositionAndRotation(positionMessage.pos, Quaternion.identity);
         //присоеднияем gameObject к пулу сетевых объектов и отправляем информацию об этом остальным игрокам
         NetworkServer.AddPlayerForConnection(conn, go);
         Debug.Log($"OnCreateCharacter: {conn.address}");

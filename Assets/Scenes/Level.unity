@@ -465,6 +465,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6744f60a72ef3fd44b38eeaa124a0052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: -8510401895514348003, guid: c60ae8eb2f54ae84a9cd7d5086d1019f, type: 3}
+  poolCount: 200
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

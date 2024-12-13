@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ModestTree;
 using UnityEngine.SceneManagement;
@@ -63,6 +64,7 @@ namespace Zenject
                 "Unable to find DiContainer for scene '{0}'", scene.name);
         }
 
+        [Obsolete("Obsolete")]
         public DiContainer TryGetContainerForScene(Scene scene)
         {
             if (scene == ProjectContext.Instance.gameObject.scene)
