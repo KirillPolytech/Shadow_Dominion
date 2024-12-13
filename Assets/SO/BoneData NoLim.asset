@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84843660eae631f4b80bd3ee72c1ebe3, type: 3}
+  m_Name: BoneData NoLim
+  m_EditorClassIdentifier: 
+  BoneData:
+  - Name: mixamorig:Hips
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:Head
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:Spine1
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:Spine2
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftUpLeg
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftLeg
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftFoot
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightUpLeg
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightLeg
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightFoot
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftArm
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftForeArm
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:LeftHand
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightArm
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightForeArm
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
+  - Name: mixamorig:RightHand
+    angularYLimit: 180
+    angularZLimit: 180
+    lowAngularXLimit: -180
+    highAngularXLimit: 180
