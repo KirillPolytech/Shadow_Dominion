@@ -9,6 +9,8 @@ namespace HellBeavers
     [ExecuteInEditMode]
     public class ActiveRagdollSetUp : MonoBehaviour
     {
+        [SerializeField] private Transform root;
+        
         [Space(15)] [Header("Targets")] [SerializeField]
         private Vector3 TargetPosition;
 
@@ -17,24 +19,24 @@ namespace HellBeavers
         [SerializeField] private RotationDriveMode rotationDriveMode;
 
         [Space(15)] [Header("PositionDrive")] [SerializeField]
-        private int positionMaxForce = 100;
+        private int positionMaxForce = 150000000;
 
-        [SerializeField] private int positionSpringDrive;
-        [SerializeField] private int positionDamper;
+        [SerializeField] private int positionSpringDrive = 1500;
+        [SerializeField] private int positionDamper = 25;
         [SerializeField] private bool usePosAcceleration;
 
         [Space(15)] [Header("RotationDrive")] [SerializeField]
-        private int angularMaxForce = 100;
+        private int angularMaxForce = 150000000;
 
-        [SerializeField] private int angularPositionSpring;
-        [SerializeField] private int angularPositionDamper = 100;
+        [SerializeField] private int angularPositionSpring = 1500;
+        [SerializeField] private int angularPositionDamper = 25;
         [SerializeField] private bool useRotAcceleration;
 
         [Space(15)] [Header("Limits")] [SerializeField]
         private BoneDataSO bones;
 
         [Range(0, 100f)] [SerializeField] private float LinearLimit;
-        [SerializeField] private float LinearLimitSpring = 1;
+        [SerializeField] private float LinearLimitSpring;
         [SerializeField] private float LinearLimitDamper;
 
         [Space(15)] [Header("MotionStates")] [SerializeField]
@@ -59,8 +61,8 @@ namespace HellBeavers
         [Button]
         public void UpdateRagdoll()
         {
-            BoneController[] controllers = GetComponentsInChildren<BoneController>();
-            Collider[] colls = GetComponentsInChildren<Collider>();
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
+            Collider[] colls = root.GetComponentsInChildren<Collider>();
 
             for (int i = 0; i < bones.BoneData.Length; i++)
             {
@@ -113,32 +115,12 @@ namespace HellBeavers
             {
                 col.material = physicMaterial;
             }
-
-            return;
-            ConfigurableJoint hipsConf = GetComponent<ConfigurableJoint>();
-            Rigidbody hipRb = GetComponent<Rigidbody>();
-
-            if (!hipRb)
-                return;
-
-            //hipRb.constraints = RigidbodyConstraints.FreezeAll;
-
-            if (!hipsConf)
-                return;
-
-            hipsConf.xMotion = ConfigurableJointMotion.Free;
-            hipsConf.yMotion = ConfigurableJointMotion.Free;
-            hipsConf.zMotion = ConfigurableJointMotion.Free;
-
-            hipsConf.angularXMotion = ConfigurableJointMotion.Free;
-            hipsConf.angularYMotion = ConfigurableJointMotion.Free; //ConfigurableJointMotion.Limited;
-            hipsConf.angularZMotion = ConfigurableJointMotion.Free;
         }
 
         [Button]
         public void CreateRagdoll()
         {
-            CharacterJoint[] joints = GetComponentsInChildren<CharacterJoint>();
+            CharacterJoint[] joints = root.GetComponentsInChildren<CharacterJoint>();
             for (int i = 0; i < joints.Length; i++)
             {
                 Rigidbody rb = joints[i].connectedBody;
@@ -156,14 +138,14 @@ namespace HellBeavers
         [Button]
         public void DeleteExtra()
         {
-            ConfigurableJoint[] joints = GetComponentsInChildren<ConfigurableJoint>();
+            ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
 
             for (int i = 0; i < joints.Length; i++)
             {
                 if (!joints[i])
                     continue;
 
-                ConfigurableJoint[] components = joints[i].gameObject.GetComponents<ConfigurableJoint>();
+                ConfigurableJoint[] components = joints[i].GetComponents<ConfigurableJoint>();
 
                 if (components.Length <= 1)
                     continue;
@@ -181,9 +163,9 @@ namespace HellBeavers
         [Button]
         public void DeleteAll()
         {
-            ConfigurableJoint[] joints = GetComponentsInChildren<ConfigurableJoint>();
-            Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
-            Collider[] colliders = GetComponentsInChildren<Collider>();
+            ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
+            Rigidbody[] rigidbodies = root.GetComponentsInChildren<Rigidbody>();
+            Collider[] colliders = root.GetComponentsInChildren<Collider>();
 
             for (int i = 0; i < joints.Length; i++)
             {
@@ -204,7 +186,7 @@ namespace HellBeavers
         [Button]
         public void EnableBoneControlles()
         {
-            BoneController[] controllers = GetComponentsInChildren<BoneController>();
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
 
             foreach (var controller in controllers)
                 controller.enabled = true;
@@ -213,7 +195,7 @@ namespace HellBeavers
         [Button]
         public void DisableBoneControlles()
         {
-            BoneController[] controllers = GetComponentsInChildren<BoneController>();
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
 
             foreach (var controller in controllers)
                 controller.enabled = false;

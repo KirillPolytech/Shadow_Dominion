@@ -5,6 +5,8 @@ using Zenject;
 
 public class MirrorPlayerInstaller : MonoBehaviour
 {
+    [SerializeField] private Player player;
+    [SerializeField] private CopyMotion copyMotion;
     [SerializeField] private PlayerAnim playerAnim;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private CameraLook cameraLook;
@@ -31,11 +33,11 @@ public class MirrorPlayerInstaller : MonoBehaviour
 
     private void Awake()
     {
+        player.Construct(inputHandler, copyMotion);
         cameraLook.Construct(cameraSettings);
         aimTarget.Construct(cameraLook);
         playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
         playerAnim.Construct(animator, inputHandler);
-        
         ak47.Construct(_bulletPool);
     }
 }

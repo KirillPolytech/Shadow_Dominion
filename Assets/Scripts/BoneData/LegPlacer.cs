@@ -143,7 +143,7 @@ public class LegPlacer : MonoBehaviour
 
         void SetLegPos()
         {
-            foot.SetPos( footPos.position, 1, 1);
+            //foot.SetPos( footPos.position, 1, 1);
             //foot.SetRot( footPos.rotation, 1);
 
             //leg.SetPos(foot.CurrentPosition + Vector3.up * 0.1f, 1, 1);

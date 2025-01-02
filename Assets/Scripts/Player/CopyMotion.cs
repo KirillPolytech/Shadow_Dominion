@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class CopyMotion : MonoBehaviour
 {
+    [SerializeField] private Rigidbody stabilizer;
+    [SerializeField] private Transform hips;
+    
     [SerializeField] private Transform anim;
     [SerializeField] private Transform[] copyFrom;
     [SerializeField] private BoneController[] copyTo;
 
-    [SerializeField] private float strengthPos = 1;
-    [SerializeField] private float strengthRot = 1;
-    [SerializeField] private float CopyStrength;
-
     [SerializeField] private bool isCopyPos;
     [SerializeField] private bool isCopyRot;
     [SerializeField] private bool isDeactivable;
-    
-    [Range(0, 1f)] [SerializeField] 
-    private float deactivateDistance = 0.1f;
-    [Range(0, 0.5f)] [SerializeField] 
-    private float sphereRadius = 0.1f;
-    [Range(0, 16)] [SerializeField] 
-    private int enabledBones = 1;
-    
+
+    [Range(0, 1f)] [SerializeField] private float deactivateDistance = 0.1f;
+    [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
+    [Range(0, 16)] [SerializeField] private int enabledBones = 1;
+
+    //[SerializeField] private float strengthPos = 2500;
+    //[SerializeField] private float strengthRot = 1500;
+    //[SerializeField] private float CopyStrength = 1;
+
     [Button]
     public void Initialize()
     {
-        copyTo = transform.GetComponentsInChildren<BoneController>().ToArray();
+        copyTo = GetComponentsInChildren<BoneController>().ToArray();
 
         Transform[] transforms = new Transform[copyTo.Length];
         Transform[] animTransforms = anim.GetComponentsInChildren<Transform>();
@@ -41,29 +41,56 @@ public class CopyMotion : MonoBehaviour
     {
         HandleBonesPosition();
         HandleBonesRotation();
+        HandleBonesDeactivation();
     }
+
+    public void SmoothDeactivate(bool isDeactivate)
+    {
+        if (!isDeactivate)
+            return;
+        
+        for (int i = 0; i < enabledBones; i++)
+        {
+            float newVal = copyTo[i].CurrentPositionSpring - 50;
+            copyTo[i].SetPositionDrive(newVal);
+        }
+    }
+
+    private void HandleBonesDeactivation()
+    {
+        if (!isDeactivable)
+            return;
+
+        for (int i = 0; i < enabledBones; i++)
+        {
+            if ((copyTo[i].CurrentPosition - copyFrom[i].position).magnitude > deactivateDistance)
+            {
+                copyTo[i].IsPositionApplying(false);
+                copyTo[i].IsRotationApplying(false);
+            }
+        }
+    }
+
+    public void IsCopyPos(bool isCopy) => isCopyPos = isCopy;
+    public void IsCopyRot(bool isCopy) => isCopyRot = isCopy;
 
     private void HandleBonesPosition()
     {
         if (!isCopyPos)
             return;
-        
+
         for (int i = 0; i < enabledBones; i++)
         {
-            if ((copyTo[i].CurrentPosition - copyFrom[i].position).magnitude > deactivateDistance && isDeactivable)
-            {
-                copyTo[i].IsPositionApplying(false);
-                continue;
-            }
-
             copyTo[i].IsPositionApplying(true);
 
-            Vector3 copyFromPos = copyFrom[i].position;
-            float value = CopyStrength * strengthPos * Time.fixedDeltaTime;
+            //Vector3 copyFromPos = copyFrom[i].position;
+            //float value = CopyStrength * strengthPos * Time.fixedDeltaTime;
             //copyTo[i].SetPos( copyFromPos, value, value);
-            copyTo[i].SetPos( copyFromPos);
-                
-            Debug.DrawLine(copyTo[i].CurrentPosition, copyFromPos, Color.blue);
+            //copyTo[i].SetPos(copyFrom[i].position);
+            stabilizer.position = hips.position;
+            stabilizer.rotation = hips.rotation;
+
+            Debug.DrawLine(copyTo[i].CurrentPosition, copyFrom[i].position, Color.blue);
         }
     }
 
@@ -71,18 +98,14 @@ public class CopyMotion : MonoBehaviour
     {
         if (!isCopyRot)
             return;
-        
+
         for (int i = 0; i < enabledBones; i++)
         {
-            if ((copyTo[i].CurrentPosition - copyFrom[i].position).magnitude > deactivateDistance && isDeactivable)
-            {
-                copyTo[i].IsRotationApplying(false);
-                continue;
-            }
-            
             copyTo[i].IsRotationApplying(true);
-            //copyTo[i].SetRot(copyFrom[i].localRotation, CopyStrength * strengthRot);
             copyTo[i].SetRot(copyFrom[i].localRotation);
+
+            //Debug.DrawRay(copyFrom[i].position, copyFrom[i].forward, Color.black);
+            //Debug.DrawRay(copyFrom[i].position, copyTo[i].transform.forward, Color.yellow);
         }
     }
 
@@ -90,24 +113,23 @@ public class CopyMotion : MonoBehaviour
     {
         Gizmos.color = Color.green;
 
-        for (int i = 0; i < copyFrom.Length; i++)
-        {
-            Gizmos.DrawSphere(copyFrom[i].position, sphereRadius);
-        }
-
-        return;
-        /*
-        GUIStyle style = new GUIStyle { normal = { textColor = Color.red } };
-
         foreach (var t in copyFrom)
         {
-            Handles.Label(t.localPosition, $"x:{t.localPosition.x:#.00} y:{t.localPosition.y:#.00} z:{t.localPosition.z:#.00}", style);
+            Gizmos.DrawSphere(t.position, sphereRadius);
         }
-
-        foreach (var t in copyFrom)
-        {
-            Handles.Label(t.position, $"x:{t.position.x:#.00} y:{t.position.y:#.00} z:{t.position.z:#.00}", style);
-        }
-        */
     }
 }
+
+/*
+GUIStyle style = new GUIStyle { normal = { textColor = Color.red } };
+
+foreach (var t in copyFrom)
+{
+    Handles.Label(t.localPosition, $"x:{t.localPosition.x:#.00} y:{t.localPosition.y:#.00} z:{t.localPosition.z:#.00}", style);
+}
+
+foreach (var t in copyFrom)
+{
+    Handles.Label(t.position, $"x:{t.position.x:#.00} y:{t.position.y:#.00} z:{t.position.z:#.00}", style);
+}
+*/
