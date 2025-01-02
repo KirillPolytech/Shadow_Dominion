@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class RunBackwardState : IState
 {
-    private static readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
     private readonly Animator _animator;
+    private readonly int _isRunBackward;
 
-    public RunBackwardState(Animator animator)
+    public RunBackwardState(Animator animator, int isRunBackward)
     {
         _animator = animator;
+        _isRunBackward = isRunBackward;
     }
 
     public override void Enter()
     {
-        _animator.SetBool(IsRunBackward, true);
+        _animator.SetBool(_isRunBackward, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsRunBackward, false);
+        _animator.SetBool(_isRunBackward, false);
     }
 }

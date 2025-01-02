@@ -52,20 +52,18 @@ public class CopyMotion : MonoBehaviour
         {
             if ((copyTo[i].CurrentPosition - copyFrom[i].position).magnitude > deactivateDistance && isDeactivable)
             {
-                copyTo[i].SetPosState(false);
+                copyTo[i].IsPositionApplying(false);
                 continue;
             }
 
-            copyTo[i].SetPosState(true);
+            copyTo[i].IsPositionApplying(true);
 
-            if (isCopyPos)
-            {
-                Vector3 copyFromPos = copyFrom[i].position;
-                float value = CopyStrength * strengthPos * Time.fixedDeltaTime;
-                copyTo[i].SetPos( copyFromPos, value, value);
+            Vector3 copyFromPos = copyFrom[i].position;
+            float value = CopyStrength * strengthPos * Time.fixedDeltaTime;
+            //copyTo[i].SetPos( copyFromPos, value, value);
+            copyTo[i].SetPos( copyFromPos);
                 
-                Debug.DrawLine(copyTo[i].CurrentPosition, copyFromPos, Color.blue);
-            }
+            Debug.DrawLine(copyTo[i].CurrentPosition, copyFromPos, Color.blue);
         }
     }
 
@@ -78,16 +76,13 @@ public class CopyMotion : MonoBehaviour
         {
             if ((copyTo[i].CurrentPosition - copyFrom[i].position).magnitude > deactivateDistance && isDeactivable)
             {
-                copyTo[i].SetRotState(false);
+                copyTo[i].IsRotationApplying(false);
                 continue;
             }
             
-            copyTo[i].SetRotState(true);
-            
-            if (isCopyRot)
-            {
-                copyTo[i].SetRot(copyFrom[i].localRotation, CopyStrength * strengthRot);
-            }
+            copyTo[i].IsRotationApplying(true);
+            //copyTo[i].SetRot(copyFrom[i].localRotation, CopyStrength * strengthRot);
+            copyTo[i].SetRot(copyFrom[i].localRotation);
         }
     }
 

@@ -18,11 +18,11 @@ public class MirrorServer : NetworkRoomManager
     public event Action ActionOnStopClient;
     public event Action ActionOnClientConnect;
     public event Action ActionOnClientDisconnect;
-
+    
     public event Action ActionOnAnyChange;
-
+    
     private PlayerPool _playerPool;
-
+    
     public override void Awake()
     {
         base.Awake();
@@ -62,7 +62,7 @@ public class MirrorServer : NetworkRoomManager
         Debug.Log($"OnClientChangeScene: {newSceneName}");
     }
 
-    public void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
+    private void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
     {
         //локально на сервере создаем gameObject
         GameObject go = _playerPool.Pull().gameObject;
@@ -71,8 +71,8 @@ public class MirrorServer : NetworkRoomManager
         NetworkServer.AddPlayerForConnection(conn, go);
         Debug.Log($"OnCreateCharacter: {conn.address}");
     }
-    
-    public void ActivatePlayerSpawn()
+
+    private void ActivatePlayerSpawn()
     {
         //создаем struct определенного типа, чтобы сервер понял к чему эти данные относятся
         PositionMessage message = new PositionMessage { pos = Vector3.zero };
@@ -117,7 +117,28 @@ public class MirrorServer : NetworkRoomManager
         ActionOnServerConnect?.Invoke();
         ActionOnServerConnectWithArg?.Invoke(conn);
 
+        foreach (var VARIABLE in roomSlots)
+        {
+            Debug.Log($"roomSlots: {VARIABLE.connectionToClient.address}");
+        }
+        //NetworkRoomPlayer roomPrefab = Instantiate(roomPlayerPrefab);
+        //NetworkServer.AddPlayerForConnection(conn, roomPrefab.gameObject);
+        
         //Debug.Log($"OnServerConnect. {conn.address}");
+    }
+
+    public override void OnRoomServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        base.OnRoomServerAddPlayer(conn);
+        
+        Debug.Log($"OnRoomServerAddPlayer. {conn.address}");
+    }
+
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+    {
+        Debug.Log($"OnRoomServerSceneLoadedForPlayer {conn.address}");
+        
+        return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)

@@ -1,8 +1,12 @@
-public struct InputData
+namespace HellBeavers
 {
-    public float MouseX;
-    public float MouseY;
-    public float HorizontalAxisRaw;
-    public float VerticalAxisRaw;
-    public bool LeftShift;
+    public struct InputData
+    {
+        public float MouseX;
+        public float MouseY;
+        public float HorizontalAxisRaw;
+        public float VerticalAxisRaw;
+        public bool LeftShift;
+        public bool E;
+    }
 }

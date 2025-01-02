@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class WalkRightState : IState
 {
-    private static readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
     private readonly Animator _animator;
+    private readonly int _isWalkRight;
 
-    public WalkRightState(Animator animator)
+    public WalkRightState(Animator animator, int isWalkRight)
     {
         _animator = animator;
+        _isWalkRight = isWalkRight;
     }
     
     public override void Enter()
     {
-        _animator.SetBool(IsWalkRight, true);
+        _animator.SetBool(_isWalkRight, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsWalkRight, false);
+        _animator.SetBool(_isWalkRight, false);
     }
 }

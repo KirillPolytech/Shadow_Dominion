@@ -1,12 +1,15 @@
 using Zenject;
 
-public class LevelContext : MonoInstaller
+namespace HellBeavers
 {
-    public override void InstallBindings()
+    public class LevelContext : MonoInstaller
     {
-        Container.Bind<ButtonsFactory>().AsSingle();
-        Container.Bind<CursorService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<InputHandler>().AsTransient();
-        Container.BindInterfacesAndSelfTo<LevelStateMachine>().AsSingle().NonLazy();
+        public override void InstallBindings()
+        {
+            Container.Bind<ButtonsFactory>().AsSingle();
+            Container.Bind<CursorService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<InputHandler>().AsTransient();
+            Container.BindInterfacesAndSelfTo<LevelStateMachine>().AsSingle().NonLazy();
+        }
     }
 }

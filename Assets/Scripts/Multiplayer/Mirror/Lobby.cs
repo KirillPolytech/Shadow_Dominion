@@ -28,10 +28,17 @@ public class Lobby : NetworkBehaviour
         Debug.Log("Server: names synced");
     }
 
+    private float d = 1f, t;
     private void FixedUpdate()
     {
-        if (NetworkServer.active && NetworkClient.isConnected)
-            UpdateList();
+        if (t > d)
+        {
+            if (NetworkServer.active && NetworkClient.isConnected)
+                UpdateList();
+            t = 0;
+        }
+
+        t += Time.fixedDeltaTime;
         
         if (_syncNames == _temp)
             return;
@@ -86,6 +93,8 @@ public class Lobby : NetworkBehaviour
     public override void OnStartClient()
     {
         //_playerNames.OnChange += _onChange.Invoke;
+        
+        Debug.Log($"NetID {GetComponent<NetworkIdentity>().netId}");
 
         // Debug.Log("Client started and subscribed to SyncList changes.");
     }

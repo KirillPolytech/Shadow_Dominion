@@ -6,6 +6,7 @@ public class Ak47 : MonoBehaviour
     [SerializeField] private Transform aim;
     [SerializeField] private Transform bulletStartPosition;
     [SerializeField] private float bulletVelocity = 100;
+    [SerializeField] private float rotationSpeed = 15;
     
     public Vector3 BulletStartPos => bulletStartPosition.position;
     public Vector3 HitPoint => _hit.point;
@@ -40,12 +41,19 @@ public class Ak47 : MonoBehaviour
 
     private void CastRay()
     {
-        Physics.Raycast(BulletStartPos, transform.forward, out _hit, _distance);
+        Ray ray = new Ray(BulletStartPos, transform.forward);
+        Physics.Raycast(ray, out _hit, _distance);
+
+        if (_hit.point == default)
+        {
+            _hit.point = ray.GetPoint(_distance);
+        }
     }
 
     private void RotateTo()
     {
-        transform.rotation = Quaternion.LookRotation(aim.position - transform.position);
+        transform.rotation = Quaternion.Lerp(transform.rotation, 
+            Quaternion.LookRotation(aim.position - transform.position), rotationSpeed * Time.fixedDeltaTime);
     }   
 
     private void OnDrawGizmos()

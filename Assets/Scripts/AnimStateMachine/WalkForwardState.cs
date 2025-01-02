@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class WalkForwardState : IState
 {
-    private static readonly int IsWalkForward = Animator.StringToHash("IsWalkForward");
-    
     private readonly Animator _animator;
+    private readonly int _isWalkForward;
     
-    public WalkForwardState(Animator animator)
+    public WalkForwardState(Animator animator, int isWalkForward)
     {
         _animator = animator;
+        _isWalkForward = isWalkForward;
     }
     
     public override void Enter()
     {
-        _animator.SetBool(IsWalkForward, true);
+        _animator.SetBool(_isWalkForward, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsWalkForward, false);
+        _animator.SetBool(_isWalkForward, false);
     }
 }

@@ -1,14 +1,11 @@
-using System;
 using DG.Tweening;
 using Mirror;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraLook : NetworkBehaviour
 {
-    [SerializeField] private NetworkIdentity networkIdentity;
-    [SerializeField] private CinemachineFreeLook freeLookModifier;
+    [SerializeField] private CinemachineFreeLookModifier freeLookModifier;
     [SerializeField] private Transform target;
     [SerializeField] private Transform aimPos;
     [SerializeField] private Transform defaultPos;

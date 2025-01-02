@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class IdleState : IState
 {
-    private static readonly int IsIdle = Animator.StringToHash("IsIdle");
     private readonly Animator _animator;
+    private readonly int _isIdle;
 
-    public IdleState(Animator animator)
+    public IdleState(Animator animator, int isIdle)
     {
         _animator = animator;
+        _isIdle = isIdle;
     }
 
     public override void Enter()
     {
-        _animator.SetBool(IsIdle, true);
+        _animator.SetBool(_isIdle, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsIdle, false);
+        _animator.SetBool(_isIdle, false);
     }
 }

@@ -9,7 +9,6 @@ namespace HellBeavers.Player
 
         public Animator Animator { get; private set; }
 
-        private bool _isRun;
         private MonoInputHandler _inputHandler;
 
         public void Construct(
@@ -19,22 +18,57 @@ namespace HellBeavers.Player
             Animator = animator;
             _inputHandler = inputHandler;
         }
-        
+
         private void Start()
         {
             AnimationStateMachine = new AnimationStateMachine(Animator);
-            
+
             if (!isLocalPlayer)
                 return;
-            
+
             AnimationStateMachine.SetState<IdleState>();
-            
+
             _inputHandler.OnInputUpdate += HandleHorizontalState;
-            _inputHandler.OnInputUpdate += HandleVerticalState;
+            _inputHandler.OnInputUpdate += HandleWalkState;
             _inputHandler.OnInputUpdate += HandleIdleState;
             _inputHandler.OnInputUpdate += HandleRunStates;
+            _inputHandler.OnInputUpdate += HandleStandUpState;
+        }
+
+        private void HandleWalkState(InputData inputData)
+        {
+            Debug.Log($"IsPressedShift: {inputData.LeftShift}");
+            
+            if (inputData.LeftShift)
+                return;
+
+            switch (inputData.VerticalAxisRaw)
+            {
+                case > 0:
+                    AnimationStateMachine.SetState<WalkForwardState>();
+                    break;
+                case < 0:
+                    AnimationStateMachine.SetState<WalkBackwardState>();
+                    break;
+            }
         }
         
+        private void HandleRunStates(InputData inputData)
+        {
+            if (!inputData.LeftShift)
+                return;
+
+            switch (inputData.VerticalAxisRaw)
+            {
+                case > 0:
+                    AnimationStateMachine.SetState<RunForwardState>();
+                    break;
+                case < 0:
+                    AnimationStateMachine.SetState<WalkBackwardState>();
+                    break;
+            }
+        }
+
         private void HandleHorizontalState(InputData inputData)
         {
             switch (inputData.HorizontalAxisRaw)
@@ -48,25 +82,6 @@ namespace HellBeavers.Player
             }
         }
 
-        private void HandleVerticalState(InputData inputData)
-        {
-            _isRun = inputData.LeftShift;
-
-            switch (inputData.VerticalAxisRaw)
-            {
-                case > 0:
-                    if (_isRun)
-                        break;
-                    AnimationStateMachine.SetState<WalkForwardState>();
-                    break;
-                case < 0:
-                    if (_isRun)
-                        break;
-                    AnimationStateMachine.SetState<WalkBackwardState>();
-                    break;
-            }
-        }
-
         private void HandleIdleState(InputData inputData)
         {
             if (inputData is { HorizontalAxisRaw: 0, VerticalAxisRaw: 0 })
@@ -75,28 +90,24 @@ namespace HellBeavers.Player
             }
         }
 
-        private void HandleRunStates(InputData inputData)
+        private void HandleStandUpState(InputData inputData)
         {
-            switch (_isRun)
-            {
-                case var _ when inputData.VerticalAxisRaw > 0 && _isRun:
-                    AnimationStateMachine.SetState<RunForwardState>();
-                    break;
-                case var _ when inputData.VerticalAxisRaw < 0 && _isRun:
-                    AnimationStateMachine.SetState<WalkBackwardState>();
-                    break;
-            }
+            if (!inputData.E)
+                return;
+            
+            AnimationStateMachine.SetState<StandupState>();
         }
 
         public void OnDestroy()
-        {            
+        {
             if (isLocalPlayer)
                 return;
-            
+
             _inputHandler.OnInputUpdate -= HandleHorizontalState;
-            _inputHandler.OnInputUpdate -= HandleVerticalState;
+            _inputHandler.OnInputUpdate -= HandleWalkState;
             _inputHandler.OnInputUpdate -= HandleIdleState;
             _inputHandler.OnInputUpdate -= HandleRunStates;
+            _inputHandler.OnInputUpdate -= HandleStandUpState;
         }
     }
 }

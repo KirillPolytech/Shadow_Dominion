@@ -56,7 +56,7 @@ public class BoneController : MonoBehaviour
     {
         if (!_configurableJoint)
             return;
-        
+
         JointDrive drive = new JointDrive
         {
             maximumForce = posMaximumForce,
@@ -153,6 +153,15 @@ public class BoneController : MonoBehaviour
         _rigidbody.AddForce((pos - transform.position).normalized * AddForce);
     }
 
+    public void SetPos(Vector3 pos)
+    {
+        if (!CurrentPosState || !_configurableJoint)
+            return;
+
+        _configurableJoint.targetPosition = pos;
+        _rigidbody.position = pos;
+    }
+
     public void SetRot(Quaternion rot, float speed)
     {
         if (!CurrentRotState || !_configurableJoint)
@@ -165,13 +174,18 @@ public class BoneController : MonoBehaviour
             Quaternion.Lerp(_configurableJoint.targetRotation, newRot, speed * Time.fixedDeltaTime);
     }
 
-    public void SetPosState(bool posState)
+    public void SetRot(Quaternion rot)
     {
-        CurrentPosState = posState;
+        if (!CurrentRotState || !_configurableJoint)
+            return;
+
+        Quaternion newRot = ConfigurableJointExtensions.SetTargetRotationLocal(_configurableJoint,
+            rot, _cachedStartRot);
+
+        _configurableJoint.targetRotation = newRot;
     }
 
-    public void SetRotState(bool rotState)
-    {
-        CurrentRotState = rotState;
-    }
+    public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
+
+    public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
 }

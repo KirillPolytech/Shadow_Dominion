@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class RunForwardState : IState
 {
-    private static readonly int IsRunForward = Animator.StringToHash("IsRunForward");
     private readonly Animator _animator;
-
-    public RunForwardState(Animator animator)
+    private readonly int _isRunForward;
+    
+    public RunForwardState(Animator animator, int isRunForward)
     {
         _animator = animator;
+        _isRunForward = isRunForward;
     }
 
     public override void Enter()
     {
-        _animator.SetBool(IsRunForward, true);
+        _animator.SetBool(_isRunForward, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsRunForward, false);
+        _animator.SetBool(_isRunForward, false);
     }
 }

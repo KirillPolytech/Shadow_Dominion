@@ -1,22 +1,26 @@
 using System;
 using UnityEngine;
 
-public class MonoInputHandler : MonoBehaviour
+namespace HellBeavers
 {
-    public event Action<InputData> OnInputUpdate;
-
-    private InputData _inputData;
-
-    private void Update()
+    public class MonoInputHandler : MonoBehaviour
     {
-        _inputData.HorizontalAxisRaw = Input.GetAxisRaw(VariableNames.HorizontalAxis);
-        _inputData.VerticalAxisRaw = Input.GetAxisRaw(VariableNames.VerticalAxis);
+        public event Action<InputData> OnInputUpdate;
 
-        _inputData.MouseX = Input.GetAxis(VariableNames.MouseX);
-        _inputData.MouseX = Input.GetAxis(VariableNames.MouseY);
+        private InputData _inputData;
 
-        _inputData.LeftShift = Input.GetKeyDown(VariableNames.LeftShiftKey);
+        private void Update()
+        {
+            _inputData.HorizontalAxisRaw = Input.GetAxisRaw(VariableNames.HorizontalAxis);
+            _inputData.VerticalAxisRaw = Input.GetAxisRaw(VariableNames.VerticalAxis);
 
-        OnInputUpdate?.Invoke(_inputData);
+            _inputData.MouseX = Input.GetAxis(VariableNames.MouseX);
+            _inputData.MouseX = Input.GetAxis(VariableNames.MouseY);
+
+            _inputData.LeftShift = Input.GetKey(VariableNames.LeftShiftKey);
+            _inputData.E = Input.GetKey(VariableNames.E);
+
+            OnInputUpdate?.Invoke(_inputData);
+        }
     }
 }

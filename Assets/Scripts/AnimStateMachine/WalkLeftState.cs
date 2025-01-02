@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class WalkLeftState : IState
 {
-    private static readonly int IsWalkLeft = Animator.StringToHash("IsWalkLeft");
     private readonly Animator _animator;
+    private readonly int _isWalkLeft;
 
-    public WalkLeftState(Animator animator)
+    public WalkLeftState(Animator animator, int isWalkLeft)
     {
         _animator = animator;
+        _isWalkLeft = isWalkLeft;
     }
     
     public override void Enter()
     {
-        _animator.SetBool(IsWalkLeft, true);
+        _animator.SetBool(_isWalkLeft, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsWalkLeft, false);
+        _animator.SetBool(_isWalkLeft, false);
     }
 }

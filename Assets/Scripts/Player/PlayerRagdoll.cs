@@ -155,7 +155,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private void EHandler()
     {
-        if (!Input.GetKeyDown(KeyCode.E)) 
+        if (!Input.GetKeyDown(VariableNames.E)) 
             return;
         
         foreach (var rb in _rbs)

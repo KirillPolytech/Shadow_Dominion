@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class StandupState : IState
 {
-    private static readonly int IsStandUp = Animator.StringToHash("IsStandUp");
     private readonly Animator _animator;
+    private readonly int _isStandUp;
     
-    public StandupState(Animator animator)
+    public StandupState(Animator animator, int isStandUp)
     {
         _animator = animator;
+        _isStandUp = isStandUp;
     }
     
     public override void Enter()
     {
-        _animator.SetBool(IsStandUp, true);
+        _animator.SetBool(_isStandUp, true);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(IsStandUp, false);
+        _animator.SetBool(_isStandUp, false);
     }
 }

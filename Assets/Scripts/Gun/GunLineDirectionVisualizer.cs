@@ -3,6 +3,7 @@ using UnityEngine;
 public class GunLineDirectionVisualizer : MonoBehaviour
 {
     [SerializeField] private LineRenderer prefab;
+    [Range(0,1)][SerializeField] private float size;
 
     private Ak47 _ak47;
     private LineRenderer _lineRend;
@@ -11,6 +12,8 @@ public class GunLineDirectionVisualizer : MonoBehaviour
     {
         _lineRend = Instantiate(prefab);
         _lineRend.positionCount = 2;
+        _lineRend.startWidth = size;
+        _lineRend.endWidth = size;
 
         _ak47 = GetComponent<Ak47>();
     }

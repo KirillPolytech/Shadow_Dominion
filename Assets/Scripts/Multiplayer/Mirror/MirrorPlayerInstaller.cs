@@ -20,16 +20,7 @@ public class MirrorPlayerInstaller : MonoBehaviour
 
     [SerializeField] private Rigidbody charRigidbody;
     [SerializeField] private LegPlacer legPlacer;
-
-    [Space] [Header("PlayerHeight")] [SerializeField]
-    private Transform height;
-
-    [SerializeField] private Transform target;
-    [SerializeField] private PlayerHeightData playerHeightData;
-
-    [Header("Factories")] [SerializeField]
-    private Bullet bulletPrefab;
-
+    
     private BulletPool _bulletPool;
 
     [Inject]

@@ -86,7 +86,6 @@ MonoBehaviour:
   GameplayScene: Assets/Scenes/Level.unity
   _allPlayersReady: 0
   clientIndex: 0
-  lobby: {fileID: 0}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0
