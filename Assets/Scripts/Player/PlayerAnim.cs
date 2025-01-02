@@ -95,7 +95,7 @@ namespace HellBeavers.Player
             if (!inputData.E)
                 return;
             
-            AnimationStateMachine.SetState<StandupState>();
+            //AnimationStateMachine.SetState<StandupState>();
         }
 
         public void OnDestroy()

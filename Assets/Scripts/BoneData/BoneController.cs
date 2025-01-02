@@ -12,6 +12,7 @@ public class BoneController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
 
     private Quaternion _cachedStartRot;
+    private float _cachedCurrentPositionSpring;
 
     public void Initialize()
     {
@@ -22,6 +23,7 @@ public class BoneController : MonoBehaviour
     private void Start()
     {
         _cachedStartRot = transform.localRotation;
+        _cachedCurrentPositionSpring = _configurableJoint.xDrive.positionSpring;
     }
 
     public void SetJointLimits(
@@ -144,34 +146,13 @@ public class BoneController : MonoBehaviour
         _rigidbody.isKinematic = isKinematic;
     }
 
-    public void SetPos(Vector3 pos, float deltaTime, float AddForce)
-    {
-        if (!CurrentPosState || !_configurableJoint)
-            return;
-
-        Vector3 newPos = Vector3.Lerp(_configurableJoint.targetPosition, pos, deltaTime);
-        _configurableJoint.targetPosition = newPos;
-        _rigidbody.AddForce((pos - transform.position).normalized * AddForce);
-    }
-
-    public void SetRot(Quaternion rot, float speed)
-    {
-        if (!CurrentRotState || !_configurableJoint)
-            return;
-
-        Quaternion newRot = _configurableJoint.SetTargetRotationLocal(rot, _cachedStartRot);
-
-        _configurableJoint.targetRotation =
-            Quaternion.Lerp(_configurableJoint.targetRotation, newRot, speed * Time.fixedDeltaTime);
-    }
-
-    public void SetPos(Vector3 pos)
+    public void SetPos(Vector3 pos, float deltaTime)
     {
         if (!CurrentPosState || !_configurableJoint)
             return;
 
         _configurableJoint.targetPosition = pos;
-        _rigidbody.position = pos;
+        _rigidbody.position = Vector3.Lerp(_rigidbody.position, pos, Time.fixedDeltaTime * deltaTime);
     }
     
     public void SetRot(Quaternion rot)
@@ -182,15 +163,14 @@ public class BoneController : MonoBehaviour
         Quaternion newRot = _configurableJoint.SetTargetRotationLocal(rot, _cachedStartRot);
 
         _configurableJoint.targetRotation = newRot;
-        //_rigidbody.rotation = newRot;
     }
-
+    
     public void SetPositionDrive(float value)
     {
         JointDrive drive = new JointDrive
         {
             maximumForce = _configurableJoint.xDrive.maximumForce,
-            positionSpring = Mathf.Clamp(value, 0, int.MaxValue),
+            positionSpring = Mathf.Clamp(value, 0, _cachedCurrentPositionSpring),
             positionDamper = _configurableJoint.xDrive.positionDamper,
             useAcceleration = _configurableJoint.xDrive.useAcceleration
         };

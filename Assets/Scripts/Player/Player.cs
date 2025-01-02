@@ -20,7 +20,7 @@ namespace HellBeavers.Player
 
         private void HandleRagdoll(InputData inputData)
         {
-            _copyMotion.IsCopyPos(!inputData.E);
+            //_copyMotion.IsCopyPos(!inputData.E);
             _copyMotion.IsCopyRot(!inputData.E);
             _copyMotion.SmoothDeactivate(inputData.E);
         }

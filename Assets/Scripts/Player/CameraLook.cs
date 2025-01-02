@@ -9,7 +9,7 @@ public class CameraLook : NetworkBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private Transform aimPos;
     [SerializeField] private Transform defaultPos;
-    
+
     public Transform CameraTransform { get; private set; }
     public Vector3 HitPoint { get; private set; }
 
@@ -17,7 +17,7 @@ public class CameraLook : NetworkBehaviour
     private Ray _ray;
     private CameraSettings _cameraSettings;
     private Camera _camera;
-    
+
     public void Construct(CameraSettings camSettings)
     {
         _cameraSettings = camSettings;
@@ -35,16 +35,16 @@ public class CameraLook : NetworkBehaviour
     private void Update()
     {
         CastRay();
-        
+
         return;
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            target.DOMove(aimPos.position,1);
+            target.DOMove(aimPos.position, 1);
         }
         else
         {
-            target.DOMove(defaultPos.position,1);
+            target.DOMove(defaultPos.position, 1);
         }
     }
 
