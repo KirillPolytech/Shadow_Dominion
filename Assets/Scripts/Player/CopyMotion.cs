@@ -20,7 +20,7 @@ namespace HellBeavers
         
         [Range(0, 100)] [SerializeField] private int springDelta = 50;
         
-        [SerializeField]private float rate = 10; 
+        [SerializeField]private float rate = 20; 
 
         private float _deltaTime = 100;
         private readonly float _deltaMax = 100;
@@ -69,7 +69,7 @@ namespace HellBeavers
                 for (int i = 0; i < enabledBones; i++)
                 {
                     float newVal = copyTo[i].CurrentPositionSpring + springDelta;
-                    copyTo[i].SetPositionDrive(newVal);
+                    copyTo[i].UpdatePositionSpring(newVal);
                 }
                 return;
             }
@@ -77,7 +77,7 @@ namespace HellBeavers
             for (int i = 0; i < enabledBones; i++)
             {
                 float newVal = copyTo[i].CurrentPositionSpring - springDelta;
-                copyTo[i].SetPositionDrive(newVal);
+                copyTo[i].UpdatePositionSpring(newVal);
             }
         }
 

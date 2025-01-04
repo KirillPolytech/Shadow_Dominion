@@ -1,189 +1,82 @@
+using System;
 using UnityEngine;
 
-public class BoneController : MonoBehaviour
+namespace HellBeavers
 {
-    public Vector3 CurrentPosition => _rigidbody.position;
-    public Quaternion CurrentRotation => _rigidbody.rotation;
-    public bool CurrentPosState { get; private set; } = true;
-    public bool CurrentRotState { get; private set; } = true;
-    public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
-
-    [SerializeField] private ConfigurableJoint _configurableJoint;
-    [SerializeField] private Rigidbody _rigidbody;
-
-    private Quaternion _cachedStartRot;
-    private float _cachedCurrentPositionSpring;
-
-    public void Initialize()
+    public class BoneController : MonoBehaviour
     {
-        _configurableJoint = GetComponent<ConfigurableJoint>();
-        _rigidbody = GetComponent<Rigidbody>();
-    }
-
-    private void Start()
-    {
-        _cachedStartRot = transform.localRotation;
-        _cachedCurrentPositionSpring = _configurableJoint.xDrive.positionSpring;
-    }
-
-    public void SetJointLimits(
-        float angularYLimit,
-        float angularZLimit,
-        float highAngularXLimit,
-        float lowAngularXLimit,
-        float linearLimit,
-        float linearLimitSpring,
-        float linearLimitSpringDamper)
-    {
-        if (!_configurableJoint)
-            return;
-
-        _configurableJoint.angularYLimit = new SoftJointLimit { limit = angularYLimit };
-        _configurableJoint.angularZLimit = new SoftJointLimit { limit = angularZLimit };
-        _configurableJoint.highAngularXLimit = new SoftJointLimit { limit = highAngularXLimit };
-        _configurableJoint.lowAngularXLimit = new SoftJointLimit { limit = lowAngularXLimit };
-        _configurableJoint.linearLimit = new SoftJointLimit { limit = linearLimit };
-        _configurableJoint.linearLimitSpring = new SoftJointLimitSpring
-            { spring = linearLimitSpring, damper = linearLimitSpringDamper };
-    }
-
-    public void SetDrive(
-        float posMaximumForce,
-        float positionSpring,
-        float positionDamper,
-        bool usePosAcceleration,
-        float angularMaxForce,
-        float angularPositionSpring,
-        float angularPositionDamper,
-        bool useRotAcceleration)
-    {
-        if (!_configurableJoint)
-            return;
-
-        JointDrive drive = new JointDrive
-        {
-            maximumForce = posMaximumForce,
-            positionSpring = positionSpring,
-            positionDamper = positionDamper,
-            useAcceleration = usePosAcceleration
-        };
-
-        JointDrive angularXDrive = new JointDrive
-        {
-            positionSpring = angularPositionSpring,
-            maximumForce = angularMaxForce,
-            positionDamper = angularPositionDamper,
-            useAcceleration = useRotAcceleration
-        };
-
-        _configurableJoint.angularXDrive = angularXDrive;
-        _configurableJoint.angularYZDrive = angularXDrive;
-
-        _configurableJoint.xDrive = drive;
-        _configurableJoint.yDrive = drive;
-        _configurableJoint.zDrive = drive;
-    }
-
-    public void SetPositionMotionState(ConfigurableJointMotion configurableJointMotion)
-    {
-        if (!_configurableJoint)
-            return;
-
-        _configurableJoint.xMotion = configurableJointMotion;
-        _configurableJoint.yMotion = configurableJointMotion;
-        _configurableJoint.zMotion = configurableJointMotion;
-    }
-
-    public void SetRotationMotionState(ConfigurableJointMotion configurableJointMotion)
-    {
-        if (!_configurableJoint)
-            return;
-
-        _configurableJoint.angularXMotion = configurableJointMotion;
-        _configurableJoint.angularYMotion = configurableJointMotion;
-        _configurableJoint.angularZMotion = configurableJointMotion;
-    }
-
-    public void SetTargets(
-        Vector3 targetPosition,
-        Quaternion targetRotation,
-        Vector3 targetVelocity)
-    {
-        if (!_configurableJoint)
-            return;
-
-        _configurableJoint.targetPosition = targetPosition;
-        _configurableJoint.targetRotation = targetRotation;
-        _configurableJoint.targetVelocity = targetVelocity;
-    }
-
-    public void SetConfigurableJoint(
-        JointProjectionMode jointProjectionMode,
-        RotationDriveMode rotationDriveMode,
-        bool enablePreprocessing)
-    {
-        if (!_configurableJoint)
-            return;
-
-        _configurableJoint.projectionMode = jointProjectionMode;
-        _configurableJoint.enablePreprocessing = enablePreprocessing;
-        _configurableJoint.rotationDriveMode = rotationDriveMode;
-    }
-
-    public void SetRigidbody(
-        float mass,
-        float drag,
-        float angularDrag,
-        CollisionDetectionMode collisionDetectionMode,
-        RigidbodyConstraints rigidbodyConstraints,
-        bool isKinematic)
-    {
-        _rigidbody.mass = mass;
-        _rigidbody.linearDamping = drag;
-        _rigidbody.angularDamping = angularDrag;
-        _rigidbody.collisionDetectionMode = collisionDetectionMode;
-        _rigidbody.constraints = rigidbodyConstraints;
-        _rigidbody.isKinematic = isKinematic;
-    }
-
-    public void SetPos(Vector3 pos, float deltaTime)
-    {
-        if (!CurrentPosState || !_configurableJoint)
-            return;
-
-        _configurableJoint.targetPosition = pos;
-        _rigidbody.position = Vector3.Lerp(_rigidbody.position, pos, Time.fixedDeltaTime * deltaTime);
-    }
-    
-    public void SetRot(Quaternion rot)
-    {
-        if (!CurrentRotState || !_configurableJoint)
-            return;
-
-        Quaternion newRot = _configurableJoint.SetTargetRotationLocal(rot, _cachedStartRot);
-
-        _configurableJoint.targetRotation = newRot;
-    }
-    
-    public void SetPositionDrive(float value)
-    {
-        JointDrive drive = new JointDrive
-        {
-            maximumForce = _configurableJoint.xDrive.maximumForce,
-            positionSpring = Mathf.Clamp(value, 0, _cachedCurrentPositionSpring),
-            positionDamper = _configurableJoint.xDrive.positionDamper,
-            useAcceleration = _configurableJoint.xDrive.useAcceleration
-        };
+        public Action<BoneController> ActionOnCollisionEnter;
         
-        _configurableJoint.angularXDrive = drive;
-        _configurableJoint.angularYZDrive = drive;
+        public Vector3 CurrentPosition => _rigidbody.position;
+        public Quaternion CurrentRotation => _rigidbody.rotation;
 
-        _configurableJoint.xDrive = drive;
-        _configurableJoint.yDrive = drive;
-        _configurableJoint.zDrive = drive;
+        public bool CurrentPosState { get; private set; } = true;
+        public bool CurrentRotState { get; private set; } = true;
+
+        public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
+        public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
+
+        public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
+
+        public BoneSettings BoneSettings;
+
+        private Quaternion _cachedStartRot;
+        private float _cachedCurrentPositionSpring;
+        private ConfigurableJoint _configurableJoint;
+        private Rigidbody _rigidbody;
+
+        private void Awake()
+        {
+            _configurableJoint = transform.GetComponent<ConfigurableJoint>();
+            _rigidbody = transform.GetComponent<Rigidbody>();
+            BoneSettings = new BoneSettings(_configurableJoint, _rigidbody);
+            _cachedStartRot = transform.localRotation;
+            _cachedCurrentPositionSpring = _configurableJoint.xDrive.positionSpring;
+        }
+
+        public void SetPos(Vector3 pos, float deltaTime)
+        {
+            if (!CurrentPosState || !_configurableJoint)
+                return;
+
+            _configurableJoint.targetPosition = pos;
+            _rigidbody.position = Vector3.Lerp(_rigidbody.position, pos, Time.fixedDeltaTime * deltaTime);
+        }
+
+        public void SetRot(Quaternion rot)
+        {
+            if (!CurrentRotState || !_configurableJoint)
+                return;
+
+            Quaternion newRot = _configurableJoint.SetTargetRotationLocal(rot, _cachedStartRot);
+
+            _configurableJoint.targetRotation = newRot;
+        }
+
+        public void UpdatePositionSpring(float value)
+        {
+            JointDrive drive = new JointDrive
+            {
+                maximumForce = _configurableJoint.xDrive.maximumForce,
+                positionSpring = Mathf.Clamp(value, 0, _cachedCurrentPositionSpring),
+                positionDamper = _configurableJoint.xDrive.positionDamper,
+                useAcceleration = _configurableJoint.xDrive.useAcceleration
+            };
+
+            _configurableJoint.angularXDrive = drive;
+            _configurableJoint.angularYZDrive = drive;
+
+            _configurableJoint.xDrive = drive;
+            _configurableJoint.yDrive = drive;
+            _configurableJoint.zDrive = drive;
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (!other.gameObject.CompareTag("Bullet") || !other.gameObject.CompareTag("Obstacle"))
+                return;
+            
+            ActionOnCollisionEnter?.Invoke(this);
+        }
     }
-
-    public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
-
-    public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
 }

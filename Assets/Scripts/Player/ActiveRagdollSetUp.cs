@@ -58,6 +58,11 @@ namespace HellBeavers
 
         [SerializeField] private bool enablePreprocessing;
 
+        private void Start()
+        {
+            UpdateRagdoll();
+        }
+
         [Button]
         public void UpdateRagdoll()
         {
@@ -73,10 +78,8 @@ namespace HellBeavers
                     Debug.LogWarning($"Can't find bone: {bones.BoneData[i].Name}");
                     continue;
                 }
-
-                controller.Initialize();
-
-                controller.SetJointLimits(
+                
+                controller.BoneSettings.SetJointLimits(
                     bones.BoneData[i].angularYLimit,
                     bones.BoneData[i].angularZLimit,
                     bones.BoneData[i].highAngularXLimit,
@@ -85,7 +88,7 @@ namespace HellBeavers
                     LinearLimitSpring,
                     LinearLimitDamper);
 
-                controller.SetDrive(
+                controller.BoneSettings.SetDrive(
                     positionMaxForce,
                     positionSpringDrive,
                     positionDamper,
@@ -96,14 +99,14 @@ namespace HellBeavers
                     useRotAcceleration
                 );
 
-                controller.SetConfigurableJoint(ProjectionMode, rotationDriveMode, enablePreprocessing);
+                controller.BoneSettings.SetConfigurableJoint(ProjectionMode, rotationDriveMode, enablePreprocessing);
 
-                controller.SetPositionMotionState(PosMotionState);
-                controller.SetRotationMotionState(RotMotionState);
+                controller.BoneSettings.SetPositionMotionState(PosMotionState);
+                controller.BoneSettings.SetRotationMotionState(RotMotionState);
 
-                controller.SetTargets(TargetPosition, TargetRotation, TargetVelocity);
+                controller.BoneSettings.SetTargets(TargetPosition, TargetRotation, TargetVelocity);
 
-                controller.SetRigidbody(mass,
+                controller.BoneSettings.SetRigidbody(mass,
                     drag,
                     drag,
                     collisionDetectionMode,
