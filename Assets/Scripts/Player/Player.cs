@@ -12,22 +12,5 @@ namespace HellBeavers.Player
             _monoInputHandler = monoInputHandler;
             _copyMotion = copyMotion;
         }
-
-        private void OnEnable()
-        {
-            _monoInputHandler.OnInputUpdate += HandleRagdoll;
-        }
-
-        private void HandleRagdoll(InputData inputData)
-        {
-            //_copyMotion.IsCopyPos(!inputData.E);
-            _copyMotion.IsCopyRot(!inputData.E);
-            _copyMotion.SmoothDeactivate(inputData.E);
-        }
-
-        private void OnDisable()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleRagdoll;
-        }
     }
 }

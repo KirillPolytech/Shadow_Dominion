@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -10,7 +11,10 @@ namespace HellBeavers
     public class ActiveRagdollSetUp : MonoBehaviour
     {
         [SerializeField] private Transform root;
-        
+
+        [SerializeField] private Transform Anim;
+        [SerializeField] private float colliderSize = 0.1f;
+
         [Space(15)] [Header("Targets")] [SerializeField]
         private Vector3 TargetPosition;
 
@@ -78,7 +82,7 @@ namespace HellBeavers
                     Debug.LogWarning($"Can't find bone: {bones.BoneData[i].Name}");
                     continue;
                 }
-                
+
                 controller.BoneSettings.SetJointLimits(
                     bones.BoneData[i].angularYLimit,
                     bones.BoneData[i].angularZLimit,
@@ -136,6 +140,35 @@ namespace HellBeavers
 
                 gb.AddComponent<BoneController>();
             }
+        }
+
+        [Button]
+        public void AddCollidersToAnim()
+        {
+            Transform[] trans = Anim.GetComponentsInChildren<Transform>();
+
+            for (int i = 0; i < bones.BoneData.Length; i++)
+            {
+                Transform controller = trans.FirstOrDefault(x => x.name == bones.BoneData[i].Name);
+
+                if (!controller)
+                    continue;
+
+                BoxCollider boxCollider = controller.GetComponent<BoxCollider>();
+
+                if (!boxCollider)
+                    boxCollider = controller.AddComponent<BoxCollider>();
+                boxCollider.size = new Vector3(colliderSize, colliderSize, colliderSize);
+            }
+        }
+
+        [Button]
+        public void SetAnimCollidersState()
+        {
+            BoxCollider[] colls = Anim.GetComponentsInChildren<BoxCollider>();
+
+            for (int i = 0; i < colls.Length; i++)
+                colls[i].enabled = !colls[i].enabled;
         }
 
         [Button]

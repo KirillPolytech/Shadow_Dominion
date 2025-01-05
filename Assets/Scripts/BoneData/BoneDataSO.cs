@@ -1,7 +1,7 @@
 using HellBeavers;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BoneData", menuName = "Bones/BoneData", order = 0)]
+[CreateAssetMenu(fileName = "BoneData", menuName = "HellBeaversData/BoneData", order = 0)]
 public class BoneDataSO : ScriptableObject
 {
     public BoneData[] BoneData;
