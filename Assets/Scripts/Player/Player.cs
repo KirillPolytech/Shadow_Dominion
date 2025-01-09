@@ -5,12 +5,10 @@ namespace HellBeavers.Player
     public class Player : MonoBehaviour
     {
         private MonoInputHandler _monoInputHandler;
-        private CopyMotion _copyMotion;
 
-        public void Construct(MonoInputHandler monoInputHandler, CopyMotion copyMotion)
+        public void Construct(MonoInputHandler monoInputHandler)
         {
             _monoInputHandler = monoInputHandler;
-            _copyMotion = copyMotion;
         }
     }
 }

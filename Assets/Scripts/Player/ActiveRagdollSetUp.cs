@@ -73,6 +73,10 @@ namespace HellBeavers
             BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
             Collider[] colls = root.GetComponentsInChildren<Collider>();
 
+#if UNITY_EDITOR
+            return;
+#endif
+
             for (int i = 0; i < bones.BoneData.Length; i++)
             {
                 BoneController controller = controllers.FirstOrDefault(x => x.name == bones.BoneData[i].Name);

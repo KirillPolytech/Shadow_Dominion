@@ -28,6 +28,7 @@ namespace Zenject
             }
         }
 
+        [Obsolete("Obsolete")]
         public void Awake()
         {
             _hasInjected = true;
