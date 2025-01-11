@@ -1,6 +1,6 @@
 using System;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     [Serializable]
     public struct BoneData

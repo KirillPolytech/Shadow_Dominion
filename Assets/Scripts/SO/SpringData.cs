@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     [CreateAssetMenu(fileName = "SpringData", menuName = "HellBeaversData/SpringData")]
     public class SpringData : ScriptableObject

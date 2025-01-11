@@ -218,11 +218,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1730393408681400578, guid: 9349bfca919bcd147be8e764eca78541, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -4016960
+      value: -4147520
       objectReference: {fileID: 0}
     - target: {fileID: 1730393408681400578, guid: 9349bfca919bcd147be8e764eca78541, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 6527750
+      value: 6748250
       objectReference: {fileID: 0}
     - target: {fileID: 1931282829187984183, guid: 9349bfca919bcd147be8e764eca78541, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

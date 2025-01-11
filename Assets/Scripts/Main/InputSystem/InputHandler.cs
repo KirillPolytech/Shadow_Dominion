@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Zenject;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class InputHandler : ITickable
     {

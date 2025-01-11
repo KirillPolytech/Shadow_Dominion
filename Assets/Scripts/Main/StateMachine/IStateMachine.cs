@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace HellBeavers.Level.StateMachine
+namespace Shadow_Dominion.Level.StateMachine
 {
     public abstract class IStateMachine
     {

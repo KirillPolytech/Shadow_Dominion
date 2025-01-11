@@ -1,7 +1,7 @@
 using Mirror;
 using UnityEngine;
 
-namespace HellBeavers.Player
+namespace Shadow_Dominion.Player
 {
     public class PlayerAnim : NetworkBehaviour
     {

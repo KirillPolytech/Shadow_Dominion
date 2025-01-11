@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class MonoInputHandler : MonoBehaviour
     {
@@ -19,6 +19,14 @@ namespace HellBeavers
 
             _inputData.LeftShift = Input.GetKey(VariableNames.LeftShiftKey);
             _inputData.E = Input.GetKey(VariableNames.E);
+
+            _inputData.LeftMouseButton = Input.GetMouseButton(VariableNames.LeftMouseButton);
+            _inputData.LeftMouseButtonDown = Input.GetMouseButtonDown(VariableNames.LeftMouseButton);
+            _inputData.LeftMouseButtonUp = Input.GetMouseButtonUp(VariableNames.LeftMouseButton);
+
+            _inputData.RightMouseButton = Input.GetMouseButton(VariableNames.RightMouseButton);
+            _inputData.RightMouseButtonDown = Input.GetMouseButtonDown(VariableNames.RightMouseButton);
+            _inputData.RightMouseButtonUp = Input.GetMouseButtonUp(VariableNames.RightMouseButton);
 
             OnInputUpdate?.Invoke(_inputData);
         }

@@ -3,7 +3,7 @@ using DitzelGames.FastIK;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class LegPlacer : MonoBehaviour
     {

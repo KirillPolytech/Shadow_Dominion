@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace HellBeavers.Settings
+namespace Shadow_Dominion.Settings
 {
     public class ApplicationSettings : IInitializable
     {

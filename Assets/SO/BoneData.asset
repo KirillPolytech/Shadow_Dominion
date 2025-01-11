@@ -93,3 +93,13 @@ MonoBehaviour:
     angularZLimit: 45
     lowAngularXLimit: -75
     highAngularXLimit: 75
+  - Name: mixamorig:LeftToeBase
+    angularYLimit: 45
+    angularZLimit: 45
+    lowAngularXLimit: -45
+    highAngularXLimit: 45
+  - Name: mixamorig:RightToeBase
+    angularYLimit: 45
+    angularZLimit: 45
+    lowAngularXLimit: -45
+    highAngularXLimit: 45

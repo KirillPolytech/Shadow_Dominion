@@ -1,14 +1,9 @@
 using UnityEngine;
 
-namespace HellBeavers.Player
+namespace Shadow_Dominion.Main
 {
     public class Player : MonoBehaviour
     {
-        private MonoInputHandler _monoInputHandler;
 
-        public void Construct(MonoInputHandler monoInputHandler)
-        {
-            _monoInputHandler = monoInputHandler;
-        }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class HandsPlacer : MonoBehaviour
     {

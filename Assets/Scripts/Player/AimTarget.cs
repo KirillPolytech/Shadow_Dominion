@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class AimTarget : MonoBehaviour
     {

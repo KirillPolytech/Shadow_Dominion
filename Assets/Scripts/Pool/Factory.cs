@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public abstract class Factory<T> where T : Object
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class BoneController : MonoBehaviour
     {
@@ -22,22 +22,18 @@ namespace HellBeavers
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
         private SpringData _springData;
-        private MonoInputHandler _monoInputHandler;
         private Transform _copyTarget;
 
-        public void Construct(MonoInputHandler monoInputHandler, SpringData springData, Transform copyTarget)
+        public void Construct(SpringData springData, Transform copyTarget)
         {
             _springData = springData;
             _copyTarget = copyTarget;
-            _monoInputHandler = monoInputHandler;
-
-            _monoInputHandler.OnInputUpdate += HandleInput;
         }
 
         private void Awake()
         {
-            _configurableJoint = transform.GetComponent<ConfigurableJoint>();
-            _rigidbody = transform.GetComponent<Rigidbody>();
+            _configurableJoint = GetComponent<ConfigurableJoint>();
+            _rigidbody = GetComponent<Rigidbody>();
             BoneSettings = new BoneSettings(_configurableJoint, _rigidbody);
             _cachedStartRot = transform.localRotation;
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
@@ -47,12 +43,6 @@ namespace HellBeavers
         {
             UpdatePosition();
             UpdateRotation();
-        }
-
-        private void HandleInput(InputData inputData)
-        {
-            IsPositionApplying(!inputData.E);
-            IsRotationApplying(!inputData.E);
         }
 
         private void UpdatePosition()
@@ -99,11 +89,6 @@ namespace HellBeavers
                 return;
 
             UpdatePositionSpring(CurrentPositionSpring - _cachedInitialPositionSpring / 2);
-        }
-
-        private void OnDisable()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleInput;
         }
     }
 }

@@ -1,4 +1,4 @@
-using HellBeavers;
+using Shadow_Dominion;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BoneData", menuName = "HellBeaversData/BoneData", order = 0)]
