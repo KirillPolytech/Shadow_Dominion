@@ -1,6 +1,6 @@
 using Zenject;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class BulletFactory : Factory<Bullet>
     {

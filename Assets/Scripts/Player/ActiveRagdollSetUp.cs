@@ -1,16 +1,17 @@
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     [ExecuteInEditMode]
     public class ActiveRagdollSetUp : MonoBehaviour
     {
         [SerializeField] private Transform root;
-        
+
         [Space(15)] [Header("Targets")] [SerializeField]
         private Vector3 TargetPosition;
 
@@ -40,9 +41,9 @@ namespace HellBeavers
         [SerializeField] private float LinearLimitDamper;
 
         [Space(15)] [Header("MotionStates")] [SerializeField]
-        private ConfigurableJointMotion PosMotionState;
+        private ConfigurableJointMotion PosMotionState = ConfigurableJointMotion.Locked;
 
-        [SerializeField] private ConfigurableJointMotion RotMotionState;
+        [SerializeField] private ConfigurableJointMotion RotMotionState = ConfigurableJointMotion.Limited;
 
         [Space(15)] [Header("Rigidbody")] [Range(0, 1)] [SerializeField]
         private int mass = 1;
@@ -60,63 +61,13 @@ namespace HellBeavers
 
         private void Start()
         {
-            UpdateRagdoll();
-        }
-
-        [Button]
-        public void UpdateRagdoll()
-        {
-            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
-            Collider[] colls = root.GetComponentsInChildren<Collider>();
-
-            for (int i = 0; i < bones.BoneData.Length; i++)
+            try
             {
-                BoneController controller = controllers.FirstOrDefault(x => x.name == bones.BoneData[i].Name);
-
-                if (!controller)
-                {
-                    Debug.LogWarning($"Can't find bone: {bones.BoneData[i].Name}");
-                    continue;
-                }
-                
-                controller.BoneSettings.SetJointLimits(
-                    bones.BoneData[i].angularYLimit,
-                    bones.BoneData[i].angularZLimit,
-                    bones.BoneData[i].highAngularXLimit,
-                    bones.BoneData[i].lowAngularXLimit,
-                    LinearLimit,
-                    LinearLimitSpring,
-                    LinearLimitDamper);
-
-                controller.BoneSettings.SetDrive(
-                    positionMaxForce,
-                    positionSpringDrive,
-                    positionDamper,
-                    usePosAcceleration,
-                    angularMaxForce,
-                    angularPositionSpring,
-                    angularPositionDamper,
-                    useRotAcceleration
-                );
-
-                controller.BoneSettings.SetConfigurableJoint(ProjectionMode, rotationDriveMode, enablePreprocessing);
-
-                controller.BoneSettings.SetPositionMotionState(PosMotionState);
-                controller.BoneSettings.SetRotationMotionState(RotMotionState);
-
-                controller.BoneSettings.SetTargets(TargetPosition, TargetRotation, TargetVelocity);
-
-                controller.BoneSettings.SetRigidbody(mass,
-                    drag,
-                    drag,
-                    collisionDetectionMode,
-                    rigidbodyConstraints,
-                    isKinematic);
+                UpdateRagdoll();
             }
-
-            foreach (var col in colls)
+            catch (Exception e)
             {
-                col.material = physicMaterial;
+                Console.WriteLine(e);
             }
         }
 
@@ -136,6 +87,33 @@ namespace HellBeavers
 
                 gb.AddComponent<BoneController>();
             }
+            
+            ConfigurableJoint[] configurableJoints = root.GetComponentsInChildren<ConfigurableJoint>();
+            for (int i = 0; i < configurableJoints.Length; i++)
+            {
+                BoneController boneController = configurableJoints[i].GetComponent<BoneController>();
+
+                if (!boneController)
+                    configurableJoints[i].AddComponent<BoneController>();
+            }
+        }
+
+        [Button]
+        public void EnableBoneControlles()
+        {
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
+
+            foreach (var controller in controllers)
+                controller.enabled = true;
+        }
+
+        [Button]
+        public void DisableBoneControlles()
+        {
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
+
+            foreach (var controller in controllers)
+                controller.enabled = false;
         }
 
         [Button]
@@ -187,28 +165,109 @@ namespace HellBeavers
         }
 
         [Button]
-        public void EnableBoneControlles()
-        {
-            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
-
-            foreach (var controller in controllers)
-                controller.enabled = true;
-        }
-
-        [Button]
-        public void DisableBoneControlles()
-        {
-            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
-
-            foreach (var controller in controllers)
-                controller.enabled = false;
-        }
-
-        [Button]
         public void GCCollect()
         {
             GC.Collect();
             GarbageCollector.CollectIncremental();
         }
+
+        private void UpdateRagdoll()
+        {
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
+            Collider[] colls = root.GetComponentsInChildren<Collider>();
+
+            for (int i = 0; i < bones.BoneData.Length; i++)
+            {
+                BoneController controller = controllers.FirstOrDefault(x => x.name == bones.BoneData[i].Name);
+
+                if (!controller)
+                {
+                    Debug.LogWarning($"Can't find bone: {bones.BoneData[i].Name}");
+                    continue;
+                }
+
+                controller.BoneSettings.SetJointLimits(
+                    bones.BoneData[i].angularYLimit,
+                    bones.BoneData[i].angularZLimit,
+                    bones.BoneData[i].highAngularXLimit,
+                    bones.BoneData[i].lowAngularXLimit,
+                    LinearLimit,
+                    LinearLimitSpring,
+                    LinearLimitDamper);
+
+                controller.BoneSettings.SetDrive(
+                    positionMaxForce,
+                    positionSpringDrive,
+                    positionDamper,
+                    usePosAcceleration,
+                    angularMaxForce,
+                    angularPositionSpring,
+                    angularPositionDamper,
+                    useRotAcceleration
+                );
+
+                controller.BoneSettings.SetConfigurableJoint(ProjectionMode, rotationDriveMode, enablePreprocessing);
+
+                controller.BoneSettings.SetPositionMotionState(PosMotionState);
+                controller.BoneSettings.SetRotationMotionState(RotMotionState);
+
+                controller.BoneSettings.SetTargets(TargetPosition, TargetRotation, TargetVelocity);
+
+                controller.BoneSettings.SetRigidbody(mass,
+                    drag,
+                    drag,
+                    collisionDetectionMode,
+                    rigidbodyConstraints,
+                    isKinematic);
+            }
+
+            foreach (var col in colls)
+            {
+                col.material = physicMaterial;
+            }
+        }
     }
 }
+
+/*
+         [SerializeField] private Transform Anim;
+        [SerializeField] private float colliderSize = 0.1f;
+
+
+ [Button]
+        public void AddCollidersToAnim()
+        {
+            Transform[] trans = Anim.GetComponentsInChildren<Transform>();
+
+            for (int i = 0; i < bones.BoneData.Length; i++)
+            {
+                Transform controller = trans.FirstOrDefault(x => x.name == bones.BoneData[i].Name);
+
+                if (!controller)
+                    continue;
+
+                BoxCollider boxCollider = controller.GetComponent<BoxCollider>();
+
+                if (!boxCollider)
+                    boxCollider = controller.AddComponent<BoxCollider>();
+                boxCollider.size = new Vector3(colliderSize, colliderSize, colliderSize);
+            }
+        }
+
+        [Button]
+        public void SetAnimCollidersState()
+        {
+            BoxCollider[] colls = Anim.GetComponentsInChildren<BoxCollider>();
+
+            for (int i = 0; i < colls.Length; i++)
+                colls[i].enabled = !colls[i].enabled;
+        }
+
+        [Button]
+        public void DeleteAnimColls()
+        {
+            BoxCollider[] colls = Anim.GetComponentsInChildren<BoxCollider>();
+
+            for (int i = 0; i < colls.Length; i++)
+                DestroyImmediate(colls[i]);
+        }*/

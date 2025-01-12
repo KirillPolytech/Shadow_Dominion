@@ -53,6 +53,7 @@ namespace Zenject
             PostInstall();
         }
 
+        [Obsolete("Obsolete")]
         protected void PreInstall()
         {
             Assert.That(!_hasStartedInstall, "Called PreInstall twice in test '{0}'!", TestContext.CurrentContext.Test.Name);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace HellBeavers.Level.StateMachine
+namespace Shadow_Dominion.Level.StateMachine
 {
     public class GameplayState :IState
     {

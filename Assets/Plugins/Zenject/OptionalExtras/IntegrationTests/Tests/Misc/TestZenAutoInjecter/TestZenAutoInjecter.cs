@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Linq;
 using ModestTree;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Object = UnityEngine.Object;
 
 namespace Zenject.Tests.AutoInjecter
 {
@@ -81,12 +83,13 @@ namespace Zenject.Tests.AutoInjecter
         }
 
         [UnityTest]
+        [Obsolete("Obsolete")]
         public IEnumerator TestInstantiatePrefabWithSearchContainerSourceInDontDestroyOnLoad()
         {
             SkipInstall();
             yield return null;
 
-            var qux = GameObject.Instantiate(
+            var qux = Object.Instantiate(
                 GetPrefab("QuxSearch"), Vector3.zero, Quaternion.identity, ProjectContext.Instance.transform)
                 .GetComponentInChildren<Qux>();
 

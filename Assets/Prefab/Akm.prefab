@@ -231,9 +231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4462b15e4755d4342a67ca15cb564706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aim: {fileID: 0}
   bulletStartPosition: {fileID: 879668459974907919}
-  bulletVelocity: 15
+  bulletVelocity: 250
   rotationSpeed: 15
 --- !u!114 &3949908068201410221
 MonoBehaviour:

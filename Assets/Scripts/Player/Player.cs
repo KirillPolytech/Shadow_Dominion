@@ -1,33 +1,14 @@
 using UnityEngine;
 
-namespace HellBeavers.Player
+namespace Shadow_Dominion.Main
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IZombieTarget
     {
-        private MonoInputHandler _monoInputHandler;
-        private CopyMotion _copyMotion;
+        public Transform Position { get; set; }
 
-        public void Construct(MonoInputHandler monoInputHandler, CopyMotion copyMotion)
+        private void Awake()
         {
-            _monoInputHandler = monoInputHandler;
-            _copyMotion = copyMotion;
-        }
-
-        private void OnEnable()
-        {
-            _monoInputHandler.OnInputUpdate += HandleRagdoll;
-        }
-
-        private void HandleRagdoll(InputData inputData)
-        {
-            //_copyMotion.IsCopyPos(!inputData.E);
-            _copyMotion.IsCopyRot(!inputData.E);
-            _copyMotion.SmoothDeactivate(inputData.E);
-        }
-
-        private void OnDisable()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleRagdoll;
+            Position = transform;
         }
     }
 }

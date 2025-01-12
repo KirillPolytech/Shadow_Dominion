@@ -1,10 +1,10 @@
 using Zenject;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
-    public class PlayerFactory : Factory<Player.Player>
+    public class PlayerFactory : Factory<Main.Player>
     {
         [Inject]
-        public PlayerFactory(IInstantiator instantiator, Player.Player prefab) : base(instantiator, prefab) { }
+        public PlayerFactory(IInstantiator instantiator, Main.Player prefab) : base(instantiator, prefab) { }
     }
 }

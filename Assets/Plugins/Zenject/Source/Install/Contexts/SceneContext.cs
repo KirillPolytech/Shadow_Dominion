@@ -115,6 +115,7 @@ namespace Zenject
             }
         }
 
+        [Obsolete("Obsolete")]
         public void Validate()
         {
             Assert.That(IsValidating);
@@ -123,6 +124,7 @@ namespace Zenject
             Resolve();
         }
 
+        [Obsolete("Obsolete")]
         protected override void RunInternal()
         {
             // We always want to initialize ProjectContext as early as possible

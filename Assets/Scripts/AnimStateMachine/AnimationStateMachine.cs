@@ -1,8 +1,8 @@
 using System.Linq;
-using HellBeavers.Level.StateMachine;
+using Shadow_Dominion.Level.StateMachine;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class AnimationStateMachine : IStateMachine
     {

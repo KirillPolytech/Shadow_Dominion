@@ -1,26 +1,29 @@
 using UnityEngine;
 
-public class GunLineDirectionVisualizer : MonoBehaviour
+namespace Shadow_Dominion
 {
-    [SerializeField] private LineRenderer prefab;
-    [Range(0,1)][SerializeField] private float size;
-
-    private Ak47 _ak47;
-    private LineRenderer _lineRend;
-    
-    private void Start()
+    public class GunLineDirectionVisualizer : MonoBehaviour
     {
-        _lineRend = Instantiate(prefab);
-        _lineRend.positionCount = 2;
-        _lineRend.startWidth = size;
-        _lineRend.endWidth = size;
+        [SerializeField] private LineRenderer prefab;
+        [Range(0, 1)] [SerializeField] private float size = 0.005f;
 
-        _ak47 = GetComponent<Ak47>();
-    }
+        private Ak47 _ak47;
+        private LineRenderer _lineRend;
 
-    private void FixedUpdate()
-    { 
-        _lineRend.SetPosition(0, _ak47.BulletStartPos);
-        _lineRend.SetPosition(1, _ak47.HitPoint);
+        private void Start()
+        {
+            _lineRend = Instantiate(prefab);
+            _lineRend.positionCount = 2;
+            _lineRend.startWidth = size;
+            _lineRend.endWidth = size;
+
+            _ak47 = GetComponent<Ak47>();
+        }
+
+        private void FixedUpdate()
+        {
+            _lineRend.SetPosition(0, _ak47.BulletStartPos);
+            _lineRend.SetPosition(1, _ak47.HitPoint);
+        }
     }
 }

@@ -1,69 +1,75 @@
 using DG.Tweening;
 using Mirror;
-using Unity.Cinemachine;
 using UnityEngine;
 
-public class CameraLook : NetworkBehaviour
+namespace Shadow_Dominion
 {
-    [SerializeField] private CinemachineFreeLookModifier freeLookModifier;
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform aimPos;
-    [SerializeField] private Transform defaultPos;
-
-    public Transform CameraTransform { get; private set; }
-    public Vector3 HitPoint { get; private set; }
-
-    private RaycastHit _hit;
-    private Ray _ray;
-    private CameraSettings _cameraSettings;
-    private Camera _camera;
-
-    public void Construct(CameraSettings camSettings)
+    public class CameraLook : NetworkBehaviour
     {
-        _cameraSettings = camSettings;
-        CameraTransform = transform;
+        [SerializeField] private Transform target;
+        [SerializeField] private Transform aimPos;
+        [SerializeField] private Transform defaultPos;
 
-        _camera = GetComponent<Camera>();
-    }
+        [SerializeField] private float transitDuration = 0.5f;
 
-    private void Start()
-    {
-        if (!isLocalPlayer)
-            _camera.gameObject.SetActive(false);
-    }
+        public Transform CameraTransform { get; private set; }
+        public Vector3 HitPoint { get; private set; }
 
-    private void Update()
-    {
-        CastRay();
+        private RaycastHit _hit;
+        private Ray _ray;
+        private CameraSettings _cameraSettings;
+        private Camera _camera;
+        private MonoInputHandler _monoInputHandler;
 
-        return;
-
-        if (Input.GetKeyDown(KeyCode.R))
+        public void Construct(CameraSettings camSettings, MonoInputHandler monoInputHandler)
         {
-            target.DOMove(aimPos.position, 1);
+            _cameraSettings = camSettings;
+            CameraTransform = transform;
+            _monoInputHandler = monoInputHandler;
+
+            _camera = GetComponent<Camera>();
         }
-        else
-        {
-            target.DOMove(defaultPos.position, 1);
-        }
-    }
 
-    private void CastRay()
-    {
-        _ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(_ray, out _hit, _cameraSettings.rayCastDistance, ~_cameraSettings.layerMask))
+        private void OnEnable()
         {
+            _monoInputHandler.OnInputUpdate += HandleInput;
+        }
+
+        private void Start()
+        {
+            if (!isLocalPlayer)
+                _camera.gameObject.SetActive(false);
+        }
+
+        private void HandleInput(InputData inputData)
+        {
+            CastRay();
+
+            target.DOMove(inputData.RightMouseButton ? aimPos.position : defaultPos.position, transitDuration);
+        }
+
+        private void CastRay()
+        {
+            _ray = new Ray(transform.position, transform.forward);
+            if (Physics.Raycast(_ray, out _hit, _cameraSettings.rayCastDistance, ~_cameraSettings.layerMask))
+            {
+                HitPoint = _hit.point;
+                return;
+            }
+
+            _hit.point = _ray.GetPoint(_cameraSettings.rayCastDistance);
+
             HitPoint = _hit.point;
-            return;
         }
 
-        _hit.point = _ray.GetPoint(_cameraSettings.rayCastDistance);
+        private void OnDrawGizmos()
+        {
+            Debug.DrawLine(_ray.origin, _hit.point, Color.red);
+        }
 
-        HitPoint = _hit.point;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Debug.DrawLine(_ray.origin, _hit.point, Color.red);
+        private void OnDisable()
+        {
+            _monoInputHandler.OnInputUpdate -= HandleInput;
+        }
     }
 }

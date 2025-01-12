@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public class BoneController : MonoBehaviour
     {
-        public Action<BoneController> ActionOnCollisionEnter;
-        
         public Vector3 CurrentPosition => _rigidbody.position;
         public Quaternion CurrentRotation => _rigidbody.rotation;
 
@@ -21,44 +18,62 @@ namespace HellBeavers
         public BoneSettings BoneSettings;
 
         private Quaternion _cachedStartRot;
-        private float _cachedCurrentPositionSpring;
+        private float _cachedInitialPositionSpring;
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
+        private SpringData _springData;
+        private Transform _copyTarget;
+
+        private float _springRate = 1;
+
+        public void Construct(SpringData springData, Transform copyTarget)
+        {
+            _springData = springData;
+            _copyTarget = copyTarget;
+        }
 
         private void Awake()
         {
-            _configurableJoint = transform.GetComponent<ConfigurableJoint>();
-            _rigidbody = transform.GetComponent<Rigidbody>();
+            _configurableJoint = GetComponent<ConfigurableJoint>();
+            _rigidbody = GetComponent<Rigidbody>();
             BoneSettings = new BoneSettings(_configurableJoint, _rigidbody);
             _cachedStartRot = transform.localRotation;
-            _cachedCurrentPositionSpring = _configurableJoint.xDrive.positionSpring;
+            _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
         }
 
-        public void SetPos(Vector3 pos, float deltaTime)
+        private void FixedUpdate()
         {
-            if (!CurrentPosState || !_configurableJoint)
-                return;
-
-            _configurableJoint.targetPosition = pos;
-            _rigidbody.position = Vector3.Lerp(_rigidbody.position, pos, Time.fixedDeltaTime * deltaTime);
+            UpdatePosition();
+            UpdateRotation();
         }
 
-        public void SetRot(Quaternion rot)
+        private void UpdatePosition()
         {
-            if (!CurrentRotState || !_configurableJoint)
+            if (!CurrentPosState)
                 return;
 
-            Quaternion newRot = _configurableJoint.SetTargetRotationLocal(rot, _cachedStartRot);
+            _configurableJoint.targetPosition = _copyTarget.position;
+            _rigidbody.position = Vector3.Lerp(_rigidbody.position, _copyTarget.position,
+                Time.fixedDeltaTime * _springData.Rate * _springRate);
 
+            Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
+        }
+
+        private void UpdateRotation()
+        {
+            if (!CurrentRotState)
+                return;
+
+            Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
             _configurableJoint.targetRotation = newRot;
         }
 
-        public void UpdatePositionSpring(float value)
+        private void UpdatePositionSpring(float value)
         {
             JointDrive drive = new JointDrive
             {
                 maximumForce = _configurableJoint.xDrive.maximumForce,
-                positionSpring = Mathf.Clamp(value, 0, _cachedCurrentPositionSpring),
+                positionSpring = Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
                 positionDamper = _configurableJoint.xDrive.positionDamper,
                 useAcceleration = _configurableJoint.xDrive.useAcceleration
             };
@@ -73,10 +88,12 @@ namespace HellBeavers
 
         private void OnCollisionEnter(Collision other)
         {
-            if (!other.gameObject.CompareTag("Bullet") || !other.gameObject.CompareTag("Obstacle"))
+            if (!other.gameObject.CompareTag("Obstacle") && !other.gameObject.CompareTag("Bullet"))
                 return;
-            
-            ActionOnCollisionEnter?.Invoke(this);
+
+            _springRate = Mathf.Clamp(_springRate - 1, 0.1f, 1);
+
+            UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
     }
 }

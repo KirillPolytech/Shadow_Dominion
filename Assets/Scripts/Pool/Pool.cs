@@ -3,7 +3,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace HellBeavers
+namespace Shadow_Dominion
 {
     public abstract class Pool<T> where T : Object
     {

@@ -1,19 +1,20 @@
 using Mirror;
 using UnityEngine;
 
-namespace HellBeavers.Player
+namespace Shadow_Dominion.Main
 {
     public class PlayerMovement : NetworkBehaviour
     {
-        private float x, y;
-        private LegPlacer _legPlacer;
-        private Quaternion _cachedRot;
-        private Vector3 _dir;
         private MonoInputHandler _inputHandler;
         private PlayerSettings _playerSettings;
-        private Rigidbody _charRigidbody;
+        private LegPlacer _legPlacer;
         private CameraLook _cameraLook;
+        private Rigidbody _charRigidbody;
+
         private Transform _transform;
+        private float x, y;
+        private Quaternion _cachedRot;
+        private Vector3 _dir;
         private Vector3 _centerOfMass;
 
         //[Inject]

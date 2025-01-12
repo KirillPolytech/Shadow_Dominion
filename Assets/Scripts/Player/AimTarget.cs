@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class AimTarget : MonoBehaviour
+namespace Shadow_Dominion
 {
-    [SerializeField] private Transform aim;
-
-    private CameraLook _cameraLook;
-
-    public void Construct(CameraLook cameraLook)
+    public class AimTarget : MonoBehaviour
     {
-        _cameraLook = cameraLook;
-    }
+        [SerializeField] private Transform aim;
 
-    private void Update()
-    {
-        aim.position = _cameraLook.HitPoint;
+        private CameraLook _cameraLook;
+
+        public void Construct(CameraLook cameraLook)
+        {
+            _cameraLook = cameraLook;
+        }
+
+        private void Update()
+        {
+            aim.position = _cameraLook.HitPoint;
+        }
     }
 }

@@ -1,4 +1,4 @@
-namespace HellBeavers.Server
+namespace Shadow_Dominion.Server
 {
     public class RoomFactory
     {
