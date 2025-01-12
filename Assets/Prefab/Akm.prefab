@@ -159,7 +159,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1797915114962854268}
-  - component: {fileID: 6582588380953520859}
   - component: {fileID: 7921836044464192939}
   - component: {fileID: 3957841903866044015}
   - component: {fileID: 3949908068201410221}
@@ -187,23 +186,6 @@ Transform:
   - {fileID: 6204748285822291718}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6582588380953520859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1660228532507424106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 1947741992
-  serverOnly: 0
-  visibility: 0
-  hasSpawned: 0
 --- !u!114 &7921836044464192939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletStartPosition: {fileID: 879668459974907919}
-  bulletVelocity: 15
+  bulletVelocity: 250
   rotationSpeed: 15
 --- !u!114 &3949908068201410221
 MonoBehaviour:

@@ -24,6 +24,8 @@ namespace Shadow_Dominion
         private SpringData _springData;
         private Transform _copyTarget;
 
+        private float _springRate = 1;
+
         public void Construct(SpringData springData, Transform copyTarget)
         {
             _springData = springData;
@@ -51,8 +53,9 @@ namespace Shadow_Dominion
                 return;
 
             _configurableJoint.targetPosition = _copyTarget.position;
-            _rigidbody.position = Vector3.Lerp(_rigidbody.position, _copyTarget.position, Time.fixedDeltaTime * _springData.Rate);
-            
+            _rigidbody.position = Vector3.Lerp(_rigidbody.position, _copyTarget.position,
+                Time.fixedDeltaTime * _springData.Rate * _springRate);
+
             Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
         }
 
@@ -85,10 +88,12 @@ namespace Shadow_Dominion
 
         private void OnCollisionEnter(Collision other)
         {
-            if (!other.gameObject.CompareTag("Obstacle")) //!other.gameObject.CompareTag("Bullet") ||
+            if (!other.gameObject.CompareTag("Obstacle") && !other.gameObject.CompareTag("Bullet"))
                 return;
 
-            UpdatePositionSpring(CurrentPositionSpring - _cachedInitialPositionSpring / 2);
+            _springRate = Mathf.Clamp(_springRate - 1, 0.1f, 1);
+
+            UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
     }
 }

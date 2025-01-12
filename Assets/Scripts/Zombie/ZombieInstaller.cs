@@ -6,6 +6,10 @@ namespace Shadow_Dominion
 {
     public class ZombieInstaller : MonoBehaviour
     {
+        [SerializeField] private ZombieSettings zombieSettings;
+        [SerializeField] private ZombieMovement zombieMovement;
+        [SerializeField] private ZombieTargetDetector zombieTargetDetector;
+
         [Space] [Header("Motion")] [SerializeField]
         private SpringData springData;
 
@@ -13,13 +17,17 @@ namespace Shadow_Dominion
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
         [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
-        
+
         private void Awake()
         {
+            zombieMovement.Construct(zombieSettings);
+            
+            zombieTargetDetector.OnDetectTarget += zombieMovement.MoveTo;
+
             for (int i = 0; i < copyFrom.Length; i++)
                 copyTo[i].Construct(springData, copyFrom[i]);
         }
-        
+
         [Button("InitializeMotion")]
         public void Initialize()
         {
@@ -33,7 +41,7 @@ namespace Shadow_Dominion
 
             copyFrom = transforms;
         }
-        
+
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
@@ -42,6 +50,11 @@ namespace Shadow_Dominion
             {
                 Gizmos.DrawSphere(t.position, sphereRadius);
             }
+        }
+
+        private void OnDestroy()
+        {
+            zombieTargetDetector.OnDetectTarget -= zombieMovement.MoveTo;
         }
     }
 }

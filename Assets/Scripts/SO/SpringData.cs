@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    [CreateAssetMenu(fileName = "SpringData", menuName = "HellBeaversData/SpringData")]
+    [CreateAssetMenu(fileName = "SpringData", menuName = PathStorage.ScriptableObjectMenu + "/SpringData")]
     public class SpringData : ScriptableObject
     {
         public float Rate = 20;

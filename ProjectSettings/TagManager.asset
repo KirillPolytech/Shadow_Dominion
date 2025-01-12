@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ChatWindow
   - Obstacle
+  - Bullet
   layers:
   - Default
   - TransparentFX

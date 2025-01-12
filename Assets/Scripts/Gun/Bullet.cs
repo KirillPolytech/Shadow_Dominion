@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
     public void Initialize(Vector3 pos, Quaternion rot, Vector3 dir)
