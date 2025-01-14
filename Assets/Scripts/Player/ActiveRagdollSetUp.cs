@@ -16,7 +16,7 @@ namespace Shadow_Dominion
         private Vector3 TargetPosition;
 
         [SerializeField] private Vector3 TargetVelocity;
-        [SerializeField] private Quaternion TargetRotation;
+        [SerializeField]private Quaternion TargetRotation = Quaternion.identity;
         [SerializeField] private RotationDriveMode rotationDriveMode;
 
         [Space(15)] [Header("PositionDrive")] [SerializeField]
@@ -72,6 +72,19 @@ namespace Shadow_Dominion
         }
 
         [Button]
+        public void UpdateValues()
+        {
+            try
+            {
+                UpdateRagdoll();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        [Button]
         public void CreateRagdoll()
         {
             CharacterJoint[] joints = root.GetComponentsInChildren<CharacterJoint>();
@@ -95,6 +108,22 @@ namespace Shadow_Dominion
 
                 if (!boneController)
                     configurableJoints[i].AddComponent<BoneController>();
+            }
+            
+            foreach (Transform g in root.GetComponentsInChildren<Transform>())
+            {
+                if (g.GetComponent<BoneController>()) 
+                    continue;
+                
+                g.AddComponent<BoneController>();
+                g.AddComponent<BoxCollider>();
+                g.AddComponent<ConfigurableJoint>();
+            }
+
+            configurableJoints = root.GetComponentsInChildren<ConfigurableJoint>();
+            for (int i = 0; i < configurableJoints.Length; i++)
+            {
+                configurableJoints[i].connectedBody = configurableJoints[i].transform.parent.GetComponent<Rigidbody>();
             }
         }
 

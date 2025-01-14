@@ -1,5 +1,7 @@
+using System.Collections;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player
 {
@@ -10,13 +12,18 @@ namespace Shadow_Dominion.Player
         public Animator Animator { get; private set; }
 
         private MonoInputHandler _inputHandler;
+        private Rig _aimRig;
+        private Coroutine _coroutine;
+        private int _lastValue;
 
         public void Construct(
             Animator animator,
-            MonoInputHandler inputHandler)
+            MonoInputHandler inputHandler,
+            Rig aimRig)
         {
             Animator = animator;
             _inputHandler = inputHandler;
+            _aimRig = aimRig;
         }
 
         private void Start()
@@ -33,12 +40,39 @@ namespace Shadow_Dominion.Player
             _inputHandler.OnInputUpdate += HandleIdleState;
             _inputHandler.OnInputUpdate += HandleRunStates;
             _inputHandler.OnInputUpdate += HandleStandUpState;
+            _inputHandler.OnInputUpdate += HandleAimRig;
+        }
+
+        private void HandleAimRig(InputData inputData)
+        {
+            int currentValue = inputData.RightMouseButton ? 1 : 0;
+
+            if (_lastValue != currentValue)
+            {
+                if (_coroutine != null)
+                    StopCoroutine(_coroutine);
+
+                _coroutine = StartCoroutine(ChangeWeight(_aimRig, currentValue));
+            }
+            
+            _lastValue = currentValue;
+        }
+
+        private IEnumerator ChangeWeight(Rig rig, float targetValue)
+        {
+            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime;
+
+            while (Mathf.Abs(rig.weight - targetValue) > 0.01f)
+            {
+                rig.weight += step;
+                yield return new WaitForFixedUpdate();
+            }
         }
 
         private void HandleWalkState(InputData inputData)
         {
             Debug.Log($"IsPressedShift: {inputData.LeftShift}");
-            
+
             if (inputData.LeftShift)
                 return;
 
@@ -52,7 +86,7 @@ namespace Shadow_Dominion.Player
                     break;
             }
         }
-        
+
         private void HandleRunStates(InputData inputData)
         {
             if (!inputData.LeftShift)
@@ -94,7 +128,7 @@ namespace Shadow_Dominion.Player
         {
             if (!inputData.E)
                 return;
-            
+
             //AnimationStateMachine.SetState<StandupState>();
         }
 
@@ -108,6 +142,7 @@ namespace Shadow_Dominion.Player
             _inputHandler.OnInputUpdate -= HandleIdleState;
             _inputHandler.OnInputUpdate -= HandleRunStates;
             _inputHandler.OnInputUpdate -= HandleStandUpState;
+            _inputHandler.OnInputUpdate -= HandleAimRig;
         }
     }
 }

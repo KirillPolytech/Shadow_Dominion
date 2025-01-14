@@ -4,7 +4,7 @@ public class BoneSettings
 {
     private readonly ConfigurableJoint _configurableJoint;
     private readonly Rigidbody _rigidbody;
-    
+
     public BoneSettings(ConfigurableJoint configurableJoint, Rigidbody rigidbody)
     {
         _configurableJoint = configurableJoint;
@@ -98,7 +98,10 @@ public class BoneSettings
             return;
 
         _configurableJoint.targetPosition = targetPosition;
-        _configurableJoint.targetRotation = targetRotation;
+        
+        _configurableJoint.targetRotation = 
+            targetRotation == new Quaternion(0, 0, 0, 0) ? Quaternion.identity : targetRotation;
+        
         _configurableJoint.targetVelocity = targetVelocity;
     }
 

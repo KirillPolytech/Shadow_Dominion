@@ -1,3 +1,4 @@
+using Shadow_Dominion.Zombie;
 using UnityEngine;
 
 namespace Shadow_Dominion.Main

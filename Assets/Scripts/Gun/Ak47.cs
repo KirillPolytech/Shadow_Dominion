@@ -7,6 +7,7 @@ namespace Shadow_Dominion
         private const int Distance = 1000;
 
         [SerializeField] private Transform bulletStartPosition;
+        [SerializeField] private Transform weaponPose;
         [SerializeField] private float bulletVelocity = 100;
         [SerializeField] private float rotationSpeed = 15;
 
@@ -16,14 +17,14 @@ namespace Shadow_Dominion
         private BulletPool _bulletPool;
         private MonoInputHandler _monoInputHandler;
         private RaycastHit _hit;
-        private Transform _aim;
+        private Transform _lookTarget;
 
         //[Inject]
-        public void Construct(MonoInputHandler monoInputHandler, BulletPool bulletPool, Transform aim)
+        public void Construct(MonoInputHandler monoInputHandler, BulletPool bulletPool, Transform lookTarget)
         {
             _monoInputHandler = monoInputHandler;
             _bulletPool = bulletPool;
-            _aim = aim;
+            _lookTarget = lookTarget;
 
             _monoInputHandler.OnInputUpdate += HandleInput;
         }
@@ -59,8 +60,8 @@ namespace Shadow_Dominion
 
         private void RotateTo()
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(_aim.position - transform.position), rotationSpeed * Time.fixedDeltaTime);
+            weaponPose.rotation = Quaternion.Lerp(transform.rotation,
+                Quaternion.LookRotation(_lookTarget.position - transform.position), rotationSpeed * Time.fixedDeltaTime);
         }
 
         private void OnDrawGizmos()

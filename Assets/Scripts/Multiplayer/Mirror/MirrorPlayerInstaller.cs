@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using Zenject;
 
 namespace Shadow_Dominion
@@ -38,6 +39,9 @@ namespace Shadow_Dominion
         [SerializeField] private BoneController[] copyTo;
         [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
 
+        [Space] [Header("Rig")] [SerializeField]
+        private Rig aimRig;
+
 
         private BulletPool _bulletPool;
 
@@ -53,7 +57,7 @@ namespace Shadow_Dominion
             cameraLook.Construct(cameraSettings, inputHandler);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
-            playerAnim.Construct(animator, inputHandler);
+            playerAnim.Construct(animator, inputHandler, aimRig);
             ak47.Construct(inputHandler, _bulletPool, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)

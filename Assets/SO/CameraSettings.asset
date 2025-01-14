@@ -15,4 +15,4 @@ MonoBehaviour:
   rayCastDistance: 1000
   layerMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 196

@@ -7,17 +7,18 @@ namespace Shadow_Dominion
     public class BootContext : MonoInstaller
     {
         [SerializeField] private MirrorServer server;
-        [SerializeField] private Lobby lobby;
-        [Space] [SerializeField] private Shadow_Dominion.Main.Player playerPrefab;
+        [Space] [SerializeField] private MirrorPlayerInstaller playerPrefab;
         [Range(0, 4)] [SerializeField] private int count;
         [Space] [SerializeField] private Bullet bulletPrefab;
         [Range(0, 600)] [SerializeField] private int poolCount;
 
+        //[SerializeField] private Lobby lobby;
 
         public override void InstallBindings()
         {
+            //Container.BindInstance(lobby).AsSingle();
+
             Container.BindInstance(server).AsSingle();
-            Container.BindInstance(lobby).AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();

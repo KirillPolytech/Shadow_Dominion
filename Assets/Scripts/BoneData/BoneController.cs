@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class BoneController : MonoBehaviour
     {
+        public event Action<Vector3> OnCollision;
+
         public Vector3 CurrentPosition => _rigidbody.position;
         public Quaternion CurrentRotation => _rigidbody.rotation;
 
@@ -25,6 +28,8 @@ namespace Shadow_Dominion
         private Transform _copyTarget;
 
         private float _springRate = 1;
+        private Vector3 integralError;
+        private Vector3 previousError;
 
         public void Construct(SpringData springData, Transform copyTarget)
         {
@@ -47,12 +52,20 @@ namespace Shadow_Dominion
             UpdateRotation();
         }
 
+        public void AddForce(Vector3 dir)
+        {
+            _rigidbody.AddForce(dir);
+        }
+
         private void UpdatePosition()
         {
             if (!CurrentPosState)
                 return;
 
             _configurableJoint.targetPosition = _copyTarget.position;
+
+            //if (gameObject.name is "mixamorig:RightUpLeg" or "mixamorig:LeftUpLeg" or "mixamorig:LeftLeg" or "mixamorig:RightLeg")
+
             _rigidbody.position = Vector3.Lerp(_rigidbody.position, _copyTarget.position,
                 Time.fixedDeltaTime * _springData.Rate * _springRate);
 
@@ -66,6 +79,8 @@ namespace Shadow_Dominion
 
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
             _configurableJoint.targetRotation = newRot;
+
+            //_rigidbody.rotation = _copyTarget.rotation;
         }
 
         private void UpdatePositionSpring(float value)
@@ -91,9 +106,12 @@ namespace Shadow_Dominion
             if (!other.gameObject.CompareTag("Obstacle") && !other.gameObject.CompareTag("Bullet"))
                 return;
 
-            _springRate = Mathf.Clamp(_springRate - 1, 0.1f, 1);
+            Vector3 dir = other.transform.position - transform.position;
+            OnCollision?.Invoke(dir);
 
-            UpdatePositionSpring(CurrentPositionSpring * _springRate);
+            //_springRate = Mathf.Clamp(_springRate - 1, 0.1f, 1);
+
+            //UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
     }
 }
