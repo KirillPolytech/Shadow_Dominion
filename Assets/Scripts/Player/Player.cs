@@ -11,5 +11,16 @@ namespace Shadow_Dominion.Main
         {
             Position = transform;
         }
+        
+        public void Disable(BoneController[] boneController, Vector3 dir)
+        {
+            for (int i = 0; i < boneController.Length; i++)
+            {
+                boneController[i].IsPositionApplying(false);
+                boneController[i].IsRotationApplying(false);
+                boneController[i].IsFreezeed(false);
+                boneController[i].AddForce(dir);
+            }
+        }
     }
 }

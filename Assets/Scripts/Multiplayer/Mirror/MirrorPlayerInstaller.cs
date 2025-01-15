@@ -42,14 +42,7 @@ namespace Shadow_Dominion
         [Space] [Header("Rig")] [SerializeField]
         private Rig aimRig;
 
-
-        private BulletPool _bulletPool;
-
-        [Inject]
-        public void Construct(BulletPool bulletPool)
-        {
-            _bulletPool = bulletPool;
-        }
+        [Space][SerializeField] private bool debug;
 
         private void Awake()
         {
@@ -58,7 +51,7 @@ namespace Shadow_Dominion
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
             playerAnimation.Construct(animator, inputHandler, aimRig);
-            ak47.Construct(inputHandler, _bulletPool, aim);
+            ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -66,12 +59,24 @@ namespace Shadow_Dominion
 
                 int ind = i;
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
+                
+                copyTo[i].OnCollision += dir =>
+                {
+                    if (playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunForwardState) 
+                        && playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunBackwardState))
+                        return;
+                    
+                    player.Disable(copyTo, dir);
+                };
             }
 
             return;
 
             void HandleInput(InputData inputData, BoneController boneController)
             {
+                if (!debug)
+                    return;
+                
                 boneController.IsPositionApplying(!inputData.T);
                 boneController.IsRotationApplying(!inputData.T);
                 

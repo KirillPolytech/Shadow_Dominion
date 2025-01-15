@@ -55,11 +55,6 @@ namespace Shadow_Dominion
             UpdateFreezee();
         }
 
-        public void AddForce(Vector3 dir)
-        {
-            _rigidbody.AddForce(dir);
-        }
-
         private void UpdatePosition()
         {
             if (!CurrentPosState)
@@ -72,7 +67,7 @@ namespace Shadow_Dominion
             //_rigidbody.MovePosition(Vector3.Lerp(_rigidbody.position, _copyTarget.position, Time.fixedDeltaTime * _springData.Rate * _springRate));
             if (_springData.Rate != 0)
                 transform.position = Vector3.Lerp(transform.position, _copyTarget.position,
-                    Time.fixedDeltaTime * _springData.Rate);
+                    Time.fixedDeltaTime * _springRate * _springData.Rate);
 
             Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
         }
@@ -87,7 +82,7 @@ namespace Shadow_Dominion
 
             if (_springData.Rate != 0)
                 transform.rotation = Quaternion.Lerp(transform.rotation, _copyTarget.rotation,
-                    Time.fixedDeltaTime * _springData.Rate);
+                    Time.fixedDeltaTime * _springRate * _springData.Rate);
             //_rigidbody.rotation = _copyTarget.rotation;
         }
 
@@ -113,18 +108,25 @@ namespace Shadow_Dominion
             _configurableJoint.yDrive = drive;
             _configurableJoint.zDrive = drive;
         }
+        
+        public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
 
-        private void OnCollisionEnter(Collision other)
+        public void ReceiveDamage(Vector3 dir)
         {
-            if (!other.gameObject.CompareTag("Obstacle") && !other.gameObject.CompareTag("Bullet"))
+            OnCollision?.Invoke(dir);
+        }
+
+        private void OnCollisionStay(Collision other)
+        {
+            if (!other.gameObject.CompareTag("Obstacle"))
                 return;
 
             Vector3 dir = other.transform.position - transform.position;
             OnCollision?.Invoke(dir);
 
-            //_springRate = Mathf.Clamp(_springRate - 1, 0.1f, 1);
+            _springRate = Mathf.Clamp(_springRate - 0.5f, 0.1f, 1);
 
-            //UpdatePositionSpring(CurrentPositionSpring * _springRate);
+            UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
     }
 }

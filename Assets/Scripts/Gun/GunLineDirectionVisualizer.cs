@@ -22,7 +22,7 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
-            _lineRend.SetPosition(0, _ak47.BulletStartPos);
+            _lineRend.SetPosition(0, _ak47.BulletStartPosition);
             _lineRend.SetPosition(1, _ak47.HitPoint);
         }
     }

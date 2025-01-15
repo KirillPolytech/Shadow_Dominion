@@ -8,37 +8,43 @@ namespace Shadow_Dominion
 
         [SerializeField] private Transform bulletStartPosition;
         [SerializeField] private Transform weaponPose;
-        [SerializeField] private float bulletVelocity = 100;
         [SerializeField] private float rotationSpeed = 15;
+        [SerializeField] private ParticleSystem fireEffect;
 
-        public Vector3 BulletStartPos => bulletStartPosition.position;
         public Vector3 HitPoint => _hit.point;
+        public Vector3 BulletStartPosition => bulletStartPosition.position;
 
-        private BulletPool _bulletPool;
         private MonoInputHandler _monoInputHandler;
         private RaycastHit _hit;
         private Transform _lookTarget;
+        private Transform _cachedTransform;
 
         //[Inject]
-        public void Construct(MonoInputHandler monoInputHandler, BulletPool bulletPool, Transform lookTarget)
+        public void Construct(MonoInputHandler monoInputHandler, Transform lookTarget)
         {
             _monoInputHandler = monoInputHandler;
-            _bulletPool = bulletPool;
             _lookTarget = lookTarget;
+            _cachedTransform = transform;
 
-            _monoInputHandler.OnInputUpdate += HandleInput;
+            _monoInputHandler.OnInputUpdate += Fire;
         }
 
-        private void HandleInput(InputData inputData)
+        private void Fire(InputData inputData)
         {
             if (!inputData.LeftMouseButtonDown)
                 return;
+            
+            fireEffect.Play();
+            
+            if (!_hit.collider)
+                return;
+            
+            BoneController boneController = _hit.collider.GetComponent<BoneController>();
 
-            Bullet bullet = _bulletPool.Pull();
-            bullet.Initialize(
-                bulletStartPosition.position,
-                Quaternion.LookRotation(transform.forward),
-                transform.forward * bulletVelocity);
+            if (!boneController)
+                return;
+
+            boneController.ReceiveDamage((boneController.CurrentPosition - _cachedTransform.position) * 10000);
         }
 
         private void FixedUpdate()
@@ -49,7 +55,7 @@ namespace Shadow_Dominion
 
         private void CastRay()
         {
-            Ray ray = new Ray(BulletStartPos, transform.forward);
+            Ray ray = new Ray(bulletStartPosition.position, transform.forward);
             Physics.Raycast(ray, out _hit, Distance);
 
             if (_hit.point == default)
@@ -61,17 +67,18 @@ namespace Shadow_Dominion
         private void RotateTo()
         {
             weaponPose.rotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(_lookTarget.position - transform.position), rotationSpeed * Time.fixedDeltaTime);
+                Quaternion.LookRotation(_lookTarget.position - transform.position),
+                rotationSpeed * Time.fixedDeltaTime);
         }
 
         private void OnDrawGizmos()
         {
-            Debug.DrawLine(BulletStartPos, _hit.point, Color.red);
+            Debug.DrawLine(bulletStartPosition.position, _hit.point, Color.red);
         }
 
         private void OnDisable()
         {
-            _monoInputHandler.OnInputUpdate -= HandleInput;
+            _monoInputHandler.OnInputUpdate -= Fire;
         }
     }
 }
