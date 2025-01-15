@@ -16,7 +16,7 @@ namespace Shadow_Dominion
         private Vector3 TargetPosition;
 
         [SerializeField] private Vector3 TargetVelocity;
-        [SerializeField]private Quaternion TargetRotation = Quaternion.identity;
+        [SerializeField] private Quaternion TargetRotation = Quaternion.identity;
         [SerializeField] private RotationDriveMode rotationDriveMode;
 
         [Space(15)] [Header("PositionDrive")] [SerializeField]
@@ -45,7 +45,7 @@ namespace Shadow_Dominion
 
         [SerializeField] private ConfigurableJointMotion RotMotionState = ConfigurableJointMotion.Limited;
 
-        [Space(15)] [Header("Rigidbody")] [Range(0, 1)] [SerializeField]
+        [Space(15)] [Header("Rigidbody")] [Range(0, 100)] [SerializeField]
         private int mass = 1;
 
         [Range(0, 1)] [SerializeField] private int drag = 1;
@@ -67,7 +67,7 @@ namespace Shadow_Dominion
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.Log(e);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Shadow_Dominion
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.Log(e);
             }
         }
 
@@ -100,30 +100,40 @@ namespace Shadow_Dominion
 
                 gb.AddComponent<BoneController>();
             }
-            
+
+            Transform[] t = root.GetComponentsInChildren<Transform>();
+            for (int i = 0; i < t.Length; i++)
+            {
+                var x = t[i].GetComponent<ConfigurableJoint>();
+                if (x == null)
+                    continue;
+
+                if (!t[i].GetComponent<BoneController>())
+                    t[i].AddComponent<BoneController>();
+
+                Collider col = t[i].GetComponent<Collider>();
+                if (!col)
+                {
+                    col = t[i].AddComponent<BoxCollider>();
+                    ((BoxCollider)col).size = new Vector3(0.1f, 0.1f, 0.1f);
+                }else if (col.GetType() == typeof(BoxCollider))
+                    ((BoxCollider)col).size = new Vector3(0.1f, 0.1f, 0.1f);
+
+                if (!t[i].GetComponent<ConfigurableJoint>())
+                    t[i].AddComponent<ConfigurableJoint>();
+            }
+
             ConfigurableJoint[] configurableJoints = root.GetComponentsInChildren<ConfigurableJoint>();
             for (int i = 0; i < configurableJoints.Length; i++)
             {
-                BoneController boneController = configurableJoints[i].GetComponent<BoneController>();
-
-                if (!boneController)
-                    configurableJoints[i].AddComponent<BoneController>();
-            }
-            
-            foreach (Transform g in root.GetComponentsInChildren<Transform>())
-            {
-                if (g.GetComponent<BoneController>()) 
-                    continue;
-                
-                g.AddComponent<BoneController>();
-                g.AddComponent<BoxCollider>();
-                g.AddComponent<ConfigurableJoint>();
-            }
-
-            configurableJoints = root.GetComponentsInChildren<ConfigurableJoint>();
-            for (int i = 0; i < configurableJoints.Length; i++)
-            {
-                configurableJoints[i].connectedBody = configurableJoints[i].transform.parent.GetComponent<Rigidbody>();
+                Rigidbody temp = configurableJoints[i].transform.parent.GetComponent<Rigidbody>();
+                Transform tr = configurableJoints[i].transform;
+                while (temp == null || tr.name == "Root")
+                {
+                    tr = tr.transform.parent;
+                    temp = tr.GetComponent<Rigidbody>();
+                }
+                configurableJoints[i].connectedBody = temp;
             }
         }
 

@@ -19,6 +19,10 @@ namespace Shadow_Dominion
 
             _inputData.LeftShift = Input.GetKey(VariableNames.LeftShiftKey);
             _inputData.E = Input.GetKey(VariableNames.E);
+            _inputData.E_Down = Input.GetKeyDown(VariableNames.E);
+            _inputData.E_Up = Input.GetKeyUp(VariableNames.E);
+            
+            _inputData.T = Input.GetKey(VariableNames.T);
 
             _inputData.LeftMouseButton = Input.GetMouseButton(VariableNames.LeftMouseButton);
             _inputData.LeftMouseButtonDown = Input.GetMouseButtonDown(VariableNames.LeftMouseButton);

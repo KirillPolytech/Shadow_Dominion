@@ -12,9 +12,11 @@ namespace Shadow_Dominion
 
         public bool CurrentPosState { get; private set; } = true;
         public bool CurrentRotState { get; private set; } = true;
+        public bool CurrentFreeze { get; private set; } = true;
 
         public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
         public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
+        public void IsFreezeed(bool isFreezeed) => CurrentFreeze = isFreezeed;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
 
@@ -50,6 +52,7 @@ namespace Shadow_Dominion
         {
             UpdatePosition();
             UpdateRotation();
+            UpdateFreezee();
         }
 
         public void AddForce(Vector3 dir)
@@ -66,8 +69,10 @@ namespace Shadow_Dominion
 
             //if (gameObject.name is "mixamorig:RightUpLeg" or "mixamorig:LeftUpLeg" or "mixamorig:LeftLeg" or "mixamorig:RightLeg")
 
-            _rigidbody.position = Vector3.Lerp(_rigidbody.position, _copyTarget.position,
-                Time.fixedDeltaTime * _springData.Rate * _springRate);
+            //_rigidbody.MovePosition(Vector3.Lerp(_rigidbody.position, _copyTarget.position, Time.fixedDeltaTime * _springData.Rate * _springRate));
+            if (_springData.Rate != 0)
+                transform.position = Vector3.Lerp(transform.position, _copyTarget.position,
+                    Time.fixedDeltaTime * _springData.Rate);
 
             Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
         }
@@ -80,7 +85,15 @@ namespace Shadow_Dominion
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
             _configurableJoint.targetRotation = newRot;
 
+            if (_springData.Rate != 0)
+                transform.rotation = Quaternion.Lerp(transform.rotation, _copyTarget.rotation,
+                    Time.fixedDeltaTime * _springData.Rate);
             //_rigidbody.rotation = _copyTarget.rotation;
+        }
+
+        private void UpdateFreezee()
+        {
+            _rigidbody.constraints = CurrentFreeze ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
         }
 
         private void UpdatePositionSpring(float value)

@@ -2595,6 +2595,10 @@ PrefabInstance:
       propertyPath: weaponPose
       value: 
       objectReference: {fileID: 988897474449604110}
+    - target: {fileID: 2149951253001536792, guid: afa0fe7b690a7064a9f370a7f3378f32, type: 3}
+      propertyPath: bulletVelocity
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5678642647599042994, guid: afa0fe7b690a7064a9f370a7f3378f32, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.17515707

@@ -78,10 +78,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="17484">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="36124">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="17484" />
+      <option name="pid" value="36124" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -108,6 +108,7 @@
       <workItem from="1736754917882" duration="3970000" />
       <workItem from="1736779340438" duration="4692000" />
       <workItem from="1736861433592" duration="2224000" />
+      <workItem from="1736886720500" duration="4579000" />
     </task>
     <servers />
   </component>
@@ -115,24 +116,5 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/BoneData/BoneSettings.cs</url>
-          <line>101</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\BoneData\BoneSettings.cs" initialLine="101" containingFunctionPresentation="Method 'SetTargets'">
-            <startOffsets>
-              <option value="3337" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3470" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

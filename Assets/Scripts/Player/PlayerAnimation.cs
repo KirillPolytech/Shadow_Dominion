@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player
 {
-    public class PlayerAnim : NetworkBehaviour
+    public class PlayerAnimation : NetworkBehaviour
     {
         public AnimationStateMachine AnimationStateMachine { get; private set; }
 
@@ -60,7 +60,7 @@ namespace Shadow_Dominion.Player
 
         private IEnumerator ChangeWeight(Rig rig, float targetValue)
         {
-            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime;
+            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * 5;
 
             while (Mathf.Abs(rig.weight - targetValue) > 0.01f)
             {
@@ -71,7 +71,7 @@ namespace Shadow_Dominion.Player
 
         private void HandleWalkState(InputData inputData)
         {
-            Debug.Log($"IsPressedShift: {inputData.LeftShift}");
+            //Debug.Log($"IsPressedShift: {inputData.LeftShift}");
 
             if (inputData.LeftShift)
                 return;

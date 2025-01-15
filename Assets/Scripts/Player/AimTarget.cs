@@ -13,7 +13,7 @@ namespace Shadow_Dominion
             _cameraLook = cameraLook;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             aim.position = _cameraLook.HitPoint;
         }

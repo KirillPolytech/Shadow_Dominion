@@ -18,11 +18,10 @@ namespace Shadow_Dominion.Zombie
         [SerializeField] private Transform anim;
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
-        [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
+        [Range(0, 0.5f)] [SerializeField] private float sphereRadius;
 
         private void Awake()
         {
-            zombie.Construct();
             zombieMovement.Construct(animator, zombieSettings);
 
             zombieTargetDetector.OnDetectTarget += zombieMovement.MoveTo;

@@ -12,7 +12,7 @@ namespace Shadow_Dominion
     {
         [SerializeField] private Main.Player player;
         [SerializeField] private MonoInputHandler inputHandler;
-        [SerializeField] private PlayerAnim playerAnim;
+        [SerializeField] private PlayerAnimation playerAnimation;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CameraLook cameraLook;
         [SerializeField] private AimTarget aimTarget;
@@ -57,7 +57,7 @@ namespace Shadow_Dominion
             cameraLook.Construct(cameraSettings, inputHandler);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
-            playerAnim.Construct(animator, inputHandler, aimRig);
+            playerAnimation.Construct(animator, inputHandler, aimRig);
             ak47.Construct(inputHandler, _bulletPool, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
@@ -72,8 +72,11 @@ namespace Shadow_Dominion
 
             void HandleInput(InputData inputData, BoneController boneController)
             {
-                boneController.IsPositionApplying(!inputData.E);
-                boneController.IsRotationApplying(!inputData.E);
+                boneController.IsPositionApplying(!inputData.T);
+                boneController.IsRotationApplying(!inputData.T);
+                
+                if (inputData.E_Down)
+                    boneController.IsFreezeed(!boneController.CurrentFreeze);
             }
         }
 

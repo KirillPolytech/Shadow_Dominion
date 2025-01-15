@@ -30,12 +30,12 @@ namespace Shadow_Dominion
         private float _resetDelayCounter;
         private float _value;
 
-        private PlayerAnim _playerAnim;
+        private PlayerAnimation _playerAnimation;
 
 
-        public void Construct(PlayerAnim playerAnim)
+        public void Construct(PlayerAnimation playerAnimation)
         {
-            _playerAnim = playerAnim;
+            _playerAnimation = playerAnimation;
         }
 
         private void Awake()
@@ -116,7 +116,7 @@ namespace Shadow_Dominion
             player.enabled = true;
             characterController.enabled = true;
 
-            _playerAnim.AnimationStateMachine.SetState<IdleState>();
+            _playerAnimation.AnimationStateMachine.SetState<IdleState>();
         }
 
         private void SpaceHandler()
@@ -175,7 +175,7 @@ namespace Shadow_Dominion
                 _ragDollBoneTransforms[i] = new BoneTransform();
             }
 
-            _playerAnim.AnimationStateMachine.SetState<StandupState>();
+            _playerAnimation.AnimationStateMachine.SetState<StandupState>();
 
             _isStandUp = true;
         }

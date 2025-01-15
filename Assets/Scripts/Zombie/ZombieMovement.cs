@@ -34,7 +34,8 @@ namespace Shadow_Dominion.Zombie
 
         public void MoveTo(IZombieTarget iZombieTarget)
         {
-            navMeshAgent.SetDestination(iZombieTarget.Position.position);
+            Vector3 destination = iZombieTarget.Position.position - (transform.position - iZombieTarget.Position.position).normalized;
+            navMeshAgent.SetDestination(destination);
         }
     }
 }
