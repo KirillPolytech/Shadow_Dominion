@@ -26,17 +26,19 @@ namespace Shadow_Dominion
         private float _cachedInitialPositionSpring;
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
-        private SpringData _springData;
         private Transform _copyTarget;
+        private PIDData _pidData;
+        private SpringData _springData;
 
         private float _springRate = 1;
-        private Vector3 integralError;
-        private Vector3 previousError;
 
-        public void Construct(SpringData springData, Transform copyTarget)
+        private Vector3 _previousError;
+
+        public void Construct(SpringData springData, Transform copyTarget, PIDData pidData)
         {
             _springData = springData;
             _copyTarget = copyTarget;
+            _pidData = pidData;
         }
 
         private void Awake()
@@ -50,9 +52,18 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
+            UpdateConfigurableJoint();
             UpdatePosition();
             UpdateRotation();
             UpdateFreezee();
+        }
+
+        private void UpdateConfigurableJoint()
+        {
+            _configurableJoint.targetPosition = _copyTarget.position;
+
+            Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
+            _configurableJoint.targetRotation = newRot;
         }
 
         private void UpdatePosition()
@@ -60,14 +71,14 @@ namespace Shadow_Dominion
             if (!CurrentPosState)
                 return;
 
-            _configurableJoint.targetPosition = _copyTarget.position;
-
-            //if (gameObject.name is "mixamorig:RightUpLeg" or "mixamorig:LeftUpLeg" or "mixamorig:LeftLeg" or "mixamorig:RightLeg")
+            //if (_springData.Rate != 0)
+            //transform.position = Vector3.Lerp(transform.position, _copyTarget.position, Time.fixedDeltaTime * _springRate * _springData.Rate);
 
             //_rigidbody.MovePosition(Vector3.Lerp(_rigidbody.position, _copyTarget.position, Time.fixedDeltaTime * _springData.Rate * _springRate));
-            if (_springData.Rate != 0)
-                transform.position = Vector3.Lerp(transform.position, _copyTarget.position,
-                    Time.fixedDeltaTime * _springRate * _springData.Rate);
+
+            Vector3 error = _copyTarget.position - _rigidbody.worldCenterOfMass;
+            _rigidbody.linearVelocity =
+                PIDController.PIDControl(_pidData.PForce, _pidData.DForce, error, ref _previousError);
 
             Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
         }
@@ -77,18 +88,15 @@ namespace Shadow_Dominion
             if (!CurrentRotState)
                 return;
 
-            Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
-            _configurableJoint.targetRotation = newRot;
+            //if (_springData.Rate != 0)
+            //transform.rotation = Quaternion.Lerp(transform.rotation, _copyTarget.rotation, Time.fixedDeltaTime * _springRate * _springData.Rate);
 
-            if (_springData.Rate != 0)
-                transform.rotation = Quaternion.Lerp(transform.rotation, _copyTarget.rotation,
-                    Time.fixedDeltaTime * _springRate * _springData.Rate);
-            //_rigidbody.rotation = _copyTarget.rotation;
+            //_rigidbody.MoveRotation(_copyTarget.rotation);
         }
 
         private void UpdateFreezee()
         {
-            _rigidbody.constraints = CurrentFreeze ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
+            //_rigidbody.constraints = CurrentFreeze ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
         }
 
         private void UpdatePositionSpring(float value)
@@ -108,7 +116,7 @@ namespace Shadow_Dominion
             _configurableJoint.yDrive = drive;
             _configurableJoint.zDrive = drive;
         }
-        
+
         public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
 
         public void ReceiveDamage(Vector3 dir)
@@ -121,7 +129,7 @@ namespace Shadow_Dominion
             if (!other.gameObject.CompareTag("Obstacle"))
                 return;
 
-            Vector3 dir = other.transform.position - transform.position;
+            Vector3 dir = (other.transform.position - transform.position).normalized * 20;
             OnCollision?.Invoke(dir);
 
             _springRate = Mathf.Clamp(_springRate - 0.5f, 0.1f, 1);

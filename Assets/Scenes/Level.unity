@@ -830,6 +830,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parasite L Starkie
       objectReference: {fileID: 0}
+    - target: {fileID: 3127019080422959487, guid: b1658b23a71db394fb37035f91536b18, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5327392198329225564, guid: b1658b23a71db394fb37035f91536b18, type: 3}
       propertyPath: m_Size.x
       value: 4

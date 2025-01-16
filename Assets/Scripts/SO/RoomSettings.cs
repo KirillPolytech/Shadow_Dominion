@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RoomSettings", menuName = "HellBeaversData/RoomSettings")]
+[CreateAssetMenu(fileName = "RoomSettings", menuName = PathStorage.ScriptableObjectMenu + "/RoomSettings")]
 public class RoomSettings : ScriptableObject
 {
     public int MaxPlayers = 4;

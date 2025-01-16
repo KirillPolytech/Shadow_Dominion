@@ -14,6 +14,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/321eb2db7c6d43ea8fc39b54eaca345246ae00/f6/57e2b77f/RuntimeConstructorInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7aa85f2d6cfd4424895aac5c1bc34f7e3e000/10/c9d1b0b4/Graph.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7fd37b296550485d95ecaf5a50ed53b21f4200/65/fa5cbc46/LayoutDataStore.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9ff2ec5163204af481ac0a675d8e1bf82ac00/6d/422c0dc6/Rigidbody.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ae3507bef2fc41c983de864b01ea47ed2beb8/ee/42739b1c/Rigidbody.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/87/42cb342e/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/91/9b329ab7/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PathStorage.cs" root0="FORCE_HIGHLIGHTING" />
@@ -78,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="40436">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2940">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="40436" />
+      <option name="pid" value="2940" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -110,6 +112,8 @@
       <workItem from="1736861433592" duration="2224000" />
       <workItem from="1736886720500" duration="4579000" />
       <workItem from="1736952561238" duration="4183000" />
+      <workItem from="1736976230408" duration="5643000" />
+      <workItem from="1737068403995" duration="335000" />
     </task>
     <servers />
   </component>
@@ -117,5 +121,24 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/BoneData/BoneController.cs</url>
+          <line>76</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\BoneData\BoneController.cs" initialLine="76" containingFunctionPresentation="Method 'UpdatePosition'">
+            <startOffsets>
+              <option value="2816" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2887" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

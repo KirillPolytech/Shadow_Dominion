@@ -4,7 +4,6 @@ using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -16,6 +15,7 @@ namespace Shadow_Dominion
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CameraLook cameraLook;
         [SerializeField] private AimTarget aimTarget;
+        [SerializeField] private PIDData pidData;
 
         [Space] [Header("Gun")] [SerializeField]
         private Ak47 ak47;
@@ -31,18 +31,18 @@ namespace Shadow_Dominion
         [SerializeField] private Rigidbody charRigidbody;
         [SerializeField] private LegPlacer legPlacer;
 
-        [Space] [Header("Motion")] [SerializeField]
-        private SpringData springData;
-
+        [Space] 
+        [Header("Motion")] [SerializeField] private SpringData springData;
         [SerializeField] private Transform anim;
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
         [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
 
-        [Space] [Header("Rig")] [SerializeField]
-        private Rig aimRig;
+        [Space] 
+        [Header("Rig")] [SerializeField] private Rig aimRig;
 
-        [Space][SerializeField] private bool debug;
+        [Space]
+        [Header("Debug")][SerializeField] private bool debug;
 
         private void Awake()
         {
@@ -55,7 +55,7 @@ namespace Shadow_Dominion
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i]);
+                copyTo[i].Construct(springData, copyFrom[i], pidData);
 
                 int ind = i;
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
@@ -69,6 +69,8 @@ namespace Shadow_Dominion
                     player.Disable(copyTo, dir);
                 };
             }
+            
+            playerAnimation.OnStandUp += () => player.Enable(copyTo);
 
             return;
 

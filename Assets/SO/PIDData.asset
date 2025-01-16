@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33cce3d4726ffdc40a700370f918afcd, type: 3}
-  m_Name: SpringData
+  m_Script: {fileID: 11500000, guid: 1f343b698acb2e6468e3826d7f7b47f3, type: 3}
+  m_Name: PIDData
   m_EditorClassIdentifier: 
-  Rate: 4500
-  DeltaTime: 100
-  DeltaMax: 100
-  SpringDelta: 50
+  PForce: 8
+  DForce: 0.01

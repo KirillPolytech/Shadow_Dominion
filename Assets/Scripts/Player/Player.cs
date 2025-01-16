@@ -22,5 +22,14 @@ namespace Shadow_Dominion.Main
                 boneController[i].AddForce(dir);
             }
         }
+        
+        public void Enable(BoneController[] boneController)
+        {
+            for (int i = 0; i < boneController.Length; i++)
+            {
+                boneController[i].IsPositionApplying(true);
+                boneController[i].IsRotationApplying(true);
+            }
+        }
     }
 }

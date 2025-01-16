@@ -11,6 +11,7 @@ namespace Shadow_Dominion.Zombie
         [SerializeField] private ZombieMovement zombieMovement;
         [SerializeField] private ZombieTargetDetector zombieTargetDetector;
         [SerializeField] private Animator animator;
+        [SerializeField] private PIDData pidData;
 
         [Space] [Header("Motion")] [SerializeField]
         private SpringData springData;
@@ -28,7 +29,7 @@ namespace Shadow_Dominion.Zombie
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i]);
+                copyTo[i].Construct(springData, copyFrom[i], pidData);
                 copyTo[i].OnCollision += dir => zombie.Disable(copyTo, dir);
             }
         }

@@ -183,6 +183,7 @@ MonoBehaviour:
   zombieMovement: {fileID: 3775069937606052225}
   zombieTargetDetector: {fileID: 6457663404135295479}
   animator: {fileID: 2968370974973100511}
+  pidData: {fileID: 11400000, guid: 989e8b9d088075b4e97adfb789d7d70b, type: 2}
   springData: {fileID: 11400000, guid: a1df6204b44e6d04797cfc1bb57f0ef0, type: 2}
   anim: {fileID: 3724468252587659984}
   copyFrom:

@@ -11,6 +11,7 @@ public static class VariableNames
     public const KeyCode LeftShiftKey = KeyCode.LeftShift;
     public const KeyCode E = KeyCode.E;
     public const KeyCode T = KeyCode.T;
+    public const KeyCode F = KeyCode.F;
     
     public const int LeftMouseButton = 0;
     public const int RightMouseButton = 1;

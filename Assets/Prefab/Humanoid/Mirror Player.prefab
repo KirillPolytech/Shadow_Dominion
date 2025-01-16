@@ -6733,6 +6733,7 @@ MonoBehaviour:
   playerMovement: {fileID: 6120852745547044476}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
+  pidData: {fileID: 11400000, guid: 989e8b9d088075b4e97adfb789d7d70b, type: 2}
   ak47: {fileID: 4374534481158209595}
   aim: {fileID: 4205928794011733951}
   animator: {fileID: 7040407950064811046}
@@ -6786,6 +6787,7 @@ MonoBehaviour:
   - {fileID: 8734949872019449147}
   sphereRadius: 0
   aimRig: {fileID: 2686470245534649272}
+  debug: 0
 --- !u!114 &6158517376244881172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6820,8 +6822,8 @@ MonoBehaviour:
   mass: 1
   drag: 1
   isKinematic: 0
-  collisionDetectionMode: 0
-  rigidbodyConstraints: 126
+  collisionDetectionMode: 2
+  rigidbodyConstraints: 0
   physicMaterial: {fileID: 13400000, guid: bc8d9eb75aa44534a8d4e9087b9038f9, type: 2}
   ProjectionMode: 1
   enablePreprocessing: 0
@@ -11729,7 +11731,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.1
+  m_Radius: 0.15
   m_Center: {x: -6.366463e-14, y: 0.09, z: 0.029999996}
 --- !u!153 &6286890817055987268
 ConfigurableJoint:

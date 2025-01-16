@@ -13,6 +13,7 @@ namespace Shadow_Dominion
         public bool E;
         
         public bool T;
+        public bool F_Down;
         
         public bool LeftMouseButton;
         public bool LeftMouseButtonDown;

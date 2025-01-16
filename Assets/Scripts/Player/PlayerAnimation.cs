@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mirror;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace Shadow_Dominion.Player
 {
     public class PlayerAnimation : NetworkBehaviour
     {
+        public event Action OnStandUp;
+        
         public AnimationStateMachine AnimationStateMachine { get; private set; }
 
         public Animator Animator { get; private set; }
@@ -126,10 +129,12 @@ namespace Shadow_Dominion.Player
 
         private void HandleStandUpState(InputData inputData)
         {
-            if (!inputData.E)
+            if (!inputData.F_Down)
                 return;
 
-            //AnimationStateMachine.SetState<StandupState>();
+            AnimationStateMachine.SetState<StandupState>();
+            
+            OnStandUp?.Invoke();
         }
 
         public void OnDestroy()
