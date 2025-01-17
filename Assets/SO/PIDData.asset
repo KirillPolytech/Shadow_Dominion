@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f343b698acb2e6468e3826d7f7b47f3, type: 3}
   m_Name: PIDData
   m_EditorClassIdentifier: 
-  PForce: 8
-  DForce: 0.01
+  PForce: 10
+  DForce: 0.064

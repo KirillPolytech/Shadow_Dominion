@@ -9,10 +9,14 @@ namespace Shadow_Dominion.Player
     public class PlayerAnimation : NetworkBehaviour
     {
         public event Action OnStandUp;
+
+        public bool CanAnimate { get; set; } = true;
         
         public AnimationStateMachine AnimationStateMachine { get; private set; }
 
         public Animator Animator { get; private set; }
+
+        [Range(0,10f)][SerializeField] private float aimRigWeightChangeCoeff = 3.5f;
 
         private MonoInputHandler _inputHandler;
         private Rig _aimRig;
@@ -48,6 +52,9 @@ namespace Shadow_Dominion.Player
 
         private void HandleAimRig(InputData inputData)
         {
+            if (!CanAnimate)
+                return;
+            
             int currentValue = inputData.RightMouseButton ? 1 : 0;
 
             if (_lastValue != currentValue)
@@ -63,7 +70,7 @@ namespace Shadow_Dominion.Player
 
         private IEnumerator ChangeWeight(Rig rig, float targetValue)
         {
-            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * 5;
+            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * aimRigWeightChangeCoeff;
 
             while (Mathf.Abs(rig.weight - targetValue) > 0.01f)
             {
@@ -74,9 +81,7 @@ namespace Shadow_Dominion.Player
 
         private void HandleWalkState(InputData inputData)
         {
-            //Debug.Log($"IsPressedShift: {inputData.LeftShift}");
-
-            if (inputData.LeftShift)
+            if (inputData.LeftShift || !CanAnimate)
                 return;
 
             switch (inputData.VerticalAxisRaw)
@@ -92,7 +97,7 @@ namespace Shadow_Dominion.Player
 
         private void HandleRunStates(InputData inputData)
         {
-            if (!inputData.LeftShift)
+            if (!inputData.LeftShift || !CanAnimate)
                 return;
 
             switch (inputData.VerticalAxisRaw)
@@ -108,6 +113,9 @@ namespace Shadow_Dominion.Player
 
         private void HandleHorizontalState(InputData inputData)
         {
+            if (!CanAnimate)
+                return;
+            
             switch (inputData.HorizontalAxisRaw)
             {
                 case < 0:
@@ -121,6 +129,9 @@ namespace Shadow_Dominion.Player
 
         private void HandleIdleState(InputData inputData)
         {
+            if (!CanAnimate)
+                return;
+            
             if (inputData is { HorizontalAxisRaw: 0, VerticalAxisRaw: 0 })
             {
                 AnimationStateMachine.SetState<IdleState>();

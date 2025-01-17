@@ -1,5 +1,7 @@
+using Shadow_Dominion.Player;
 using Shadow_Dominion.Zombie;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Main
 {
@@ -7,28 +9,33 @@ namespace Shadow_Dominion.Main
     {
         public Transform Position { get; set; }
 
+        private RigBuilder _rootRig;
+        private PlayerMovement _playerMovement;
+        private PlayerAnimation _playerAnimation;
+
         private void Awake()
         {
             Position = transform;
         }
-        
-        public void Disable(BoneController[] boneController, Vector3 dir)
+
+        public void Construct(RigBuilder rootRig, PlayerMovement playerMovement, PlayerAnimation playerAnimation)
         {
-            for (int i = 0; i < boneController.Length; i++)
-            {
-                boneController[i].IsPositionApplying(false);
-                boneController[i].IsRotationApplying(false);
-                boneController[i].IsFreezeed(false);
-                boneController[i].AddForce(dir);
-            }
+            _rootRig = rootRig;
+            _playerMovement = playerMovement;
+            _playerAnimation = playerAnimation;
         }
-        
-        public void Enable(BoneController[] boneController)
+
+        public void SetRagdollState(bool isEnabled, BoneController[] boneController, Vector3 dir)
         {
+            _rootRig.enabled = isEnabled;
+            _playerMovement.CanMove = isEnabled;
+            _playerAnimation.CanAnimate = isEnabled;
+
             for (int i = 0; i < boneController.Length; i++)
             {
-                boneController[i].IsPositionApplying(true);
-                boneController[i].IsRotationApplying(true);
+                boneController[i].IsPositionApplying(isEnabled);
+                boneController[i].IsRotationApplying(isEnabled);
+                boneController[i].AddForce(dir);
             }
         }
     }

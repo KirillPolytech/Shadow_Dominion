@@ -48,7 +48,7 @@ namespace Shadow_Dominion
         [Space(15)] [Header("Rigidbody")] [Range(0, 100)] [SerializeField]
         private int mass = 1;
 
-        [Range(0, 1)] [SerializeField] private int drag = 1;
+        [Range(0, 100)] [SerializeField] private int drag = 1;
         [SerializeField] private bool isKinematic;
         [SerializeField] private CollisionDetectionMode collisionDetectionMode;
         [SerializeField] private RigidbodyConstraints rigidbodyConstraints;

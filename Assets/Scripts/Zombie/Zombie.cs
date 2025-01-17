@@ -14,7 +14,6 @@ namespace Shadow_Dominion.Zombie
             {
                 boneController[i].IsPositionApplying(false);
                 boneController[i].IsRotationApplying(false);
-                boneController[i].IsFreezeed(false);
                 boneController[i].AddForce(dir);
             }
         }

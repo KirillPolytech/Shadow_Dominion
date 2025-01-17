@@ -16,14 +16,13 @@ namespace Shadow_Dominion
 
         public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
         public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
-        public void IsFreezeed(bool isFreezeed) => CurrentFreeze = isFreezeed;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
 
         public BoneSettings BoneSettings;
 
         private Quaternion _cachedStartRot;
-        private float _cachedInitialPositionSpring;
+        private float _cachedInitialPositionSpring, _cachedPositionDamper;
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
         private Transform _copyTarget;
@@ -48,14 +47,26 @@ namespace Shadow_Dominion
             BoneSettings = new BoneSettings(_configurableJoint, _rigidbody);
             _cachedStartRot = transform.localRotation;
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
+            _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;
         }
 
         private void FixedUpdate()
         {
-            UpdateConfigurableJoint();
             UpdatePosition();
-            UpdateRotation();
-            UpdateFreezee();
+            UpdateConfigurableJoint();
+        }
+
+        private void UpdatePosition()
+        {
+            if (!CurrentPosState)
+                return;
+
+            Vector3 error = _copyTarget.position - _rigidbody.worldCenterOfMass;
+            _rigidbody.AddForce(
+                PIDController.PIDControl(_pidData.PForce, _pidData.DForce, error, ref _previousError),
+                ForceMode.VelocityChange);
+
+            Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
         }
 
         private void UpdateConfigurableJoint()
@@ -66,46 +77,13 @@ namespace Shadow_Dominion
             _configurableJoint.targetRotation = newRot;
         }
 
-        private void UpdatePosition()
-        {
-            if (!CurrentPosState)
-                return;
-
-            //if (_springData.Rate != 0)
-            //transform.position = Vector3.Lerp(transform.position, _copyTarget.position, Time.fixedDeltaTime * _springRate * _springData.Rate);
-
-            //_rigidbody.MovePosition(Vector3.Lerp(_rigidbody.position, _copyTarget.position, Time.fixedDeltaTime * _springData.Rate * _springRate));
-
-            Vector3 error = _copyTarget.position - _rigidbody.worldCenterOfMass;
-            _rigidbody.linearVelocity =
-                PIDController.PIDControl(_pidData.PForce, _pidData.DForce, error, ref _previousError);
-
-            Debug.DrawLine(CurrentPosition, _copyTarget.position, Color.blue);
-        }
-
-        private void UpdateRotation()
-        {
-            if (!CurrentRotState)
-                return;
-
-            //if (_springData.Rate != 0)
-            //transform.rotation = Quaternion.Lerp(transform.rotation, _copyTarget.rotation, Time.fixedDeltaTime * _springRate * _springData.Rate);
-
-            //_rigidbody.MoveRotation(_copyTarget.rotation);
-        }
-
-        private void UpdateFreezee()
-        {
-            //_rigidbody.constraints = CurrentFreeze ? RigidbodyConstraints.FreezeAll : RigidbodyConstraints.None;
-        }
-
         private void UpdatePositionSpring(float value)
         {
             JointDrive drive = new JointDrive
             {
                 maximumForce = _configurableJoint.xDrive.maximumForce,
                 positionSpring = Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
-                positionDamper = _configurableJoint.xDrive.positionDamper,
+                positionDamper = Mathf.Clamp(value, 0, value / (_cachedInitialPositionSpring - _cachedPositionDamper)),
                 useAcceleration = _configurableJoint.xDrive.useAcceleration
             };
 
@@ -117,7 +95,14 @@ namespace Shadow_Dominion
             _configurableJoint.zDrive = drive;
         }
 
-        public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
+        public void AddForce(Vector3 dir)
+        {
+            _rigidbody.AddForce(dir);
+            
+            _springRate = Mathf.Clamp(_springRate - 1f, 0f, 1);
+
+            UpdatePositionSpring(CurrentPositionSpring * _springRate);
+        }
 
         public void ReceiveDamage(Vector3 dir)
         {
@@ -126,15 +111,14 @@ namespace Shadow_Dominion
 
         private void OnCollisionStay(Collision other)
         {
-            if (!other.gameObject.CompareTag("Obstacle"))
+            if (!CurrentPosState)
+                return;
+            
+            if (!other.gameObject.CompareTag(TagStorage.Obstacle))
                 return;
 
-            Vector3 dir = (other.transform.position - transform.position).normalized * 20;
+            Vector3 dir = (transform.position - other.transform.position).normalized;
             OnCollision?.Invoke(dir);
-
-            _springRate = Mathf.Clamp(_springRate - 0.5f, 0.1f, 1);
-
-            UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
     }
 }

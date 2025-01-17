@@ -23,6 +23,11 @@ MonoBehaviour:
     angularZLimit: 60
     lowAngularXLimit: 8
     highAngularXLimit: 8
+  - Name: mixamorig:Spine
+    angularYLimit: 45
+    angularZLimit: 45
+    lowAngularXLimit: -45
+    highAngularXLimit: 45
   - Name: mixamorig:Spine1
     angularYLimit: 15
     angularZLimit: 15

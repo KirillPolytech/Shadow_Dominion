@@ -3,7 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerSettings", menuName = "HellBeaversData/PlayerSettings")]
 public class PlayerSettings : ScriptableObject
 {
-    public float speed = 7500;
+    public float walkSpeed = 1;
+    public float runSpeed = 5;
     public float rotSpeed = 100;
     [Range(-1, 1)] public float tilt = -0.1f;
     

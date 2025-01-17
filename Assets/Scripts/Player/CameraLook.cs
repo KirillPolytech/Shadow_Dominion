@@ -1,31 +1,31 @@
-using DG.Tweening;
 using Mirror;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class CameraLook : NetworkBehaviour
     {
-        [SerializeField] private Transform target;
-        [SerializeField] private Transform aimPos;
-        [SerializeField] private Transform defaultPos;
-
-        [SerializeField] private float transitDuration = 0.5f;
-
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
 
-        private RaycastHit _hit;
-        private Ray _ray;
+        private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
+        private MonoInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
-        private MonoInputHandler _monoInputHandler;
+        
+        private RaycastHit _hit;
+        private Ray _ray;
 
-        public void Construct(CameraSettings camSettings, MonoInputHandler monoInputHandler)
+        public void Construct(
+            CameraSettings camSettings,
+            MonoInputHandler monoInputHandler, 
+            CinemachineThirdPersonFollow cinemachineThirdPersonFollow)
         {
             _cameraSettings = camSettings;
             CameraTransform = transform;
             _monoInputHandler = monoInputHandler;
+            _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
 
             _camera = GetComponent<Camera>();
         }
@@ -45,7 +45,7 @@ namespace Shadow_Dominion
         {
             CastRay();
 
-            target.DOMove(inputData.RightMouseButton ? aimPos.position : defaultPos.position, transitDuration);
+            _cinemachineThirdPersonFollow.CameraDistance = inputData.RightMouseButton ? 0 : _cameraSettings.zoom;
         }
 
         private void CastRay()

@@ -5,6 +5,8 @@ namespace Shadow_Dominion.Main
 {
     public class PlayerMovement : NetworkBehaviour
     {
+        public bool CanMove { get; set; } = true;
+        
         private MonoInputHandler _inputHandler;
         private PlayerSettings _playerSettings;
         private LegPlacer _legPlacer;
@@ -12,12 +14,11 @@ namespace Shadow_Dominion.Main
         private Rigidbody _charRigidbody;
 
         private Transform _transform;
-        private float x, y;
         private Quaternion _cachedRot;
-        private Vector3 _dir;
-        private Vector3 _centerOfMass;
+        private Vector3 _dir, _centerOfMass;
+        private float x, y;
+        private bool _isRun;
 
-        //[Inject]
         public void Construct(
             PlayerSettings playerSettings,
             Rigidbody characterController,
@@ -42,13 +43,18 @@ namespace Shadow_Dominion.Main
             
             x = data.HorizontalAxisRaw;
             y = data.VerticalAxisRaw;
+            _isRun = data.LeftShift;
         }
 
         public void FixedUpdate()
         {
+            if (!CanMove)
+                return;
+            
             _centerOfMass = _transform.position + Vector3.up;
             PlaceLegs();
             Move();
+            Run();
             Rotate();
         }
 
@@ -67,17 +73,29 @@ namespace Shadow_Dominion.Main
 
         private void Move()
         {
-            if (!_playerSettings.canMove)
+            if (!_playerSettings.canMove || _isRun)
                 return;
 
             _dir = (_cameraLook.CameraTransform.forward * y +
-                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.speed;
+                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.walkSpeed;
             _dir.y = 0;
 
             _charRigidbody.AddForce(_dir);
 
             Debug.DrawRay(_centerOfMass, _dir * 10, Color.red);
             Debug.DrawRay(_transform.position, _charRigidbody.linearVelocity * 10, Color.yellow);
+        }
+        
+        private void Run()
+        {
+            if (!_playerSettings.canMove || !_isRun)
+                return;
+
+            _dir = (_cameraLook.CameraTransform.forward * y +
+                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.runSpeed;
+            _dir.y = 0;
+
+            _charRigidbody.AddForce(_dir);
         }
 
         private void Rotate()

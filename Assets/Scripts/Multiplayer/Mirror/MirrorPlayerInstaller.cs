@@ -2,6 +2,7 @@ using System.Linq;
 using NaughtyAttributes;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -16,38 +17,36 @@ namespace Shadow_Dominion
         [SerializeField] private CameraLook cameraLook;
         [SerializeField] private AimTarget aimTarget;
         [SerializeField] private PIDData pidData;
+        [SerializeField] private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
 
-        [Space] [Header("Gun")] [SerializeField]
-        private Ak47 ak47;
+        [Space] [Header("Gun")] [SerializeField] private Ak47 ak47;
 
         [SerializeField] private Transform aim;
 
         [Space] [SerializeField] private Animator animator;
         [SerializeField] private CameraSettings cameraSettings;
 
-        [Header("PlayerMovement")] [SerializeField]
-        private PlayerSettings playerSettings;
+        [Header("PlayerMovement")] [SerializeField] private PlayerSettings playerSettings;
 
         [SerializeField] private Rigidbody charRigidbody;
         [SerializeField] private LegPlacer legPlacer;
 
-        [Space] 
-        [Header("Motion")] [SerializeField] private SpringData springData;
+        [Space] [Header("Motion")] [SerializeField] private SpringData springData;
+
         [SerializeField] private Transform anim;
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
         [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
 
-        [Space] 
-        [Header("Rig")] [SerializeField] private Rig aimRig;
+        [Space] [Header("Rig")] [SerializeField] private RigBuilder rootRig;
+        [SerializeField] private Rig aimRig;
 
-        [Space]
-        [Header("Debug")][SerializeField] private bool debug;
+        [Space] [Header("Debug")] [SerializeField] private bool debug;
 
         private void Awake()
         {
-            //player.Construct(inputHandler);
-            cameraLook.Construct(cameraSettings, inputHandler);
+            player.Construct(rootRig, playerMovement, playerAnimation);
+            cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
             playerAnimation.Construct(animator, inputHandler, aimRig);
@@ -59,18 +58,18 @@ namespace Shadow_Dominion
 
                 int ind = i;
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
-                
+
                 copyTo[i].OnCollision += dir =>
                 {
-                    if (playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunForwardState) 
+                    if (playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunForwardState)
                         && playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunBackwardState))
                         return;
-                    
-                    player.Disable(copyTo, dir);
+
+                    player.SetRagdollState(false,copyTo, dir);
                 };
             }
-            
-            playerAnimation.OnStandUp += () => player.Enable(copyTo);
+
+            playerAnimation.OnStandUp += () => player.SetRagdollState(true, copyTo, Vector3.zero);
 
             return;
 
@@ -78,12 +77,9 @@ namespace Shadow_Dominion
             {
                 if (!debug)
                     return;
-                
+
                 boneController.IsPositionApplying(!inputData.T);
                 boneController.IsRotationApplying(!inputData.T);
-                
-                if (inputData.E_Down)
-                    boneController.IsFreezeed(!boneController.CurrentFreeze);
             }
         }
 
