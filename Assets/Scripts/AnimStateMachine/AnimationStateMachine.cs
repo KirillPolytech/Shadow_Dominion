@@ -13,7 +13,8 @@ namespace Shadow_Dominion
         private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
         private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
         private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
-        private readonly int StandUpHashCode = Animator.StringToHash("IsStandUp");
+        private readonly int IsStandUpHashCode = Animator.StringToHash("IsStandUp");
+        private readonly int StandUpHashCode = Animator.StringToHash("StandUp");
 
         public AnimationStateMachine(Animator animator)
         {

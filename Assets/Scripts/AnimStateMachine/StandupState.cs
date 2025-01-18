@@ -14,11 +14,11 @@ public class StandupState : IState
     
     public override void Enter()
     {
-        _animator.SetBool(_isStandUp, true);
+        _animator.SetTrigger(_isStandUp);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(_isStandUp, false);
+        _animator.SetTrigger(_isStandUp);
     }
 }

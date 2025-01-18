@@ -8,6 +8,7 @@ namespace Shadow_Dominion
 
         [SerializeField] private Transform bulletStartPosition;
         [SerializeField] private Transform weaponPose;
+        [SerializeField] private float damage = 100;
         [SerializeField] private float rotationSpeed = 15;
         [SerializeField] private ParticleSystem fireEffect;
 
@@ -19,7 +20,6 @@ namespace Shadow_Dominion
         private Transform _lookTarget;
         private Transform _cachedTransform;
 
-        //[Inject]
         public void Construct(MonoInputHandler monoInputHandler, Transform lookTarget)
         {
             _monoInputHandler = monoInputHandler;
@@ -31,9 +31,11 @@ namespace Shadow_Dominion
 
         private void Fire(InputData inputData)
         {
-            if (!inputData.LeftMouseButtonDown)
+            if (!inputData.LeftMouseButton)
                 return;
             
+            if (fireEffect.isPlaying)
+                fireEffect.Stop();
             fireEffect.Play();
             
             if (!_hit.collider)
@@ -44,7 +46,8 @@ namespace Shadow_Dominion
             if (!boneController)
                 return;
 
-            boneController.ReceiveDamage((boneController.CurrentPosition - _cachedTransform.position) * 10000);
+            boneController.ReceiveDamage((boneController.CurrentPosition - _cachedTransform.position) * damage);
+            //boneController.ReceiveHitPoint(_hit.point);
         }
 
         private void FixedUpdate()

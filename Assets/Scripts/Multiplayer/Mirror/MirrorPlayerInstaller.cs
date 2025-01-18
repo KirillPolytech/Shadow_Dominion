@@ -18,6 +18,7 @@ namespace Shadow_Dominion
         [SerializeField] private AimTarget aimTarget;
         [SerializeField] private PIDData pidData;
         [SerializeField] private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+        [SerializeField] private Renderer rend;
 
         [Space] [Header("Gun")] [SerializeField] private Ak47 ak47;
 
@@ -54,7 +55,7 @@ namespace Shadow_Dominion
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i], pidData);
+                copyTo[i].Construct(springData, copyFrom[i], pidData, rend);
 
                 int ind = i;
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);

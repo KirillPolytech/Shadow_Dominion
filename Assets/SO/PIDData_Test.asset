@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68613c8e664abab4a885bc38b3984534, type: 3}
-  m_Name: CameraSettings
+  m_Script: {fileID: 11500000, guid: 1f343b698acb2e6468e3826d7f7b47f3, type: 3}
+  m_Name: PIDData_Test
   m_EditorClassIdentifier: 
-  zoom: 1
-  zoomDuration: 5
-  rayCastDistance: 1000
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 196
+  PForce: 0
+  DForce: 0

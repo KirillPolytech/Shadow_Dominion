@@ -12,7 +12,6 @@ namespace Shadow_Dominion
 
         public bool CurrentPosState { get; private set; } = true;
         public bool CurrentRotState { get; private set; } = true;
-        public bool CurrentFreeze { get; private set; } = true;
 
         public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
         public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
@@ -32,12 +31,18 @@ namespace Shadow_Dominion
         private float _springRate = 1;
 
         private Vector3 _previousError;
+        private Renderer _renderer;
 
-        public void Construct(SpringData springData, Transform copyTarget, PIDData pidData)
+        public void Construct(
+            SpringData springData, 
+            Transform copyTarget, 
+            PIDData pidData, 
+            Renderer skinnedMeshRenderer)
         {
             _springData = springData;
             _copyTarget = copyTarget;
             _pidData = pidData;
+            _renderer = skinnedMeshRenderer;
         }
 
         private void Awake()
@@ -71,6 +76,9 @@ namespace Shadow_Dominion
 
         private void UpdateConfigurableJoint()
         {
+            if (!CurrentPosState || !CurrentRotState)
+                return;
+            
             _configurableJoint.targetPosition = _copyTarget.position;
 
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
@@ -107,6 +115,11 @@ namespace Shadow_Dominion
         public void ReceiveDamage(Vector3 dir)
         {
             OnCollision?.Invoke(dir);
+        }
+
+        public void ReceiveHitPoint(Vector3 point)
+        {
+            BodyInjuryService.DrawHole(_renderer, point);
         }
 
         private void OnCollisionStay(Collision other)

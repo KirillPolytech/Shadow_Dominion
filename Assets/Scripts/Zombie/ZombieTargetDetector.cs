@@ -9,7 +9,7 @@ namespace Shadow_Dominion.Zombie
 
         private void OnTriggerStay(Collider other)
         {
-            IZombieTarget zombieTarget = other.gameObject.GetComponent<IZombieTarget>();
+            other.TryGetComponent(out IZombieTarget zombieTarget);
             if (zombieTarget == null)
                 return;
 

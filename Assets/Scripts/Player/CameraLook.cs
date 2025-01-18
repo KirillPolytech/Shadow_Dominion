@@ -13,13 +13,14 @@ namespace Shadow_Dominion
         private MonoInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
-        
+
         private RaycastHit _hit;
         private Ray _ray;
+        private float _rightMouseValue;
 
         public void Construct(
             CameraSettings camSettings,
-            MonoInputHandler monoInputHandler, 
+            MonoInputHandler monoInputHandler,
             CinemachineThirdPersonFollow cinemachineThirdPersonFollow)
         {
             _cameraSettings = camSettings;
@@ -41,11 +42,24 @@ namespace Shadow_Dominion
                 _camera.gameObject.SetActive(false);
         }
 
+        private void FixedUpdate()
+        {
+            Zooming();
+        }
+        
         private void HandleInput(InputData inputData)
         {
             CastRay();
 
-            _cinemachineThirdPersonFollow.CameraDistance = inputData.RightMouseButton ? 0 : _cameraSettings.zoom;
+            _rightMouseValue = inputData.RightMouseButton ? -1 : 1f;
+        }
+
+        private void Zooming()
+        {
+            _cinemachineThirdPersonFollow.CameraDistance =
+                Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
+                            _rightMouseValue * Time.fixedDeltaTime * _cameraSettings.zoomDuration,
+                    0, _cameraSettings.zoom);
         }
 
         private void CastRay()
@@ -58,7 +72,7 @@ namespace Shadow_Dominion
             }
 
             _hit.point = _ray.GetPoint(_cameraSettings.rayCastDistance);
-
+            
             HitPoint = _hit.point;
         }
 

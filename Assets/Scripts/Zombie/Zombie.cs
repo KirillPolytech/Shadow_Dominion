@@ -5,7 +5,7 @@ namespace Shadow_Dominion.Zombie
     public class Zombie : MonoBehaviour
     {
         [SerializeField] private Rigidbody zombie_Ragdoll;
-        
+
         public void Disable(BoneController[] boneController, Vector3 dir)
         {
             zombie_Ragdoll.constraints = RigidbodyConstraints.None;
@@ -16,6 +16,10 @@ namespace Shadow_Dominion.Zombie
                 boneController[i].IsRotationApplying(false);
                 boneController[i].AddForce(dir);
             }
+            
+            //boneController.IsPositionApplying(false);
+            //boneController.IsRotationApplying(false);
+            //boneController.AddForce(dir);
         }
     }
 }

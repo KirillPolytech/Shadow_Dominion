@@ -175,7 +175,7 @@ namespace Shadow_Dominion
                 _ragDollBoneTransforms[i] = new BoneTransform();
             }
 
-            _playerAnimation.AnimationStateMachine.SetState<StandupState>();
+            //_playerAnimation.AnimationStateMachine.SetState<StandupState>();
 
             _isStandUp = true;
         }
