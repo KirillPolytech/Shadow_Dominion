@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shadow_Dominion.Zombie
@@ -6,10 +8,11 @@ namespace Shadow_Dominion.Zombie
     public class ZombieTargetDetector : MonoBehaviour
     {
         public event Action<IZombieTarget> OnDetectTarget;
-
-        private void OnTriggerStay(Collider other)
+        
+        private void OnTriggerEnter(Collider other)
         {
             other.TryGetComponent(out IZombieTarget zombieTarget);
+            
             if (zombieTarget == null)
                 return;
 

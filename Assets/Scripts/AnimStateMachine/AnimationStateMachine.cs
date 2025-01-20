@@ -15,6 +15,7 @@ namespace Shadow_Dominion
         private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
         private readonly int IsStandUpHashCode = Animator.StringToHash("IsStandUp");
         private readonly int StandUpHashCode = Animator.StringToHash("StandUp");
+        private readonly int Laying = Animator.StringToHash("Laying");
 
         public AnimationStateMachine(Animator animator)
         {
@@ -26,6 +27,7 @@ namespace Shadow_Dominion
             _states.Add(new RunForwardState(animator, IsRunForward));
             _states.Add(new RunBackwardState(animator, IsRunBackward));
             _states.Add(new StandupState(animator, StandUpHashCode));
+            _states.Add(new LayingState(animator, Laying));
         }
 
         public override void SetState<T>()

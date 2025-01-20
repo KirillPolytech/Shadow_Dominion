@@ -66,11 +66,15 @@ namespace Shadow_Dominion
                         && playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunBackwardState))
                         return;
 
-                    player.SetRagdollState(false,copyTo, dir);
+                    player.SetRagdollState(false, copyTo, dir);
+                    playerAnimation.AnimationStateMachine.SetState<LayingState>();
                 };
             }
 
-            playerAnimation.OnStandUp += () => player.SetRagdollState(true, copyTo, Vector3.zero);
+            playerAnimation.OnStandUp += () =>
+            {
+                player.SetRagdollState(true, copyTo, Vector3.zero);
+            };
 
             return;
 

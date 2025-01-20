@@ -12,9 +12,11 @@ namespace Shadow_Dominion
 
         public bool CurrentPosState { get; private set; } = true;
         public bool CurrentRotState { get; private set; } = true;
+        public bool CurrentSpringState { get; private set; } = true;
 
         public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
         public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
+        public void IsSpringApplying(bool isSpringApplying) => CurrentSpringState = isSpringApplying;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
 
@@ -34,9 +36,9 @@ namespace Shadow_Dominion
         private Renderer _renderer;
 
         public void Construct(
-            SpringData springData, 
-            Transform copyTarget, 
-            PIDData pidData, 
+            SpringData springData,
+            Transform copyTarget,
+            PIDData pidData,
             Renderer skinnedMeshRenderer)
         {
             _springData = springData;
@@ -76,9 +78,9 @@ namespace Shadow_Dominion
 
         private void UpdateConfigurableJoint()
         {
-            if (!CurrentPosState || !CurrentRotState)
+            if (!CurrentSpringState)
                 return;
-            
+
             _configurableJoint.targetPosition = _copyTarget.position;
 
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
@@ -103,11 +105,11 @@ namespace Shadow_Dominion
             _configurableJoint.zDrive = drive;
         }
 
-        public void AddForce(Vector3 dir)
+        public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
+
+        public void UpdateSpring(bool state)
         {
-            _rigidbody.AddForce(dir);
-            
-            _springRate = Mathf.Clamp(_springRate - 1f, 0f, 1);
+            _springRate = Mathf.Clamp(_springRate - 1f * (state ? -1 : 1), 0f, 1);
 
             UpdatePositionSpring(CurrentPositionSpring * _springRate);
         }
@@ -126,11 +128,11 @@ namespace Shadow_Dominion
         {
             if (!CurrentPosState)
                 return;
-            
+
             if (!other.gameObject.CompareTag(TagStorage.Obstacle))
                 return;
 
-            Vector3 dir = (transform.position - other.transform.position).normalized;
+            Vector3 dir = (other.transform.position - transform.position).normalized;
             OnCollision?.Invoke(dir);
         }
     }

@@ -10,6 +10,7 @@ namespace Shadow_Dominion
         [SerializeField] private Transform weaponPose;
         [SerializeField] private float damage = 100;
         [SerializeField] private float rotationSpeed = 15;
+        [SerializeField] private float limit = 30;
         [SerializeField] private ParticleSystem fireEffect;
 
         public Vector3 HitPoint => _hit.point;
@@ -72,6 +73,12 @@ namespace Shadow_Dominion
             weaponPose.rotation = Quaternion.Lerp(transform.rotation,
                 Quaternion.LookRotation(_lookTarget.position - transform.position),
                 rotationSpeed * Time.fixedDeltaTime);
+            
+            Vector3 euler = weaponPose.rotation.eulerAngles;
+            euler.x = euler.x > 180 ? euler.x - 360 : euler.x;
+            euler.x = Mathf.Clamp(euler.x, -limit, limit);
+            
+            weaponPose.rotation = Quaternion.Euler(euler);
         }
 
         private void OnDrawGizmos()

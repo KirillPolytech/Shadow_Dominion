@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caefa8bd2b97c8a45b11df1ebccf7ca9, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  walkSpeed: 1000
-  runSpeed: 2000
+  walkSpeed: 840
+  runSpeed: 1400
   rotSpeed: 5
   tilt: -0.1
   canMove: 1

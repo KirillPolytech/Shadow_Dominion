@@ -32,6 +32,8 @@ namespace Shadow_Dominion
             _inputData.RightMouseButton = Input.GetMouseButton(VariableNames.RightMouseButton);
             _inputData.RightMouseButtonDown = Input.GetMouseButtonDown(VariableNames.RightMouseButton);
             _inputData.RightMouseButtonUp = Input.GetMouseButtonUp(VariableNames.RightMouseButton);
+            
+            _inputData.MouseWheelScroll = Input.mouseScrollDelta.y;
 
             OnInputUpdate?.Invoke(_inputData);
         }

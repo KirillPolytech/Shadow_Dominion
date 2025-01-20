@@ -16,7 +16,9 @@ namespace Shadow_Dominion
 
         private RaycastHit _hit;
         private Ray _ray;
-        private float _rightMouseValue;
+        private int _rightMouseValue;
+        private float _mouseWheelValue;
+        private float _currentScrollDistance;
 
         public void Construct(
             CameraSettings camSettings,
@@ -46,20 +48,26 @@ namespace Shadow_Dominion
         {
             Zooming();
         }
-        
+
         private void HandleInput(InputData inputData)
         {
             CastRay();
 
-            _rightMouseValue = inputData.RightMouseButton ? -1 : 1f;
+            _rightMouseValue = inputData.RightMouseButton ? 1 : 0;
+            _mouseWheelValue = inputData.MouseWheelScroll;
         }
 
         private void Zooming()
         {
-            _cinemachineThirdPersonFollow.CameraDistance =
-                Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
-                            _rightMouseValue * Time.fixedDeltaTime * _cameraSettings.zoomDuration,
-                    0, _cameraSettings.zoom);
+            float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
+            float cameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
+                                               rightMouseValue * _cameraSettings.zoomDuration * Time.fixedDeltaTime,
+                0, _cameraSettings.zoom);
+
+            rightMouseValue = _rightMouseValue == 1 ? 0 : 1;
+            _currentScrollDistance = Mathf.Clamp( _currentScrollDistance - _mouseWheelValue, 0, _cameraSettings.clamp);
+            float scrollDistance = _currentScrollDistance * rightMouseValue;
+            _cinemachineThirdPersonFollow.CameraDistance = cameraDistance + scrollDistance;
         }
 
         private void CastRay()
@@ -72,7 +80,7 @@ namespace Shadow_Dominion
             }
 
             _hit.point = _ray.GetPoint(_cameraSettings.rayCastDistance);
-            
+
             HitPoint = _hit.point;
         }
 

@@ -4,6 +4,8 @@ namespace Shadow_Dominion
     {
         public float MouseX;
         public float MouseY;
+        public float MouseWheelScroll;
+        
         public float HorizontalAxisRaw;
         public float VerticalAxisRaw;
         public bool LeftShift;

@@ -7,6 +7,8 @@ public class CameraSettings : ScriptableObject
     public float zoom = 1;
     public float zoomDuration = 5;
     
+    public float clamp = 5;
+    
     public int rayCastDistance = 1000;
     public LayerMask layerMask;
 }

@@ -19,6 +19,6 @@ public class StandupState : IState
 
     public override void Exit()
     {
-        _animator.SetTrigger(_isStandUp);
+        
     }
 }

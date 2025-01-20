@@ -9,6 +9,9 @@ namespace Shadow_Dominion.Main
     {
         public Transform Position { get; set; }
 
+        [SerializeField] private Rigidbody ragdollRoot;
+        [SerializeField] private float force = 10;
+
         private RigBuilder _rootRig;
         private PlayerMovement _playerMovement;
         private PlayerAnimation _playerAnimation;
@@ -30,12 +33,15 @@ namespace Shadow_Dominion.Main
             _rootRig.enabled = isEnabled;
             _playerMovement.CanMove = isEnabled;
             _playerAnimation.CanAnimate = isEnabled;
+            
+            //ragdollRoot.constraints = isEnabled ? RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ : RigidbodyConstraints.None;
 
             for (int i = 0; i < boneController.Length; i++)
             {
                 boneController[i].IsPositionApplying(isEnabled);
                 boneController[i].IsRotationApplying(isEnabled);
-                boneController[i].AddForce(dir);
+                boneController[i].AddForce(dir * force);
+                //boneController[i].UpdateSpring(isEnabled);
             }
         }
     }

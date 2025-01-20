@@ -356,7 +356,7 @@ CapsuleCollider:
   m_Radius: 0.15
   m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 1.05, z: 0}
+  m_Center: {x: 0, y: 0.95, z: 0}
 --- !u!54 &3609581604113678919
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -479,6 +479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38a12f44b0dcded4fbf1c58037ca4fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ragdollRoot: {fileID: 4951795622753340675}
+  force: 1000
 --- !u!1 &749257996376149362
 GameObject:
   m_ObjectHideFlags: 0
@@ -5716,8 +5718,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.01, y: 0.01, z: 0.01}
-  m_Center: {x: 0, y: 0, z: -0.015}
+  m_Size: {x: 0.1, y: 0.01, z: 0.03}
+  m_Center: {x: 0, y: 0.01, z: -0.02}
 --- !u!1 &1618310412228688036
 GameObject:
   m_ObjectHideFlags: 0
@@ -5751,7 +5753,6 @@ Transform:
   m_Children:
   - {fileID: 454850276214280292}
   - {fileID: 2866002317588881410}
-  - {fileID: 1990726879161665692}
   m_Father: {fileID: 2294122942550041804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5253790638672320161
@@ -5800,7 +5801,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!1 &1650044613537368038
 GameObject:
@@ -5892,8 +5893,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: -0.0000011622906, y: 0.052422702, z: -0.00999999}
+  m_Size: {x: 0.16, y: 0.07717165, z: 0.28}
+  m_Center: {x: 1.3044072e-23, y: -0.011414179, z: 0}
 --- !u!54 &6889554813264999064
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6132,7 +6133,7 @@ Transform:
   m_GameObject: {fileID: 2023024547148383985}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.6, z: -0.2}
+  m_LocalPosition: {x: 0.5, y: 1.65, z: 0.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6195,7 +6196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.5, y: 0.2, z: -0.2}
+  ShoulderOffset: {x: 0, y: 0, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
   CameraDistance: 0
@@ -6740,7 +6741,7 @@ MonoBehaviour:
   PosMotionState: 0
   RotMotionState: 1
   mass: 10
-  drag: 5
+  drag: 1
   isKinematic: 0
   collisionDetectionMode: 1
   rigidbodyConstraints: 0
@@ -7360,7 +7361,7 @@ GameObject:
   - component: {fileID: 4634500784072131902}
   - component: {fileID: 1432543747574397680}
   - component: {fileID: 7037940713464155358}
-  - component: {fileID: 5737785741174482709}
+  - component: {fileID: 8545595337008466326}
   m_Layer: 6
   m_Name: mixamorig:RightToeBase
   m_TagString: Untagged
@@ -7525,8 +7526,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &5737785741174482709
-BoxCollider:
+--- !u!136 &8545595337008466326
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -7543,9 +7544,11 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.3, z: 0.1}
-  m_Center: {x: 0, y: -0.06, z: 0.03}
+  serializedVersion: 2
+  m_Radius: 0.04
+  m_Height: 0.31
+  m_Direction: 1
+  m_Center: {x: -0.02, y: -0.06, z: 0.03}
 --- !u!1 &3394826491742200091
 GameObject:
   m_ObjectHideFlags: 0
@@ -8026,8 +8029,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.01, y: 0.01, z: 0.01}
-  m_Center: {x: 0, y: 0, z: -0.015}
+  m_Size: {x: 0.1, y: 0.01, z: 0.03}
+  m_Center: {x: 0, y: 0.01, z: -0.02}
 --- !u!1 &4159230935115321762
 GameObject:
   m_ObjectHideFlags: 0
@@ -8658,8 +8661,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.1, y: 0.05, z: 0.05}
+  m_Center: {x: 0, y: 0.04, z: 0}
 --- !u!1 &4259723829840677927
 GameObject:
   m_ObjectHideFlags: 0
@@ -9434,7 +9437,7 @@ Transform:
   m_GameObject: {fileID: 5438910018940704158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.6, z: -0.2}
+  m_LocalPosition: {x: 0.5, y: 1.65, z: 0.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9591,12 +9594,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5687892209781997379}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 1.1146609e-14, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -5.0742796e-15, w: 1}
+  m_LocalPosition: {x: 0.5, y: 1.25, z: 0.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8793020421755960410}
+  m_Father: {fileID: 3986989064418960988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5820017214451494419
 GameObject:
@@ -9682,7 +9685,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.43, y: 0.1, z: 0.1}
+  m_Size: {x: 0.2, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!153 &3035289796510678449
 ConfigurableJoint:
@@ -10042,7 +10045,7 @@ GameObject:
   - component: {fileID: 6852269626516966319}
   - component: {fileID: 7074052813757630385}
   - component: {fileID: 8270965726402995083}
-  - component: {fileID: 974722768264362363}
+  - component: {fileID: 5392273051476249328}
   m_Layer: 6
   m_Name: mixamorig:LeftToeBase
   m_TagString: Untagged
@@ -10207,8 +10210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &974722768264362363
-BoxCollider:
+--- !u!136 &5392273051476249328
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10225,9 +10228,11 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.3, z: 0.1}
-  m_Center: {x: 0, y: -0.06, z: 0.03}
+  serializedVersion: 2
+  m_Radius: 0.04
+  m_Height: 0.31
+  m_Direction: 1
+  m_Center: {x: 0.02, y: -0.06, z: 0.03}
 --- !u!1 &6709826248311039196
 GameObject:
   m_ObjectHideFlags: 0
@@ -10507,7 +10512,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.43, y: 0.1, z: 0.1}
+  m_Size: {x: 0.2, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5261815542681627268
 MonoBehaviour:
@@ -11243,7 +11248,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.37, y: 0.1, z: 0.25}
+  m_Size: {x: 0.2, y: 0.1, z: 0.25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!153 &8402616101412886071
 ConfigurableJoint:
@@ -11587,8 +11592,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.1, y: 0.05, z: 0.05}
+  m_Center: {x: 0, y: 0.04, z: 0}
 --- !u!1 &8647004915771791223
 GameObject:
   m_ObjectHideFlags: 0
@@ -12223,7 +12228,7 @@ PrefabInstance:
     - target: {fileID: 4458355017963517263, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: a854aa230bbfc6d419f17906d137acb9, type: 2}
+      objectReference: {fileID: 9100000, guid: bf9b917f8c32223498acec73e3200c6c, type: 2}
     - target: {fileID: 4607302412166420443, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -12387,6 +12392,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7728017054593609525, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1990726879161665692}
     - targetCorrespondingSourceObject: {fileID: 8939578186563257931, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3384438364174228608}
