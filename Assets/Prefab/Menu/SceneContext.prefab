@@ -79,5 +79,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuWindowsController: {fileID: 0}
   roomSettings: {fileID: 11400000, guid: 29fdb405c980cd444ba8d840d9775754, type: 2}
-  lobby: {fileID: 0}
-  mirrorServer: {fileID: 0}
+  IP: {fileID: 0}
+  PORT: {fileID: 0}

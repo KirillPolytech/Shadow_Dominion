@@ -1,23 +1,25 @@
 using System.Linq;
 using Shadow_Dominion.Level.StateMachine;
+using WindowsSystem;
 using Zenject;
 
 public class LevelStateMachine : IStateMachine
 {
     [Inject]
-    public LevelStateMachine(CursorService cursorService)
+    public LevelStateMachine(CursorService cursorService, WindowsController windowsController)
     {
         _states.Add(new GameplayState(cursorService));
-        _states.Add(new PauseState());
+        _states.Add(new PauseState(windowsController));
         
         SetState<GameplayState>();
     }
     
-    public override void SetState<T>()
+    public sealed override void SetState<T>()
     {
-        CurrentState?.Exit();
         IState state = _states.First(x => x.GetType() == typeof(T));
-        state.Enter();
+        
+        CurrentState?.Exit();
         CurrentState = state;
+        CurrentState.Enter();
     }
 }

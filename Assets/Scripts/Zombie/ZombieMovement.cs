@@ -10,6 +10,7 @@ namespace Shadow_Dominion.Zombie
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         private AnimationStateMachine _animationStateMachine;
+        private IZombieTarget _iZombieTarget;
 
         public void Construct(Animator animator, ZombieSettings zombieSettings)
         {
@@ -22,6 +23,7 @@ namespace Shadow_Dominion.Zombie
         private void FixedUpdate()
         {
             HandleAnimations();
+            Moving();
         }
 
         private void HandleAnimations()
@@ -34,7 +36,16 @@ namespace Shadow_Dominion.Zombie
 
         public void MoveTo(IZombieTarget iZombieTarget)
         {
-            Vector3 destination = iZombieTarget.Position.position - (transform.position - iZombieTarget.Position.position).normalized;
+            _iZombieTarget = iZombieTarget;
+        }
+
+        private void Moving()
+        {
+            if (_iZombieTarget == null)
+                return;
+            
+            Vector3 destination = _iZombieTarget.Position.position - 
+                                  (transform.position - _iZombieTarget.Position.position).normalized;
             navMeshAgent.SetDestination(destination);
         }
     }

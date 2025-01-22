@@ -183,7 +183,7 @@ MonoBehaviour:
   zombieMovement: {fileID: 3775069937606052225}
   zombieTargetDetector: {fileID: 6457663404135295479}
   animator: {fileID: 2968370974973100511}
-  pidData: {fileID: 11400000, guid: 989e8b9d088075b4e97adfb789d7d70b, type: 2}
+  pidData: {fileID: 11400000, guid: 68351bd9694981d47b6a6f912b5ebc4f, type: 2}
   rend: {fileID: 3424988112518964002}
   springData: {fileID: 11400000, guid: a1df6204b44e6d04797cfc1bb57f0ef0, type: 2}
   anim: {fileID: 3724468252587659984}
@@ -583,6 +583,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.12
+      objectReference: {fileID: 0}
     - target: {fileID: 5567237881422871782, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -889,6 +897,10 @@ PrefabInstance:
     - target: {fileID: -5958552438806032170, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -5958552438806032170, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5857696854640597626, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
       propertyPath: m_Layer
