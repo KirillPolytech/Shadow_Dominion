@@ -1,4 +1,4 @@
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
 public class RunForwardState : IState

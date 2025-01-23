@@ -2,6 +2,7 @@ using System.Linq;
 using NaughtyAttributes;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
+using Shadow_Dominion.Player.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -10,13 +11,20 @@ namespace Shadow_Dominion
 {
     public class MirrorPlayerInstaller : MonoBehaviour
     {
+        [Space(15)] [Header("Configs")] 
+        [SerializeField] private BoneDataSO bones;
+        [SerializeField] private SpringData springData;
+        [SerializeField] private PIDData pidData;
+        [SerializeField] private CameraSettings cameraSettings;
+        [SerializeField] private PlayerSettings playerSettings;
+        
+        [Space(15)] [Header("Limits")] 
         [SerializeField] private Main.Player player;
         [SerializeField] private MonoInputHandler inputHandler;
         [SerializeField] private PlayerAnimation playerAnimation;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CameraLook cameraLook;
         [SerializeField] private AimTarget aimTarget;
-        [SerializeField] private PIDData pidData;
         [SerializeField] private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
         [SerializeField] private Renderer rend;
 
@@ -25,15 +33,11 @@ namespace Shadow_Dominion
         [SerializeField] private Transform aim;
 
         [Space] [SerializeField] private Animator animator;
-        [SerializeField] private CameraSettings cameraSettings;
 
-        [Header("PlayerMovement")] [SerializeField] private PlayerSettings playerSettings;
-
+        [Header("PlayerMovement")]
         [SerializeField] private Rigidbody charRigidbody;
-        [SerializeField] private LegPlacer legPlacer;
 
-        [Space] [Header("Motion")] [SerializeField] private SpringData springData;
-
+        [Space] [Header("Motion")]
         [SerializeField] private Transform anim;
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
@@ -46,35 +50,27 @@ namespace Shadow_Dominion
 
         private void Awake()
         {
-            player.Construct(rootRig, playerMovement, playerAnimation);
+            player.Construct(rootRig, playerMovement, playerAnimation, copyTo);
             cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
+            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
             playerAnimation.Construct(animator, inputHandler, aimRig);
             ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i], pidData, rend);
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+                
+                copyTo[i].Construct(springData, copyFrom[i], pidData, rend, humanBodyBone);
 
                 int ind = i;
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
 
-                copyTo[i].OnCollision += dir =>
-                {
-                    if (playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunForwardState)
-                        && playerAnimation.AnimationStateMachine.CurrentState.GetType() != typeof(RunBackwardState))
-                        return;
-
-                    player.SetRagdollState(false, copyTo, dir);
-                    playerAnimation.AnimationStateMachine.SetState<LayingState>();
-                };
+                copyTo[i].OnCollision += dir => player.playerStateMachine.SetState<RagdollState>();
+                copyTo[i].OnBoneDetach += dir => player.playerStateMachine.SetState<RagdollState>();
             }
 
-            playerAnimation.OnStandUp += () =>
-            {
-                player.SetRagdollState(true, copyTo, Vector3.zero);
-            };
+            playerAnimation.OnStandUp += player.playerStateMachine.SetState<RagdollState>;
 
             return;
 
@@ -110,6 +106,11 @@ namespace Shadow_Dominion
             {
                 Gizmos.DrawSphere(t.position, sphereRadius);
             }
+        }
+
+        private void OnDestroy()
+        {
+            playerAnimation.OnStandUp -= player.playerStateMachine.SetState<RagdollState>;
         }
     }
 }

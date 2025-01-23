@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da107ba8ca72708499fa7e8f0d7605dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boneDataSo: {fileID: 11400000, guid: c50a3f9c59b86244bbcf8047c91c7256, type: 2}
   zombie: {fileID: 6541408899077994427}
   zombieSettings: {fileID: 11400000, guid: 921ce48d14c9bd04c8adc32923ffeebe, type: 2}
   zombieMovement: {fileID: 3775069937606052225}

@@ -1,6 +1,6 @@
 using WindowsSystem;
 
-namespace Shadow_Dominion.Level.StateMachine
+namespace Shadow_Dominion.StateMachine
 {
     public class PauseState : IState
     {

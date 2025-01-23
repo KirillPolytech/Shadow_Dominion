@@ -6,6 +6,7 @@ namespace Shadow_Dominion
     public class BoneController : MonoBehaviour
     {
         public event Action<Vector3> OnCollision;
+        public event Action<HumanBodyBones> OnBoneDetach;
 
         public Vector3 CurrentPosition => _rigidbody.position;
         public Quaternion CurrentRotation => _rigidbody.rotation;
@@ -34,17 +35,20 @@ namespace Shadow_Dominion
 
         private Vector3 _previousError;
         private Renderer _renderer;
+        private HumanBodyBones _humanBodyBones;
 
         public void Construct(
             SpringData springData,
             Transform copyTarget,
             PIDData pidData,
-            Renderer skinnedMeshRenderer)
+            Renderer skinnedMeshRenderer,
+            HumanBodyBones humanBodyBones)
         {
             _springData = springData;
             _copyTarget = copyTarget;
             _pidData = pidData;
             _renderer = skinnedMeshRenderer;
+            _humanBodyBones = humanBodyBones;
         }
 
         private void Awake()
@@ -57,10 +61,24 @@ namespace Shadow_Dominion
             _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;
         }
 
+        private void Start()
+        {
+            _rigidbody.position = _copyTarget.position;
+        }
+
         private void FixedUpdate()
         {
             UpdatePosition();
             UpdateConfigurableJoint();
+            CheckDistance();
+        }
+
+        private void CheckDistance()
+        {
+            if (Vector3.Distance(_copyTarget.position, _rigidbody.position) > 1)
+                return;
+
+            OnBoneDetach?.Invoke(_humanBodyBones);
         }
 
         private void UpdatePosition()
@@ -119,9 +137,9 @@ namespace Shadow_Dominion
             OnCollision?.Invoke(dir);
         }
 
-        public void ReceiveHitPoint(Vector3 point)
+        public void ReceiveHitDirection(Vector3 dir)
         {
-            BodyInjuryService.DrawHole(_renderer, point);
+            BodyInjuryService.DrawHole(_renderer, dir);
         }
 
         private void OnCollisionStay(Collision other)

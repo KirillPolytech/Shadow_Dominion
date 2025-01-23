@@ -30,14 +30,6 @@ namespace Shadow_Dominion
         private float _resetDelayCounter;
         private float _value;
 
-        private PlayerAnimation _playerAnimation;
-
-
-        public void Construct(PlayerAnimation playerAnimation)
-        {
-            _playerAnimation = playerAnimation;
-        }
-
         private void Awake()
         {
             _joints = GetComponentsInChildren<CharacterJoint>();
@@ -115,8 +107,6 @@ namespace Shadow_Dominion
 
             player.enabled = true;
             characterController.enabled = true;
-
-            _playerAnimation.AnimationStateMachine.SetState<IdleState>();
         }
 
         private void SpaceHandler()

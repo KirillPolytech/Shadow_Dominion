@@ -479,8 +479,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38a12f44b0dcded4fbf1c58037ca4fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ragdollRoot: {fileID: 4951795622753340675}
-  force: 1000
 --- !u!1 &749257996376149362
 GameObject:
   m_ObjectHideFlags: 0
@@ -6643,6 +6641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4979e03bb791b44db15166117ab0be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bones: {fileID: 11400000, guid: c50a3f9c59b86244bbcf8047c91c7256, type: 2}
   player: {fileID: 8958827377047444852}
   inputHandler: {fileID: 2883562924446922007}
   playerAnimation: {fileID: 5306037140672579532}
@@ -6658,7 +6657,6 @@ MonoBehaviour:
   cameraSettings: {fileID: 11400000, guid: 327ad2879cf30d0479600b8a80891c39, type: 2}
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
   charRigidbody: {fileID: 3609581604113678919}
-  legPlacer: {fileID: 3661168338337602627}
   springData: {fileID: 11400000, guid: a1df6204b44e6d04797cfc1bb57f0ef0, type: 2}
   anim: {fileID: 3986989064418960988}
   copyFrom:
@@ -11833,7 +11831,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2294122942550041804}
   - component: {fileID: 1805263334326594276}
-  - component: {fileID: 3661168338337602627}
   m_Layer: 6
   m_Name: Ragdoll
   m_TagString: Untagged
@@ -11941,62 +11938,6 @@ MonoBehaviour:
   - {fileID: 6692328950488281931}
   - {fileID: 7737671995835916142}
   - {fileID: 3014799277575958339}
---- !u!114 &3661168338337602627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8752374768126675655}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ee6c3edf1e15254bbdae1085fe975d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsEnabled: 1
-  distance: 10
-  stepDelay: 0.25
-  offset: 0.1
-  heightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.15
-      value: 0.15
-      inSlope: 2.9694505
-      outSlope: 2.9694505
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.03177007
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  LFootPos: {fileID: 266477262796424106}
-  LFoot: {fileID: 2989026176627318952}
-  LLeg: {fileID: 3976304084391554502}
-  LUpLeg: {fileID: 5696393084603799610}
-  LRayPosition: {fileID: 3517254757926080154}
-  RFootPos: {fileID: 4572126509964423254}
-  RFoot: {fileID: 1452371929905289250}
-  RLeg: {fileID: 7783093052233886016}
-  RUpLeg: {fileID: 7008565423514185777}
-  RRayPosition: {fileID: 721519142041149010}
-  layer:
-    serializedVersion: 2
-    m_Bits: 183
-  fabrics:
-  - {fileID: 7540691015247557266}
-  - {fileID: 4284915588743569131}
 --- !u!1 &9176572916961033050
 GameObject:
   m_ObjectHideFlags: 0

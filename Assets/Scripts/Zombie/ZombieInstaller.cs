@@ -6,6 +6,7 @@ namespace Shadow_Dominion.Zombie
 {
     public class ZombieInstaller : MonoBehaviour
     {
+        [SerializeField] private BoneDataSO boneDataSo;
         [SerializeField] private Zombie zombie;
         [SerializeField] private ZombieSettings zombieSettings;
         [SerializeField] private ZombieMovement zombieMovement;
@@ -30,9 +31,8 @@ namespace Shadow_Dominion.Zombie
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i], pidData, rend);
+                copyTo[i].Construct(springData, copyFrom[i], pidData, rend, boneDataSo.BoneData[i].humanBodyBone);
 
-                //int ind = i;
                 copyTo[i].OnCollision += dir => zombie.Disable(copyTo, dir);
             }
         }

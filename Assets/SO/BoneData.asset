@@ -14,106 +14,127 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoneData:
   - Name: mixamorig:Hips
+    humanBodyBone: 0
     angularYLimit: 100
     angularZLimit: 15
     lowAngularXLimit: -20
     highAngularXLimit: 20
   - Name: mixamorig:Head
+    humanBodyBone: 10
     angularYLimit: 3
     angularZLimit: 60
     lowAngularXLimit: 8
     highAngularXLimit: 8
   - Name: mixamorig:Spine
+    humanBodyBone: 7
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -45
     highAngularXLimit: 45
   - Name: mixamorig:Spine1
+    humanBodyBone: 8
     angularYLimit: 15
     angularZLimit: 15
     lowAngularXLimit: -30
     highAngularXLimit: 10
   - Name: mixamorig:Spine2
+    humanBodyBone: 54
     angularYLimit: 15
     angularZLimit: 15
     lowAngularXLimit: -10
     highAngularXLimit: 30
   - Name: mixamorig:LeftUpLeg
+    humanBodyBone: 1
     angularYLimit: 25
     angularZLimit: 65
     lowAngularXLimit: -55
     highAngularXLimit: 125
   - Name: mixamorig:LeftLeg
+    humanBodyBone: 3
     angularYLimit: 35
     angularZLimit: 35
     lowAngularXLimit: -30
     highAngularXLimit: 130
   - Name: mixamorig:LeftFoot
+    humanBodyBone: 5
     angularYLimit: 20
     angularZLimit: 25
     lowAngularXLimit: -15
     highAngularXLimit: 30
   - Name: mixamorig:RightUpLeg
+    humanBodyBone: 2
     angularYLimit: 25
     angularZLimit: 65
     lowAngularXLimit: -55
     highAngularXLimit: 125
   - Name: mixamorig:RightLeg
+    humanBodyBone: 4
     angularYLimit: 35
     angularZLimit: 35
     lowAngularXLimit: -30
     highAngularXLimit: 130
   - Name: mixamorig:RightFoot
+    humanBodyBone: 6
     angularYLimit: 20
     angularZLimit: 25
     lowAngularXLimit: -15
     highAngularXLimit: 30
   - Name: mixamorig:LeftArm
+    humanBodyBone: 13
     angularYLimit: 85
     angularZLimit: 25
     lowAngularXLimit: -45
     highAngularXLimit: 90
   - Name: mixamorig:LeftForeArm
+    humanBodyBone: 15
     angularYLimit: 90
     angularZLimit: 85
     lowAngularXLimit: -60
     highAngularXLimit: 50
   - Name: mixamorig:LeftHand
+    humanBodyBone: 17
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -75
     highAngularXLimit: 75
   - Name: mixamorig:RightArm
+    humanBodyBone: 14
     angularYLimit: 85
     angularZLimit: 25
     lowAngularXLimit: -45
     highAngularXLimit: 90
   - Name: mixamorig:RightForeArm
+    humanBodyBone: 16
     angularYLimit: 90
     angularZLimit: 85
     lowAngularXLimit: -60
     highAngularXLimit: 50
   - Name: mixamorig:RightHand
+    humanBodyBone: 18
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -75
     highAngularXLimit: 75
   - Name: mixamorig:LeftToeBase
+    humanBodyBone: 19
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -45
     highAngularXLimit: 45
   - Name: mixamorig:RightToeBase
+    humanBodyBone: 20
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -45
     highAngularXLimit: 45
   - Name: mixamorig:LeftShoulder
+    humanBodyBone: 11
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -45
     highAngularXLimit: 45
   - Name: mixamorig:RightShoulder
+    humanBodyBone: 12
     angularYLimit: 45
     angularZLimit: 45
     lowAngularXLimit: -45

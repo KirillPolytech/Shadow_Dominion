@@ -1,16 +1,16 @@
 using UnityEngine;
 
-namespace Shadow_Dominion.Level.StateMachine
+namespace Shadow_Dominion.StateMachine
 {
-    public class GameplayState :IState
+    public class GameplayState : IState
     {
         private readonly CursorService _cursorService;
-        
+
         public GameplayState(CursorService cursorService)
         {
             _cursorService = cursorService;
         }
-        
+
         public override void Enter()
         {
             _cursorService.SetState(CursorLockMode.Locked);
@@ -18,7 +18,6 @@ namespace Shadow_Dominion.Level.StateMachine
 
         public override void Exit()
         {
-            
         }
     }
 }

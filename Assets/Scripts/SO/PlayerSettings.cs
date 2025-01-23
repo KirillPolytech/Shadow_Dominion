@@ -11,5 +11,4 @@ public class PlayerSettings : ScriptableObject
     [Space] 
     public bool canMove = true;
     public bool canRotate = true;
-    public bool canPlaceLegs = true;
 }

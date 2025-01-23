@@ -9,7 +9,6 @@ namespace Shadow_Dominion.Main
         
         private MonoInputHandler _inputHandler;
         private PlayerSettings _playerSettings;
-        private LegPlacer _legPlacer;
         private CameraLook _cameraLook;
         private Rigidbody _charRigidbody;
 
@@ -23,14 +22,12 @@ namespace Shadow_Dominion.Main
             PlayerSettings playerSettings,
             Rigidbody characterController,
             CameraLook cameraLook,
-            MonoInputHandler inputHandler,
-            LegPlacer legPlacer)
+            MonoInputHandler inputHandler)
         {
             _inputHandler = inputHandler;
             _playerSettings = playerSettings;
             _charRigidbody = characterController;
             _cameraLook = cameraLook;
-            _legPlacer = legPlacer;
             _transform = _charRigidbody.transform;
 
             _inputHandler.OnInputUpdate += HandleInput;
@@ -52,23 +49,9 @@ namespace Shadow_Dominion.Main
                 return;
             
             _centerOfMass = _transform.position + Vector3.up;
-            PlaceLegs();
             Move();
             Run();
             Rotate();
-        }
-
-        private void PlaceLegs()
-        {
-            if (!_playerSettings.canPlaceLegs)
-                return;
-
-            if (x + y == 0 && _transform.rotation == _cachedRot)
-                return;
-
-            _legPlacer.Step();
-
-            _cachedRot = _transform.rotation;
         }
 
         private void Move()

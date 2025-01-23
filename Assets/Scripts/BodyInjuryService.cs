@@ -4,12 +4,12 @@ public class BodyInjuryService
 {
     private static readonly int BulletHoleCount = Shader.PropertyToID("_BulletHoleCount");
 
-    public static void DrawHole(Renderer renderer, Vector3 hitPoint)
+    public static void DrawHole(Renderer renderer, Vector3 dir)
     {
         Material material = renderer.material;
 
         // Получаем UV-координаты в точке попадания
-        Vector2 hitUV = hitPoint;
+        Vector2 hitUV = dir;
 
         // Получаем текущее количество дырок
         int bulletHoleCount = material.GetInt(BulletHoleCount);
