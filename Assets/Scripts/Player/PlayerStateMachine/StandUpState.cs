@@ -1,28 +1,45 @@
 using Shadow_Dominion.Main;
-using Shadow_Dominion.StateMachine;
+using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class StandUpState : IState
+    public class StandUpState : PlayerState
     {
         private readonly PlayerMovement _playerMovement;
-        private readonly PlayerAnimation _playerAnimation;
+        private readonly RigBuilder _rigBuilder;
+        private readonly Main.Player _player;
+        private readonly Transform _ragdollRoot;
         
-        public StandUpState(PlayerMovement playerMovement, PlayerAnimation playerAnimation)
+        public StandUpState(
+            Main.Player player,
+            Transform ragdollRoot,
+            PlayerMovement playerMovement, 
+            RigBuilder rigBuilder,
+            PlayerAnimation playerAnimation) : base(playerAnimation)
         {
             _playerMovement = playerMovement;
-            _playerAnimation = playerAnimation;
+            _rigBuilder = rigBuilder;
+            _player = player;
+            _ragdollRoot = ragdollRoot;
         }
         
         public override void Enter()
         {
-            _playerAnimation.AnimationStateMachine.SetState<StandUpState>();
             _playerMovement.CanMove = false;
+            _rigBuilder.enabled = false;
+            
+            _player.SetPositionAndRotation(_ragdollRoot.position, _ragdollRoot.up);
+            
+            _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpState>();
+
+            _playerAnimation.StartStandUp();
         }
 
         public override void Exit()
         {
-            
+            _playerMovement.CanMove = true;
+            _rigBuilder.enabled = true;
         }
     }
 }

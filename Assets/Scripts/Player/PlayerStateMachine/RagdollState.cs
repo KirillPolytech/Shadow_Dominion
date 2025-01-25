@@ -1,14 +1,12 @@
 using Shadow_Dominion.Main;
-using Shadow_Dominion.StateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class RagdollState : IState
+    public class RagdollState : PlayerState
     {
         private readonly PlayerMovement _playerMovement;
-        private readonly PlayerAnimation _playerAnimation;
         private readonly RigBuilder _rigBuilder;
         private readonly BoneController[] _boneControllers;
         private readonly Vector3 _forceDirection;
@@ -17,10 +15,9 @@ namespace Shadow_Dominion.Player.StateMachine
             PlayerMovement playerMovement,
             PlayerAnimation playerAnimation,
             RigBuilder rigBuilder,
-            BoneController[] boneControllers)
+            BoneController[] boneControllers) : base(playerAnimation)
         {
             _playerMovement = playerMovement;
-            _playerAnimation = playerAnimation;
             _rigBuilder = rigBuilder;
             _boneControllers = boneControllers;
             _forceDirection = Vector3.zero;
@@ -34,13 +31,13 @@ namespace Shadow_Dominion.Player.StateMachine
             
             for (int i = 0; i < _boneControllers.Length; i++)
             {
-                //_boneControllers[i].IsPositionApplying(false);
-                //_boneControllers[i].IsRotationApplying(false);
+                _boneControllers[i].IsPositionApplying(false);
+                _boneControllers[i].IsRotationApplying(false);
                 _boneControllers[i].AddForce(_forceDirection);
                 //boneController[i].UpdateSpring(isEnabled);
             }
 
-            _playerAnimation.AnimationStateMachine.SetState<LayingState>();
+            _playerAnimation.AnimationStateMachine.SetState<AnimationLayingState>();
             
             //_playerAnimation.Animator
         }

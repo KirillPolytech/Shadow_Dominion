@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NaughtyAttributes;
 using Shadow_Dominion.Main;
@@ -11,66 +12,127 @@ namespace Shadow_Dominion
 {
     public class MirrorPlayerInstaller : MonoBehaviour
     {
-        [Space(15)] [Header("Configs")] 
-        [SerializeField] private BoneDataSO bones;
-        [SerializeField] private SpringData springData;
-        [SerializeField] private PIDData pidData;
-        [SerializeField] private CameraSettings cameraSettings;
-        [SerializeField] private PlayerSettings playerSettings;
-        
-        [Space(15)] [Header("Limits")] 
-        [SerializeField] private Main.Player player;
-        [SerializeField] private MonoInputHandler inputHandler;
-        [SerializeField] private PlayerAnimation playerAnimation;
-        [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private CameraLook cameraLook;
-        [SerializeField] private AimTarget aimTarget;
-        [SerializeField] private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
-        [SerializeField] private Renderer rend;
+        [Space]
+        [Header("Configs")]
+        [SerializeField]
+        private BoneDataSO bones;
 
-        [Space] [Header("Gun")] [SerializeField] private Ak47 ak47;
+        [SerializeField]
+        private SpringData springData;
 
-        [SerializeField] private Transform aim;
+        [SerializeField]
+        private PIDData pidData;
 
-        [Space] [SerializeField] private Animator animator;
+        [SerializeField]
+        private CameraSettings cameraSettings;
+
+        [SerializeField]
+        private PlayerSettings playerSettings;
+
+        [Space]
+        [Header("Limits")]
+        [SerializeField]
+        private Main.Player player;
+
+        [SerializeField]
+        private MonoInputHandler inputHandler;
+
+        [SerializeField]
+        private PlayerAnimation playerAnimation;
+
+        [SerializeField]
+        private PlayerMovement playerMovement;
+
+        [SerializeField]
+        private CameraLook cameraLook;
+
+        [SerializeField]
+        private AimTarget aimTarget;
+
+        [SerializeField]
+        private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+
+        [SerializeField]
+        private Renderer rend;
+
+        [Space]
+        [Header("Gun")]
+        [SerializeField]
+        private Ak47 ak47;
+
+        [SerializeField]
+        private Transform aim;
+
+        [Space]
+        [SerializeField]
+        private Animator animator;
 
         [Header("PlayerMovement")]
-        [SerializeField] private Rigidbody charRigidbody;
+        [SerializeField]
+        private Rigidbody charRigidbody;
 
-        [Space] [Header("Motion")]
-        [SerializeField] private Transform anim;
-        [SerializeField] private Transform[] copyFrom;
-        [SerializeField] private BoneController[] copyTo;
-        [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
+        [Space]
+        [Header("Motion")]
+        [SerializeField]
+        private Transform anim;
 
-        [Space] [Header("Rig")] [SerializeField] private RigBuilder rootRig;
-        [SerializeField] private Rig aimRig;
+        [SerializeField]
+        private Transform[] copyFrom;
 
-        [Space] [Header("Debug")] [SerializeField] private bool debug;
+        [SerializeField]
+        private BoneController[] copyTo;
+
+        [Range(0, 0.5f)]
+        [SerializeField]
+        private float sphereRadius = 0.1f;
+
+        [Space]
+        [Header("Rig")]
+        [SerializeField]
+        private RigBuilder rootRig;
+
+        [SerializeField]
+        private Rig aimRig;
+
+        [Space]
+        [Header("StateMachine")]
+        [SerializeField]
+        private Transform ragdollRoot;
+
+        [Space]
+        [Header("Debug")]
+        [SerializeField]
+        private bool debug;
+
+        private Action<Vector3> _cachedV3;
+        private Action<HumanBodyBones> _cachedHBB;
+        private Action<InputData> _cachedInputData;
 
         private void Awake()
         {
-            player.Construct(rootRig, playerMovement, playerAnimation, copyTo);
+            player.Construct(ragdollRoot, rootRig, playerMovement, playerAnimation, copyTo, inputHandler);
             cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
-            playerAnimation.Construct(animator, inputHandler, aimRig);
+            playerAnimation.Construct(animator, inputHandler, aimRig, player.playerStateMachine);
             ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
                 HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
-                
+
                 copyTo[i].Construct(springData, copyFrom[i], pidData, rend, humanBodyBone);
 
                 int ind = i;
+                _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
 
-                copyTo[i].OnCollision += dir => player.playerStateMachine.SetState<RagdollState>();
-                copyTo[i].OnBoneDetach += dir => player.playerStateMachine.SetState<RagdollState>();
-            }
+                _cachedV3 = dir => player.playerStateMachine.SetState<RagdollState>();
+                copyTo[i].OnCollision += _cachedV3;
 
-            playerAnimation.OnStandUp += player.playerStateMachine.SetState<RagdollState>;
+                _cachedHBB = dir => player.playerStateMachine.SetState<RagdollState>();
+                copyTo[i].OnBoneDetach += _cachedHBB;
+            }
 
             return;
 
@@ -110,7 +172,11 @@ namespace Shadow_Dominion
 
         private void OnDestroy()
         {
-            playerAnimation.OnStandUp -= player.playerStateMachine.SetState<RagdollState>;
+            for (int i = 0; i < copyFrom.Length; i++)
+            {
+                copyTo[i].OnCollision -= _cachedV3;
+                copyTo[i].OnBoneDetach -= _cachedHBB;
+            }
         }
     }
 }

@@ -1,17 +1,18 @@
-using Shadow_Dominion.StateMachine;
-
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class RunForwardState : IState
+    public class RunForwardState : PlayerState
     {
+        public RunForwardState(PlayerAnimation playerAnimation) : base(playerAnimation)
+        {
+        }
         public override void Enter()
         {
-            throw new System.NotImplementedException();
+            _playerAnimation.AnimationStateMachine.SetState<AnimationRunForwardState>();
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

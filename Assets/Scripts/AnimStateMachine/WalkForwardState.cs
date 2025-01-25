@@ -1,12 +1,12 @@
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class WalkForwardState : IState
+public class AnimationWalkForwardState : IState
 {
     private readonly Animator _animator;
     private readonly int _isWalkForward;
     
-    public WalkForwardState(Animator animator, int isWalkForward)
+    public AnimationWalkForwardState(Animator animator, int isWalkForward)
     {
         _animator = animator;
         _isWalkForward = isWalkForward;

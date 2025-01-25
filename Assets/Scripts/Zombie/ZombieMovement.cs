@@ -1,3 +1,4 @@
+using Shadow_Dominion.Player;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,9 +30,9 @@ namespace Shadow_Dominion.Zombie
         private void HandleAnimations()
         {
             if (navMeshAgent.remainingDistance > DistanceError) 
-                _animationStateMachine.SetState<WalkForwardState>();
+                _animationStateMachine.SetState<AnimationWalkForwardState>();
             else
-                _animationStateMachine.SetState<IdleState>();
+                _animationStateMachine.SetState<AnimationIdleState>();
         }
 
         public void MoveTo(IZombieTarget iZombieTarget)

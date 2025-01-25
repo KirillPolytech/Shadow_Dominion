@@ -70,14 +70,16 @@ namespace Shadow_Dominion
         {
             UpdatePosition();
             UpdateConfigurableJoint();
-            CheckDistance();
+            //CheckDistance();
         }
 
         private void CheckDistance()
         {
-            if (Vector3.Distance(_copyTarget.position, _rigidbody.position) > 1)
+            Debug.Log("Distance: " + Vector3.Distance(_copyTarget.position, _rigidbody.position));
+            
+            if (Vector3.Distance(_copyTarget.position, _rigidbody.position) < 1.2f)
                 return;
-
+            
             OnBoneDetach?.Invoke(_humanBodyBones);
         }
 

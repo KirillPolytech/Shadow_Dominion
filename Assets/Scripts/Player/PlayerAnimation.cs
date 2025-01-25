@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using Mirror;
+using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -8,53 +8,60 @@ namespace Shadow_Dominion.Player
 {
     public class PlayerAnimation : NetworkBehaviour
     {
-        public event Action OnStandUp;
+        private const float Appromixation = 0.01f;
 
         public bool CanAnimate { get; set; } = true;
-        
+
         public AnimationStateMachine AnimationStateMachine { get; private set; }
 
         public Animator Animator { get; private set; }
 
-        [Range(0,10f)][SerializeField] private float aimRigWeightChangeCoeff = 3.5f;
+        [Range(0, 10f)]
+        [SerializeField]
+        private float aimRigWeightChangeCoeff = 3.5f;
 
         private MonoInputHandler _inputHandler;
+        private PlayerStateMachine _playerStateMachine;
         private Rig _aimRig;
+
         private Coroutine _coroutine;
         private int _lastValue;
+        
+        private const float TimeToWait = 7;
+        private float _counter;
+        private bool _isStandUp;
 
         public void Construct(
             Animator animator,
             MonoInputHandler inputHandler,
-            Rig aimRig)
+            Rig aimRig,
+            PlayerStateMachine playerStateMachine)
         {
             Animator = animator;
             _inputHandler = inputHandler;
             _aimRig = aimRig;
+            _playerStateMachine = playerStateMachine;
+
+            AnimationStateMachine = new AnimationStateMachine(Animator);
         }
 
         private void Start()
         {
-            AnimationStateMachine = new AnimationStateMachine(Animator);
-
             if (!isLocalPlayer)
                 return;
-
-            AnimationStateMachine.SetState<IdleState>();
 
             _inputHandler.OnInputUpdate += HandleHorizontalState;
             _inputHandler.OnInputUpdate += HandleWalkState;
             _inputHandler.OnInputUpdate += HandleIdleState;
             _inputHandler.OnInputUpdate += HandleRunStates;
-            _inputHandler.OnInputUpdate += HandleStandUpState;
             _inputHandler.OnInputUpdate += HandleAimRig;
         }
 
         private void HandleAimRig(InputData inputData)
         {
-            if (!CanAnimate)
+            if (!CanAnimate || _isStandUp)
                 return;
-            
+
             int currentValue = inputData.RightMouseButton ? 1 : 0;
 
             if (_lastValue != currentValue)
@@ -64,7 +71,7 @@ namespace Shadow_Dominion.Player
 
                 _coroutine = StartCoroutine(ChangeWeight(_aimRig, currentValue));
             }
-            
+
             _lastValue = currentValue;
         }
 
@@ -72,7 +79,7 @@ namespace Shadow_Dominion.Player
         {
             float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * aimRigWeightChangeCoeff;
 
-            while (Mathf.Abs(rig.weight - targetValue) > 0.01f)
+            while (Mathf.Abs(rig.weight - targetValue) > Appromixation)
             {
                 rig.weight += step;
                 yield return new WaitForFixedUpdate();
@@ -81,71 +88,79 @@ namespace Shadow_Dominion.Player
 
         private void HandleWalkState(InputData inputData)
         {
-            if (inputData.LeftShift || !CanAnimate)
+            if (inputData.LeftShift || !CanAnimate || _isStandUp)
                 return;
 
             switch (inputData.VerticalAxisRaw)
             {
                 case > 0:
-                    AnimationStateMachine.SetState<WalkForwardState>();
+                    _playerStateMachine.SetState<WalkForwardState>();
                     break;
                 case < 0:
-                    AnimationStateMachine.SetState<WalkBackwardState>();
+                    _playerStateMachine.SetState<WalkBackwardState>();
                     break;
             }
         }
 
         private void HandleRunStates(InputData inputData)
         {
-            if (!inputData.LeftShift || !CanAnimate)
+            if (!inputData.LeftShift || !CanAnimate || _isStandUp)
                 return;
 
             switch (inputData.VerticalAxisRaw)
             {
                 case > 0:
-                    AnimationStateMachine.SetState<RunForwardState>();
+                    _playerStateMachine.SetState<RunForwardState>();
                     break;
                 case < 0:
-                    AnimationStateMachine.SetState<WalkBackwardState>();
+                    _playerStateMachine.SetState<RunBackwardState>();
                     break;
             }
         }
 
         private void HandleHorizontalState(InputData inputData)
         {
-            if (!CanAnimate)
+            if (!CanAnimate || _isStandUp)
                 return;
-            
+
             switch (inputData.HorizontalAxisRaw)
             {
                 case < 0:
-                    AnimationStateMachine.SetState<WalkLeftState>();
+                    _playerStateMachine.SetState<WalkLeftState>();
                     break;
                 case > 0:
-                    AnimationStateMachine.SetState<WalkRightState>();
+                    _playerStateMachine.SetState<WalkRightState>();
                     break;
             }
         }
 
         private void HandleIdleState(InputData inputData)
         {
-            if (!CanAnimate)
+            if (!CanAnimate || _isStandUp)
                 return;
-            
+
             if (inputData is { HorizontalAxisRaw: 0, VerticalAxisRaw: 0 })
             {
-                AnimationStateMachine.SetState<IdleState>();
+                _playerStateMachine.SetState<IdleState>();
             }
         }
 
-        private void HandleStandUpState(InputData inputData)
+        public void StartStandUp()
         {
-            if (!inputData.F_Down)
-                return;
+            StartCoroutine(Count());
+        }
+        
+        private IEnumerator Count()
+        {
+            _counter = 0;
+            _isStandUp = true;
+            while (_counter < TimeToWait)
+            {
+                _counter += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+            }
 
-            AnimationStateMachine.SetState<StandupState>();
-            
-            OnStandUp?.Invoke();
+            _isStandUp = false;
         }
 
         public void OnDestroy()
@@ -157,7 +172,6 @@ namespace Shadow_Dominion.Player
             _inputHandler.OnInputUpdate -= HandleWalkState;
             _inputHandler.OnInputUpdate -= HandleIdleState;
             _inputHandler.OnInputUpdate -= HandleRunStates;
-            _inputHandler.OnInputUpdate -= HandleStandUpState;
             _inputHandler.OnInputUpdate -= HandleAimRig;
         }
     }

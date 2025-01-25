@@ -1,12 +1,12 @@
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class WalkLeftState : IState
+public class AnimationWalkLeftState : IState
 {
     private readonly Animator _animator;
     private readonly int _isWalkLeft;
 
-    public WalkLeftState(Animator animator, int isWalkLeft)
+    public AnimationWalkLeftState(Animator animator, int isWalkLeft)
     {
         _animator = animator;
         _isWalkLeft = isWalkLeft;

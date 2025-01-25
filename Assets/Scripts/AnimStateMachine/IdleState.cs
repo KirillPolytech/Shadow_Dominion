@@ -1,12 +1,12 @@
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class IdleState : IState
+public class AnimationIdleState : IState
 {
     private readonly Animator _animator;
     private readonly int _isIdle;
 
-    public IdleState(Animator animator, int isIdle)
+    public AnimationIdleState(Animator animator, int isIdle)
     {
         _animator = animator;
         _isIdle = isIdle;
