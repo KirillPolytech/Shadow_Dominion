@@ -1,12 +1,12 @@
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class StandupState : IState
+public class AnimationStandUpState : IState
 {
     private readonly Animator _animator;
     private readonly int _isStandUp;
     
-    public StandupState(Animator animator, int isStandUp)
+    public AnimationStandUpState(Animator animator, int isStandUp)
     {
         _animator = animator;
         _isStandUp = isStandUp;
@@ -14,11 +14,11 @@ public class StandupState : IState
     
     public override void Enter()
     {
-        _animator.SetBool(_isStandUp, true);
+        _animator.SetTrigger(_isStandUp);
     }
 
     public override void Exit()
     {
-        _animator.SetBool(_isStandUp, false);
+        
     }
 }

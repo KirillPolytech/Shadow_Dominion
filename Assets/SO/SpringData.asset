@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33cce3d4726ffdc40a700370f918afcd, type: 3}
   m_Name: SpringData
   m_EditorClassIdentifier: 
-  Rate: 45
+  Rate: 4500
   DeltaTime: 100
   DeltaMax: 100
   SpringDelta: 50

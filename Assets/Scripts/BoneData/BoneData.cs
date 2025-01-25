@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Shadow_Dominion
 {
@@ -6,6 +7,7 @@ namespace Shadow_Dominion
     public struct BoneData
     {
         public string Name;
+        public HumanBodyBones humanBodyBone;
 
         public int angularYLimit;
         public int angularZLimit;

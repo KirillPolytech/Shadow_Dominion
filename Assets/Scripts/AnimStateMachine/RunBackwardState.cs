@@ -1,12 +1,12 @@
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class RunBackwardState : IState
+public class AnimationRunBackwardState : IState
 {
     private readonly Animator _animator;
     private readonly int _isRunBackward;
 
-    public RunBackwardState(Animator animator, int isRunBackward)
+    public AnimationRunBackwardState(Animator animator, int isRunBackward)
     {
         _animator = animator;
         _isRunBackward = isRunBackward;

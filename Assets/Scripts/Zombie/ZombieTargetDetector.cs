@@ -1,16 +1,20 @@
 using System;
 using UnityEngine;
 
-public class ZombieTargetDetector : MonoBehaviour
+namespace Shadow_Dominion.Zombie
 {
-    public event Action<IZombieTarget> OnDetectTarget;
-
-    private void OnTriggerEnter(Collider other)
+    public class ZombieTargetDetector : MonoBehaviour
     {
-        IZombieTarget zombieTarget = other.gameObject.GetComponent<IZombieTarget>();
-        if (zombieTarget == null)
-            return;
+        public event Action<IZombieTarget> OnDetectTarget;
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            other.TryGetComponent(out IZombieTarget zombieTarget);
+            
+            if (zombieTarget == null)
+                return;
 
-        OnDetectTarget?.Invoke(zombieTarget);
+            OnDetectTarget?.Invoke(zombieTarget);
+        }
     }
 }

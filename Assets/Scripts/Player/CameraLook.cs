@@ -1,31 +1,34 @@
-using DG.Tweening;
 using Mirror;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class CameraLook : NetworkBehaviour
     {
-        [SerializeField] private Transform target;
-        [SerializeField] private Transform aimPos;
-        [SerializeField] private Transform defaultPos;
-
-        [SerializeField] private float transitDuration = 0.5f;
-
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
 
-        private RaycastHit _hit;
-        private Ray _ray;
+        private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
+        private MonoInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
-        private MonoInputHandler _monoInputHandler;
 
-        public void Construct(CameraSettings camSettings, MonoInputHandler monoInputHandler)
+        private RaycastHit _hit;
+        private Ray _ray;
+        private int _rightMouseValue;
+        private float _mouseWheelValue;
+        private float _currentScrollDistance;
+
+        public void Construct(
+            CameraSettings camSettings,
+            MonoInputHandler monoInputHandler,
+            CinemachineThirdPersonFollow cinemachineThirdPersonFollow)
         {
             _cameraSettings = camSettings;
             CameraTransform = transform;
             _monoInputHandler = monoInputHandler;
+            _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
 
             _camera = GetComponent<Camera>();
         }
@@ -41,11 +44,31 @@ namespace Shadow_Dominion
                 _camera.gameObject.SetActive(false);
         }
 
+        private void FixedUpdate()
+        {
+            Zooming();
+        }
+
         private void HandleInput(InputData inputData)
         {
             CastRay();
 
-            target.DOMove(inputData.RightMouseButton ? aimPos.position : defaultPos.position, transitDuration);
+            _rightMouseValue = inputData.RightMouseButton ? 1 : 0;
+            _mouseWheelValue = inputData.MouseWheelScroll;
+        }
+
+        private void Zooming()
+        {
+            float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
+            float cameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
+                                               rightMouseValue * _cameraSettings.zoomDuration * Time.fixedDeltaTime,
+                0, _cameraSettings.zoom);
+
+            rightMouseValue = _rightMouseValue == 1 ? 0 : 1;
+            _currentScrollDistance = Mathf.Clamp( _currentScrollDistance - _mouseWheelValue * Time.fixedDeltaTime, 
+                0, _cameraSettings.maxZoomDistance);
+            float scrollDistance = _currentScrollDistance * rightMouseValue;
+            _cinemachineThirdPersonFollow.CameraDistance = cameraDistance + scrollDistance;
         }
 
         private void CastRay()

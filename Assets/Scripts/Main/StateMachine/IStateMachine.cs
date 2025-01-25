@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Shadow_Dominion.Level.StateMachine
+namespace Shadow_Dominion.StateMachine
 {
     public abstract class IStateMachine
     {

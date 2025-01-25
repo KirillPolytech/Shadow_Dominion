@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public interface IZombieTarget
+namespace Shadow_Dominion.Zombie
 {
-    public Transform Position { get; set; }
+    public interface IZombieTarget
+    {
+        public Transform Position { get; set; }
+    }
 }

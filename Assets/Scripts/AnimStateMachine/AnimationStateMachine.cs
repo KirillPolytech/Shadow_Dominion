@@ -1,8 +1,8 @@
 using System.Linq;
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.Player
 {
     public class AnimationStateMachine : IStateMachine
     {
@@ -13,18 +13,20 @@ namespace Shadow_Dominion
         private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
         private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
         private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
-        private readonly int StandUpHashCode = Animator.StringToHash("IsStandUp");
+        private readonly int StandUpHashCode = Animator.StringToHash("StandUp");
+        private readonly int Laying = Animator.StringToHash("Laying");
 
         public AnimationStateMachine(Animator animator)
         {
-            _states.Add(new IdleState(animator, IsIdle));
-            _states.Add(new WalkForwardState(animator, IsWalkForward));
-            _states.Add(new WalkBackwardState(animator, IsWalkBackward));
-            _states.Add(new WalkLeftState(animator, IsWalkLeft));
-            _states.Add(new WalkRightState(animator, IsWalkRight));
-            _states.Add(new RunForwardState(animator, IsRunForward));
-            _states.Add(new RunBackwardState(animator, IsRunBackward));
-            _states.Add(new StandupState(animator, StandUpHashCode));
+            _states.Add(new AnimationIdleState(animator, IsIdle));
+            _states.Add(new AnimationWalkForwardState(animator, IsWalkForward));
+            _states.Add(new AnimationWalkBackwardState(animator, IsWalkBackward));
+            _states.Add(new AnimationWalkLeftState(animator, IsWalkLeft));
+            _states.Add(new AnimationWalkRightState(animator, IsWalkRight));
+            _states.Add(new AnimationRunForwardState(animator, IsRunForward));
+            _states.Add(new AnimationRunBackwardState(animator, IsRunBackward));
+            _states.Add(new AnimationStandUpState(animator, StandUpHashCode));
+            _states.Add(new AnimationLayingState(animator, Laying));
         }
 
         public override void SetState<T>()
@@ -38,7 +40,7 @@ namespace Shadow_Dominion
             CurrentState = state;
             CurrentState.Enter();
 
-            Debug.Log($"Current state: {CurrentState.GetType()}");
+            Debug.Log($"Current anim state: {CurrentState.GetType()}");
         }
     }
 }

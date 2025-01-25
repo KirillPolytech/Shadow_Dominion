@@ -1,75 +1,148 @@
+using System;
 using System.Linq;
 using NaughtyAttributes;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
+using Shadow_Dominion.Player.StateMachine;
+using Unity.Cinemachine;
 using UnityEngine;
-using Zenject;
+using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion
 {
     public class MirrorPlayerInstaller : MonoBehaviour
     {
-        [SerializeField] private Main.Player player;
-        [SerializeField] private MonoInputHandler inputHandler;
-        [SerializeField] private PlayerAnim playerAnim;
-        [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private CameraLook cameraLook;
-        [SerializeField] private AimTarget aimTarget;
+        [Space]
+        [Header("Configs")]
+        [SerializeField]
+        private BoneDataSO bones;
 
-        [Space] [Header("Gun")] [SerializeField]
-        private Ak47 ak47;
-
-        [SerializeField] private Transform aim;
-
-        [Space] [SerializeField] private Animator animator;
-        [SerializeField] private CameraSettings cameraSettings;
-
-        [Header("PlayerMovement")] [SerializeField]
-        private PlayerSettings playerSettings;
-
-        [SerializeField] private Rigidbody charRigidbody;
-        [SerializeField] private LegPlacer legPlacer;
-
-        [Space] [Header("Motion")] [SerializeField]
+        [SerializeField]
         private SpringData springData;
 
-        [SerializeField] private Transform anim;
-        [SerializeField] private Transform[] copyFrom;
-        [SerializeField] private BoneController[] copyTo;
-        [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
+        [SerializeField]
+        private PIDData pidData;
 
+        [SerializeField]
+        private CameraSettings cameraSettings;
 
-        private BulletPool _bulletPool;
+        [SerializeField]
+        private PlayerSettings playerSettings;
 
-        [Inject]
-        public void Construct(BulletPool bulletPool)
-        {
-            _bulletPool = bulletPool;
-        }
+        [Space]
+        [Header("Limits")]
+        [SerializeField]
+        private Main.Player player;
+
+        [SerializeField]
+        private MonoInputHandler inputHandler;
+
+        [SerializeField]
+        private PlayerAnimation playerAnimation;
+
+        [SerializeField]
+        private PlayerMovement playerMovement;
+
+        [SerializeField]
+        private CameraLook cameraLook;
+
+        [SerializeField]
+        private AimTarget aimTarget;
+
+        [SerializeField]
+        private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+
+        [SerializeField]
+        private Renderer rend;
+
+        [Space]
+        [Header("Gun")]
+        [SerializeField]
+        private Ak47 ak47;
+
+        [SerializeField]
+        private Transform aim;
+
+        [Space]
+        [SerializeField]
+        private Animator animator;
+
+        [Header("PlayerMovement")]
+        [SerializeField]
+        private Rigidbody charRigidbody;
+
+        [Space]
+        [Header("Motion")]
+        [SerializeField]
+        private Transform anim;
+
+        [SerializeField]
+        private Transform[] copyFrom;
+
+        [SerializeField]
+        private BoneController[] copyTo;
+
+        [Range(0, 0.5f)]
+        [SerializeField]
+        private float sphereRadius = 0.1f;
+
+        [Space]
+        [Header("Rig")]
+        [SerializeField]
+        private RigBuilder rootRig;
+
+        [SerializeField]
+        private Rig aimRig;
+
+        [Space]
+        [Header("StateMachine")]
+        [SerializeField]
+        private Transform ragdollRoot;
+
+        [Space]
+        [Header("Debug")]
+        [SerializeField]
+        private bool debug;
+
+        private Action<Vector3> _cachedV3;
+        private Action<HumanBodyBones> _cachedHBB;
+        private Action<InputData> _cachedInputData;
 
         private void Awake()
         {
-            //player.Construct(inputHandler);
-            cameraLook.Construct(cameraSettings, inputHandler);
+            player.Construct(ragdollRoot, rootRig, playerMovement, playerAnimation, copyTo, inputHandler);
+            cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler, legPlacer);
-            playerAnim.Construct(animator, inputHandler);
-            ak47.Construct(inputHandler, _bulletPool, aim);
+            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
+            playerAnimation.Construct(animator, inputHandler, aimRig, player.playerStateMachine);
+            ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].Construct(springData, copyFrom[i]);
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+
+                copyTo[i].Construct(springData, copyFrom[i], pidData, rend, humanBodyBone);
 
                 int ind = i;
+                _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
+
+                _cachedV3 = dir => player.playerStateMachine.SetState<RagdollState>();
+                copyTo[i].OnCollision += _cachedV3;
+
+                _cachedHBB = dir => player.playerStateMachine.SetState<RagdollState>();
+                copyTo[i].OnBoneDetach += _cachedHBB;
             }
 
             return;
 
             void HandleInput(InputData inputData, BoneController boneController)
             {
-                boneController.IsPositionApplying(!inputData.E);
-                boneController.IsRotationApplying(!inputData.E);
+                if (!debug)
+                    return;
+
+                boneController.IsPositionApplying(!inputData.T);
+                boneController.IsRotationApplying(!inputData.T);
             }
         }
 
@@ -94,6 +167,15 @@ namespace Shadow_Dominion
             foreach (var t in copyFrom)
             {
                 Gizmos.DrawSphere(t.position, sphereRadius);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            for (int i = 0; i < copyFrom.Length; i++)
+            {
+                copyTo[i].OnCollision -= _cachedV3;
+                copyTo[i].OnBoneDetach -= _cachedHBB;
             }
         }
     }

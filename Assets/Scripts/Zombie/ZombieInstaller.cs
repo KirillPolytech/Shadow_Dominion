@@ -2,13 +2,18 @@ using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.Zombie
 {
     public class ZombieInstaller : MonoBehaviour
     {
+        [SerializeField] private BoneDataSO boneDataSo;
+        [SerializeField] private Zombie zombie;
         [SerializeField] private ZombieSettings zombieSettings;
         [SerializeField] private ZombieMovement zombieMovement;
         [SerializeField] private ZombieTargetDetector zombieTargetDetector;
+        [SerializeField] private Animator animator;
+        [SerializeField] private PIDData pidData;
+        [SerializeField] private Renderer rend;
 
         [Space] [Header("Motion")] [SerializeField]
         private SpringData springData;
@@ -16,16 +21,20 @@ namespace Shadow_Dominion
         [SerializeField] private Transform anim;
         [SerializeField] private Transform[] copyFrom;
         [SerializeField] private BoneController[] copyTo;
-        [Range(0, 0.5f)] [SerializeField] private float sphereRadius = 0.1f;
+        [Range(0, 0.5f)] [SerializeField] private float sphereRadius;
 
         private void Awake()
         {
-            zombieMovement.Construct(zombieSettings);
-            
+            zombieMovement.Construct(animator, zombieSettings);
+
             zombieTargetDetector.OnDetectTarget += zombieMovement.MoveTo;
 
             for (int i = 0; i < copyFrom.Length; i++)
-                copyTo[i].Construct(springData, copyFrom[i]);
+            {
+                copyTo[i].Construct(springData, copyFrom[i], pidData, rend, boneDataSo.BoneData[i].humanBodyBone);
+
+                copyTo[i].OnCollision += dir => zombie.Disable(copyTo, dir);
+            }
         }
 
         [Button("InitializeMotion")]

@@ -1,12 +1,12 @@
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class WalkRightState : IState
+public class AnimationWalkRightState : IState
 {
     private readonly Animator _animator;
     private readonly int _isWalkRight;
 
-    public WalkRightState(Animator animator, int isWalkRight)
+    public AnimationWalkRightState(Animator animator, int isWalkRight)
     {
         _animator = animator;
         _isWalkRight = isWalkRight;

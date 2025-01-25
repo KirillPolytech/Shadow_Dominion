@@ -76,8 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   server: {fileID: 8832471704378920471}
-  lobby: {fileID: 0}
-  playerPrefab: {fileID: 7184419189908676399, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
+  playerPrefab: {fileID: 127988981273457825, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
   count: 0
   bulletPrefab: {fileID: -8510401895514348003, guid: c60ae8eb2f54ae84a9cd7d5086d1019f, type: 3}
   poolCount: 200

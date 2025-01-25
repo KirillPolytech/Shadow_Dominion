@@ -73,3 +73,7 @@ crashlytics-build.properties
 Assets/Models/Character 2.fbx
 Assets/Models/Character 1.fbx
 Assets/Models/Character 3.fbx
+Assets/Animations/Player/Running_Normal.fbx.meta
+Assets/Animations/Player/Running_Normal.fbx
+Assets/Animations/Player/Walking_Normal.fbx
+Assets/Animations/Player/Walking_Normal.fbx.meta

@@ -5,31 +5,29 @@ namespace Shadow_Dominion.Main
 {
     public class PlayerMovement : NetworkBehaviour
     {
+        public bool CanMove { get; set; } = true;
+        
         private MonoInputHandler _inputHandler;
         private PlayerSettings _playerSettings;
-        private LegPlacer _legPlacer;
         private CameraLook _cameraLook;
         private Rigidbody _charRigidbody;
 
         private Transform _transform;
-        private float x, y;
         private Quaternion _cachedRot;
-        private Vector3 _dir;
-        private Vector3 _centerOfMass;
+        private Vector3 _dir, _centerOfMass;
+        private float x, y;
+        private bool _isRun;
 
-        //[Inject]
         public void Construct(
             PlayerSettings playerSettings,
             Rigidbody characterController,
             CameraLook cameraLook,
-            MonoInputHandler inputHandler,
-            LegPlacer legPlacer)
+            MonoInputHandler inputHandler)
         {
             _inputHandler = inputHandler;
             _playerSettings = playerSettings;
             _charRigidbody = characterController;
             _cameraLook = cameraLook;
-            _legPlacer = legPlacer;
             _transform = _charRigidbody.transform;
 
             _inputHandler.OnInputUpdate += HandleInput;
@@ -42,42 +40,45 @@ namespace Shadow_Dominion.Main
             
             x = data.HorizontalAxisRaw;
             y = data.VerticalAxisRaw;
+            _isRun = data.LeftShift;
         }
 
         public void FixedUpdate()
         {
+            if (!CanMove)
+                return;
+            
             _centerOfMass = _transform.position + Vector3.up;
-            PlaceLegs();
             Move();
+            Run();
             Rotate();
-        }
-
-        private void PlaceLegs()
-        {
-            if (!_playerSettings.canPlaceLegs)
-                return;
-
-            if (x + y == 0 && _transform.rotation == _cachedRot)
-                return;
-
-            _legPlacer.Step();
-
-            _cachedRot = _transform.rotation;
         }
 
         private void Move()
         {
-            if (!_playerSettings.canMove)
+            if (!_playerSettings.canMove || _isRun)
                 return;
 
             _dir = (_cameraLook.CameraTransform.forward * y +
-                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.speed;
+                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.walkSpeed;
             _dir.y = 0;
 
             _charRigidbody.AddForce(_dir);
 
             Debug.DrawRay(_centerOfMass, _dir * 10, Color.red);
             Debug.DrawRay(_transform.position, _charRigidbody.linearVelocity * 10, Color.yellow);
+        }
+        
+        private void Run()
+        {
+            if (!_playerSettings.canMove || !_isRun)
+                return;
+
+            _dir = (_cameraLook.CameraTransform.forward * y +
+                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.runSpeed;
+            _dir.y = 0;
+
+            _charRigidbody.AddForce(_dir);
         }
 
         private void Rotate()

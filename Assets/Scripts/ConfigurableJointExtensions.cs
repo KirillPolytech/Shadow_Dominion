@@ -40,10 +40,13 @@ public static class ConfigurableJointExtensions
         Quaternion startRotation, Space space)
     {
         // Calculate the rotation expressed by the joint's axis and secondary axis
-        var right = joint.axis;
-        var forward = Vector3.Cross(joint.axis, joint.secondaryAxis).normalized;
-        var up = Vector3.Cross(forward, right).normalized;
-        Quaternion worldToJointSpace = Quaternion.LookRotation(forward, up);
+        Vector3 right = joint.axis;
+        Vector3 forward = Vector3.Cross(joint.axis, joint.secondaryAxis).normalized;
+        Vector3 up = Vector3.Cross(forward, right).normalized;
+
+        Quaternion worldToJointSpace = Quaternion.identity;
+        if (Vector3.Cross(forward, up) != Vector3.zero)
+            worldToJointSpace = Quaternion.LookRotation(forward, up);
 
         // Transform into world space
         Quaternion resultRotation = Quaternion.Inverse(worldToJointSpace);
@@ -64,25 +67,5 @@ public static class ConfigurableJointExtensions
 
         // Set target rotation to our newly calculated rotation
         return resultRotation;
-    }
-
-    /// <summary>
-    /// Adjust ConfigurableJoint settings to closely match CharacterJoint behaviour
-    /// </summary>
-    public static void SetupAsCharacterJoint(this ConfigurableJoint joint)
-    {
-        joint.xMotion = ConfigurableJointMotion.Locked;
-        joint.yMotion = ConfigurableJointMotion.Locked;
-        joint.zMotion = ConfigurableJointMotion.Locked;
-        joint.angularXMotion = ConfigurableJointMotion.Limited;
-        joint.angularYMotion = ConfigurableJointMotion.Limited;
-        joint.angularZMotion = ConfigurableJointMotion.Limited;
-        joint.breakForce = Mathf.Infinity;
-        joint.breakTorque = Mathf.Infinity;
-
-        joint.rotationDriveMode = RotationDriveMode.Slerp;
-        var slerpDrive = joint.slerpDrive;
-        slerpDrive.maximumForce = Mathf.Infinity;
-        joint.slerpDrive = slerpDrive;
     }
 }

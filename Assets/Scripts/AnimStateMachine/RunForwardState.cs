@@ -1,12 +1,12 @@
-using Shadow_Dominion.Level.StateMachine;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class RunForwardState : IState
+public class AnimationRunForwardState : IState
 {
     private readonly Animator _animator;
     private readonly int _isRunForward;
     
-    public RunForwardState(Animator animator, int isRunForward)
+    public AnimationRunForwardState(Animator animator, int isRunForward)
     {
         _animator = animator;
         _isRunForward = isRunForward;

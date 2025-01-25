@@ -10,8 +10,7 @@ public class PlayerListing : MonoBehaviour
     [SerializeField] private Transform parent;
     [SerializeField] private TextMeshProUGUI prefab;
 
-    [SerializeField] private Lobby lobby;
-
+    //[SerializeField] private Lobby lobby;
     // [Inject]
     // public void Construct(Lobby lobby)
     // {
