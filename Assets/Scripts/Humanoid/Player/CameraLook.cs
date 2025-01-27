@@ -9,6 +9,8 @@ namespace Shadow_Dominion
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
 
+        public bool CanZooming { get; set; } = true;
+
         private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
         private MonoInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
@@ -59,6 +61,9 @@ namespace Shadow_Dominion
 
         private void Zooming()
         {
+            if (CanZooming == false)
+                return;
+            
             float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
             float cameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
                                                rightMouseValue * _cameraSettings.zoomDuration * Time.fixedDeltaTime,

@@ -34,11 +34,12 @@ namespace Shadow_Dominion.Main
             RigBuilder rootRig,
             PlayerMovement playerMovement,
             PlayerAnimation playerAnimation,
+            CameraLook cameraLook,
             BoneController[] copyTo,
             MonoInputHandler monoInputHandler)
         {
             playerStateMachine =
-                new PlayerStateMachine(this, playerMovement, ragdollRoot, playerAnimation, rootRig, copyTo);
+                new PlayerStateMachine(this, playerMovement, cameraLook, ragdollRoot, playerAnimation, rootRig, copyTo);
 
             _monoInputHandler = monoInputHandler;
 
@@ -47,10 +48,10 @@ namespace Shadow_Dominion.Main
 
         public void SetPositionAndRotation(Vector3 pos, Vector3 rotDir)
         {
-            _rigidbody.position = new Vector3(pos.x, _rigidbody.position.y, pos.z);
+            _rigidbody.transform.position = new Vector3(pos.x, _rigidbody.position.y, pos.z);
 
             rotDir = new Vector3(rotDir.x, 0, rotDir.z);
-            _rigidbody.rotation = Quaternion.LookRotation(rotDir);
+            _rigidbody.transform.rotation = Quaternion.LookRotation(-rotDir);
         }
 
         private void OnDestroy()

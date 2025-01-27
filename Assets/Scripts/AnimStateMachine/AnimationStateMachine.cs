@@ -40,7 +40,7 @@ namespace Shadow_Dominion.Player
             CurrentState = state;
             CurrentState.Enter();
 
-            Debug.Log($"Current anim state: {CurrentState.GetType()}");
+            //Debug.Log($"Current anim state: {CurrentState.GetType()}");
         }
     }
 }

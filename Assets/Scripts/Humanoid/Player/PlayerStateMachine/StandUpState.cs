@@ -9,6 +9,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly PlayerMovement _playerMovement;
         private readonly RigBuilder _rigBuilder;
         private readonly Main.Player _player;
+        private readonly CameraLook _cameraLook;
         private readonly Transform _ragdollRoot;
         
         public StandUpState(
@@ -16,18 +17,21 @@ namespace Shadow_Dominion.Player.StateMachine
             Transform ragdollRoot,
             PlayerMovement playerMovement, 
             RigBuilder rigBuilder,
-            PlayerAnimation playerAnimation) : base(playerAnimation)
+            PlayerAnimation playerAnimation,
+            CameraLook cameraLook) : base(playerAnimation)
         {
             _playerMovement = playerMovement;
             _rigBuilder = rigBuilder;
             _player = player;
             _ragdollRoot = ragdollRoot;
+            _cameraLook = cameraLook;
         }
         
         public override void Enter()
         {
             _playerMovement.CanMove = false;
             _rigBuilder.enabled = false;
+            _cameraLook.CanZooming = false;
             
             _player.SetPositionAndRotation(_ragdollRoot.position, _ragdollRoot.up);
             
@@ -40,6 +44,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             _playerMovement.CanMove = true;
             _rigBuilder.enabled = true;
+            _cameraLook.CanZooming = true;
         }
     }
 }

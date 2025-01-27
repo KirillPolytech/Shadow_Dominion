@@ -28,14 +28,15 @@ namespace Shadow_Dominion.Player.StateMachine
         public PlayerStateMachine(
             Main.Player player,
             PlayerMovement playerMovement,
+            CameraLook cameraLook,
             Transform ragdollRoot,
             PlayerAnimation playerAnimation,
             RigBuilder rootRig,
             BoneController[] boneController)
         {
             _idleState = new IdleState(playerAnimation);
-            _standUpState = new StandUpState(player, ragdollRoot, playerMovement, rootRig, playerAnimation);
-            _ragdollState = new RagdollState(playerMovement, playerAnimation, rootRig, boneController);
+            _standUpState = new StandUpState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
+            _ragdollState = new RagdollState(playerMovement, playerAnimation, cameraLook, rootRig, boneController);
 
             _runForwardState = new RunForwardState(playerAnimation);
             _runBackwardState = new RunBackwardState(playerAnimation);

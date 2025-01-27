@@ -110,7 +110,7 @@ namespace Shadow_Dominion
 
         private void Awake()
         {
-            player.Construct(ragdollRoot, rootRig, playerMovement, playerAnimation, copyTo, inputHandler);
+            player.Construct(ragdollRoot, rootRig, playerMovement, playerAnimation, cameraLook, copyTo, inputHandler);
             cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
