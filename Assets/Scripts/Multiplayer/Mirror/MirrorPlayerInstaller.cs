@@ -97,7 +97,7 @@ namespace Shadow_Dominion
         [Space]
         [Header("StateMachine")]
         [SerializeField]
-        private Transform ragdollRoot;
+        private Rigidbody ragdollRoot;
 
         [Space]
         [Header("Debug")]
@@ -110,11 +110,11 @@ namespace Shadow_Dominion
 
         private void Awake()
         {
-            player.Construct(ragdollRoot, rootRig, playerMovement, playerAnimation, cameraLook, copyTo, inputHandler);
+            player.Construct(ragdollRoot.transform, rootRig, playerMovement, playerAnimation, cameraLook, copyTo, inputHandler);
             cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
-            playerAnimation.Construct(animator, inputHandler, aimRig, player.playerStateMachine);
+            playerAnimation.Construct(animator, inputHandler, aimRig, ragdollRoot, player.playerStateMachine);
             ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
@@ -168,6 +168,8 @@ namespace Shadow_Dominion
             {
                 Gizmos.DrawSphere(t.position, sphereRadius);
             }
+
+            //Gizmos.DrawRay(ragdollRoot.position, ragdollRoot.transform.up * 5);
         }
 
         private void OnDestroy()

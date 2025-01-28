@@ -1,6 +1,7 @@
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Shadow_Dominion.Zombie
 {
@@ -10,10 +11,12 @@ namespace Shadow_Dominion.Zombie
         [SerializeField] private Zombie zombie;
         [SerializeField] private ZombieSettings zombieSettings;
         [SerializeField] private ZombieMovement zombieMovement;
+        [SerializeField] private ZombieAnimation zombieAnimation;
         [SerializeField] private ZombieTargetDetector zombieTargetDetector;
         [SerializeField] private Animator animator;
         [SerializeField] private PIDData pidData;
         [SerializeField] private Renderer rend;
+        [SerializeField] private NavMeshAgent navMeshAgent;
 
         [Space] [Header("Motion")] [SerializeField]
         private SpringData springData;
@@ -25,9 +28,10 @@ namespace Shadow_Dominion.Zombie
 
         private void Awake()
         {
-            zombieMovement.Construct(animator, zombieSettings);
+            zombieMovement.Construct(navMeshAgent, zombieSettings);
+            zombieAnimation.Construct(animator, navMeshAgent);
 
-            zombieTargetDetector.OnDetectTarget += zombieMovement.MoveTo;
+            zombieTargetDetector.OnDetectTarget += zombieMovement.MoveToTarget;
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -63,7 +67,7 @@ namespace Shadow_Dominion.Zombie
 
         private void OnDestroy()
         {
-            zombieTargetDetector.OnDetectTarget -= zombieMovement.MoveTo;
+            zombieTargetDetector.OnDetectTarget -= zombieMovement.MoveToTarget;
         }
     }
 }

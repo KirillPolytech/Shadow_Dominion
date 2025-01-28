@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion.Zombie
 {
-    public class Zombie : MonoBehaviour
+    public class Zombie : Humanoid
     {
         [SerializeField] private Rigidbody zombie_Ragdoll;
 

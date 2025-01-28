@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mirror;
 using Shadow_Dominion.Player.StateMachine;
@@ -9,6 +10,7 @@ namespace Shadow_Dominion.Player
     public class PlayerAnimation : NetworkBehaviour
     {
         private const float Appromixation = 0.01f;
+        private const float VelocityApproximation = 1.5f;
 
         public bool CanAnimate { get; set; } = true;
 
@@ -23,6 +25,7 @@ namespace Shadow_Dominion.Player
         private MonoInputHandler _inputHandler;
         private PlayerStateMachine _playerStateMachine;
         private Rig _aimRig;
+        private Rigidbody _ragdoll;
 
         private Coroutine _coroutine;
         private int _lastValue;
@@ -30,39 +33,59 @@ namespace Shadow_Dominion.Player
         private const float TimeToWait = 7;
         private float _counter;
         private bool _isStandUp;
+        private InputData _inputData;
 
         public void Construct(
             Animator animator,
             MonoInputHandler inputHandler,
             Rig aimRig,
+            Rigidbody ragdoll,
             PlayerStateMachine playerStateMachine)
         {
             Animator = animator;
             _inputHandler = inputHandler;
             _aimRig = aimRig;
             _playerStateMachine = playerStateMachine;
+            _ragdoll =ragdoll;
 
             AnimationStateMachine = new AnimationStateMachine(Animator);
         }
 
-        private void Start()
+        private void OnEnable()
         {
             if (!isLocalPlayer)
                 return;
 
-            _inputHandler.OnInputUpdate += HandleHorizontalState;
-            _inputHandler.OnInputUpdate += HandleWalkState;
-            _inputHandler.OnInputUpdate += HandleIdleState;
-            _inputHandler.OnInputUpdate += HandleRunStates;
-            _inputHandler.OnInputUpdate += HandleAimRig;
+            _inputHandler.OnInputUpdate += ReceiveInput;
+        }
+        
+        public void OnDisable()
+        {
+            if (isLocalPlayer)
+                return;
+            
+            _inputHandler.OnInputUpdate -= ReceiveInput;
         }
 
-        private void HandleAimRig(InputData inputData)
+        private void ReceiveInput(InputData inputData) => _inputData = inputData;
+
+        private void FixedUpdate()
+        {
+            float magnitude = _ragdoll.linearVelocity.magnitude;
+            
+            HandleAimRig();
+            HandleWalkState(magnitude);
+            HandleRunStates();
+            HandleHorizontalState();
+            HandleIdleState(magnitude);
+        }
+
+        private void HandleAimRig()
         {
             if (!CanAnimate || _isStandUp)
                 return;
 
-            int currentValue = inputData.RightMouseButton ? 1 : 0;
+            int currentValue = _inputData.RightMouseButton ? 1 : 0;
 
             if (_lastValue != currentValue)
             {
@@ -86,28 +109,28 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleWalkState(InputData inputData)
+        private void HandleWalkState(float mag)
         {
-            if (inputData.LeftShift || !CanAnimate || _isStandUp)
+            if (_inputData.LeftShift || _inputData.VerticalAxisRaw != 0 || !CanAnimate || _isStandUp)
                 return;
 
-            switch (inputData.VerticalAxisRaw)
+            switch (mag)
             {
-                case > 0:
+                case > VelocityApproximation:
                     _playerStateMachine.SetState<WalkForwardState>();
                     break;
-                case < 0:
+                case < -VelocityApproximation:
                     _playerStateMachine.SetState<WalkBackwardState>();
                     break;
             }
         }
 
-        private void HandleRunStates(InputData inputData)
+        private void HandleRunStates()
         {
-            if (!inputData.LeftShift || !CanAnimate || _isStandUp)
+            if (!_inputData.LeftShift || !CanAnimate || _isStandUp)
                 return;
 
-            switch (inputData.VerticalAxisRaw)
+            switch (_inputData.VerticalAxisRaw)
             {
                 case > 0:
                     _playerStateMachine.SetState<RunForwardState>();
@@ -118,12 +141,12 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleHorizontalState(InputData inputData)
+        private void HandleHorizontalState()
         {
             if (!CanAnimate || _isStandUp)
                 return;
 
-            switch (inputData.HorizontalAxisRaw)
+            switch (_inputData.HorizontalAxisRaw)
             {
                 case < 0:
                     _playerStateMachine.SetState<WalkLeftState>();
@@ -134,12 +157,13 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleIdleState(InputData inputData)
+        private void HandleIdleState(float magnitude)
         {
             if (!CanAnimate || _isStandUp)
                 return;
 
-            if (inputData is { HorizontalAxisRaw: 0, VerticalAxisRaw: 0 })
+            float mag = _ragdoll.linearVelocity.magnitude;
+            if (mag is < VelocityApproximation and > - VelocityApproximation)
             {
                 _playerStateMachine.SetState<IdleState>();
             }
@@ -161,18 +185,6 @@ namespace Shadow_Dominion.Player
             }
 
             _isStandUp = false;
-        }
-
-        public void OnDestroy()
-        {
-            if (isLocalPlayer)
-                return;
-
-            _inputHandler.OnInputUpdate -= HandleHorizontalState;
-            _inputHandler.OnInputUpdate -= HandleWalkState;
-            _inputHandler.OnInputUpdate -= HandleIdleState;
-            _inputHandler.OnInputUpdate -= HandleRunStates;
-            _inputHandler.OnInputUpdate -= HandleAimRig;
         }
     }
 }

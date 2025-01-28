@@ -13,7 +13,8 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly Dictionary<IState, Dictionary<IState, bool>> _transitions = new();
 
         private readonly IdleState _idleState;
-        private readonly StandUpState _standUpState;
+        private readonly StandUpFaceUpState _standUpFaceUpState;
+        private readonly StandUpFaceDownState _standUpFaceDownState;
         private readonly RagdollState _ragdollState;
 
         private readonly WalkForwardState _walkForwardState;
@@ -35,7 +36,8 @@ namespace Shadow_Dominion.Player.StateMachine
             BoneController[] boneController)
         {
             _idleState = new IdleState(playerAnimation);
-            _standUpState = new StandUpState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
+            _standUpFaceUpState = new StandUpFaceUpState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
+            _standUpFaceDownState = new StandUpFaceDownState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
             _ragdollState = new RagdollState(playerMovement, playerAnimation, cameraLook, rootRig, boneController);
 
             _runForwardState = new RunForwardState(playerAnimation);
@@ -49,7 +51,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
             _transitions[_idleState] = new Dictionary<IState, bool>
             {
-                [_standUpState] = true,
+                [_standUpFaceUpState] = true,
                 [_walkForwardState] = true,
                 [_walkBackwardState] = true,
                 [_runForwardState] = true,
@@ -58,14 +60,20 @@ namespace Shadow_Dominion.Player.StateMachine
                 [_walkRightState] = true,
             };
 
-            _transitions[_standUpState] = new Dictionary<IState, bool>
+            _transitions[_standUpFaceUpState] = new Dictionary<IState, bool>
+            {
+                [_idleState] = true,
+            };
+            
+            _transitions[_standUpFaceDownState] = new Dictionary<IState, bool>
             {
                 [_idleState] = true,
             };
 
             _transitions[_ragdollState] = new Dictionary<IState, bool>
             {
-                [_standUpState] = true,
+                [_standUpFaceUpState] = true,
+                [_standUpFaceDownState] = true,
             };
 
             _transitions[_runForwardState] = new Dictionary<IState, bool>

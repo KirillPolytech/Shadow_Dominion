@@ -1,4 +1,3 @@
-using Shadow_Dominion.Player;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,36 +5,21 @@ namespace Shadow_Dominion.Zombie
 {
     public class ZombieMovement : MonoBehaviour
     {
-        private const float DistanceError = 0.1f;
-        
-        [SerializeField] private NavMeshAgent navMeshAgent;
-
-        private AnimationStateMachine _animationStateMachine;
+        private NavMeshAgent _navMeshAgent;
         private IZombieTarget _iZombieTarget;
 
-        public void Construct(Animator animator, ZombieSettings zombieSettings)
+        public void Construct(NavMeshAgent navMeshAgent, ZombieSettings zombieSettings)
         {
             navMeshAgent.speed = zombieSettings.speed;
             navMeshAgent.acceleration = zombieSettings.acceleration;
-
-            _animationStateMachine = new AnimationStateMachine(animator);
         }
 
         private void FixedUpdate()
         {
-            HandleAnimations();
             Moving();
         }
 
-        private void HandleAnimations()
-        {
-            if (navMeshAgent.remainingDistance > DistanceError) 
-                _animationStateMachine.SetState<AnimationWalkForwardState>();
-            else
-                _animationStateMachine.SetState<AnimationIdleState>();
-        }
-
-        public void MoveTo(IZombieTarget iZombieTarget)
+        public void MoveToTarget(IZombieTarget iZombieTarget)
         {
             _iZombieTarget = iZombieTarget;
         }
@@ -44,10 +28,11 @@ namespace Shadow_Dominion.Zombie
         {
             if (_iZombieTarget == null)
                 return;
-            
-            Vector3 destination = _iZombieTarget.Position.position - 
-                                  (transform.position - _iZombieTarget.Position.position).normalized;
-            navMeshAgent.SetDestination(destination);
+
+            var enumerator = _iZombieTarget.Position.GetEnumerator().Current;
+            Vector3 destination = enumerator.position -
+                                  (transform.position - enumerator.position).normalized;
+            _navMeshAgent.SetDestination(destination);
         }
     }
 }

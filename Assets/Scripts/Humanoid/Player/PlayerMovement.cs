@@ -74,9 +74,13 @@ namespace Shadow_Dominion.Main
             if (!_playerSettings.canMove || !_isRun)
                 return;
 
-            _dir = (_cameraLook.CameraTransform.forward * y +
-                    _cameraLook.CameraTransform.right * x).normalized * _playerSettings.runSpeed;
-            _dir.y = 0;
+            Vector3 forward = new Vector3(_cameraLook.CameraTransform.forward.x, 0,
+                _cameraLook.CameraTransform.forward.z);
+            
+            Vector3 right = new Vector3(_cameraLook.CameraTransform.right.x, 0,
+                _cameraLook.CameraTransform.right.z);
+            
+            _dir = (forward * y + right * x).normalized * _playerSettings.runSpeed;
 
             _charRigidbody.AddForce(_dir);
         }

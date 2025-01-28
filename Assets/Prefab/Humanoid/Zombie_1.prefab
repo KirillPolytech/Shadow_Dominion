@@ -154,6 +154,9 @@ PrefabInstance:
       addedObject: {fileID: 3775069937606052225}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6647733389517378207}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 6541408899077994427}
   m_SourcePrefab: {fileID: 100100000, guid: 885d59481c911fc49bafd1818c767f06, type: 3}
 --- !u!4 &2318993055216759749 stripped
@@ -182,10 +185,12 @@ MonoBehaviour:
   zombie: {fileID: 6541408899077994427}
   zombieSettings: {fileID: 11400000, guid: 921ce48d14c9bd04c8adc32923ffeebe, type: 2}
   zombieMovement: {fileID: 3775069937606052225}
+  zombieAnimation: {fileID: 6647733389517378207}
   zombieTargetDetector: {fileID: 6457663404135295479}
   animator: {fileID: 2968370974973100511}
   pidData: {fileID: 11400000, guid: 68351bd9694981d47b6a6f912b5ebc4f, type: 2}
   rend: {fileID: 3424988112518964002}
+  navMeshAgent: {fileID: 282839689149530122}
   springData: {fileID: 11400000, guid: a1df6204b44e6d04797cfc1bb57f0ef0, type: 2}
   anim: {fileID: 3724468252587659984}
   copyFrom:
@@ -278,7 +283,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39c775a1f1faec84a8f9a3ad3e1de5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshAgent: {fileID: 282839689149530122}
+--- !u!114 &6647733389517378207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3127019080422959487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdef5ed9478311419e0b0caa6799f2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6541408899077994427
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System.Linq;
+using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
@@ -13,7 +14,8 @@ namespace Shadow_Dominion.Player
         private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
         private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
         private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
-        private readonly int StandUpHashCode = Animator.StringToHash("StandUp");
+        private readonly int StandUpFaceUpHashCode = Animator.StringToHash("StandUpFaceUp");
+        private readonly int StandUpFaceDownHashCode = Animator.StringToHash("StandUpFaceDown");
         private readonly int Laying = Animator.StringToHash("Laying");
 
         public AnimationStateMachine(Animator animator)
@@ -25,7 +27,8 @@ namespace Shadow_Dominion.Player
             _states.Add(new AnimationWalkRightState(animator, IsWalkRight));
             _states.Add(new AnimationRunForwardState(animator, IsRunForward));
             _states.Add(new AnimationRunBackwardState(animator, IsRunBackward));
-            _states.Add(new AnimationStandUpState(animator, StandUpHashCode));
+            _states.Add(new AnimationStandUpFaceUpState(animator, StandUpFaceUpHashCode));
+            _states.Add(new AnimationStandUpFaceDownState(animator, StandUpFaceDownHashCode));
             _states.Add(new AnimationLayingState(animator, Laying));
         }
 
