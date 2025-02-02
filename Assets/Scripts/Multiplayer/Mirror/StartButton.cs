@@ -5,10 +5,9 @@ using Zenject;
 
 public class StartButton : Button
 {
+    private readonly UnityAction _action = () => NetworkManager.singleton.ServerChangeScene("Level");
+    
     private MirrorServer _mirrorServer;
-
-    private UnityAction _action = () => NetworkManager.singleton.ServerChangeScene("Level");
-
     private bool _isInitialized;
 
     [Inject]
@@ -32,7 +31,7 @@ public class StartButton : Button
         if (!_isInitialized)
             return;
         
-        _mirrorServer.ActionOnHostStart += Subscribe;
-        _mirrorServer.ActionOnHostStop += Unsubscribe;
+        _mirrorServer.ActionOnHostStart -= Subscribe;
+        _mirrorServer.ActionOnHostStop -= Unsubscribe;
     }
 }

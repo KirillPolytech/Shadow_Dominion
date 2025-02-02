@@ -75,8 +75,8 @@ namespace Shadow_Dominion.Player
             
             HandleAimRig();
             HandleWalkState(magnitude);
-            HandleRunStates();
-            HandleHorizontalState();
+            HandleRunStates(magnitude);
+            HandleHorizontalState(magnitude);
             HandleIdleState(magnitude);
         }
 
@@ -125,9 +125,9 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleRunStates()
+        private void HandleRunStates(float mag)
         {
-            if (!_inputData.LeftShift || !CanAnimate || _isStandUp)
+            if (mag < Appromixation || !_inputData.LeftShift || !CanAnimate || _isStandUp)
                 return;
 
             switch (_inputData.VerticalAxisRaw)
@@ -141,9 +141,9 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleHorizontalState()
+        private void HandleHorizontalState(float mag)
         {
-            if (!CanAnimate || _isStandUp)
+            if (mag < VelocityApproximation || !CanAnimate || _isStandUp)
                 return;
 
             switch (_inputData.HorizontalAxisRaw)

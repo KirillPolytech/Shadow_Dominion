@@ -4,6 +4,9 @@ using UnityEngine;
 public class DebugWindow : MonoBehaviour
 {
     [Range(0f, 10f)] [SerializeField] private float delayUpdate = 2.5f;
+    
+    [SerializeField] private bool IsDontDestroyOnLoad;
+
 
     private string _myLog = "";
     private string _output;
@@ -15,6 +18,9 @@ public class DebugWindow : MonoBehaviour
         Application.logMessageReceived += Log;
 
         _coroutine = StartCoroutine(StartLog());
+
+        if (IsDontDestroyOnLoad)
+            DontDestroyOnLoad(gameObject);
     }
 
     private void OnDisable()

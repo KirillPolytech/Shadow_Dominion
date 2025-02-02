@@ -3,51 +3,43 @@ using UnityEngine;
 
 public class TestBehaviour : NetworkBehaviour
 {
-    public readonly SyncList<Vector3> namesList = new SyncList<Vector3>();
-
-    public TestNetwork testNetwork;
+    private readonly SyncList<int> namesList = new SyncList<int>();
     
-    public void Initialize()
+    public void OnEnable()
     {
-        testNetwork.ActionOnClientStart += Register;
-        testNetwork.ActionOnClientStart += OnStartClient;
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
+        Debug.Log("TestBehaviour spawned!");
         
-        namesList.OnChange += (arg1, arg2, arg3) =>
-        {
-            Debug.Log($"{arg1} {arg2} {arg3}");
-        };
+        //Register();
+
+        namesList.OnChange += (arg1, arg2, arg3) => 
+            { Debug.Log($"namesList.OnChange {arg1} {arg2} {arg3}"); };
     }
 
     private void Register()
     {
-        NetworkClient.RegisterHandler<ScoreMessage>(OnScore);
+        //NetworkClient.RegisterHandler<ScoreMessage>(OnScore);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            SendScore(250);
-            
-            namesList.Add(new Vector3(15,623,74));
+            //SendScore(250);
+
+            namesList.Add( 512);
         }
     }
 
-    public void SendScore(int score)
-    {
-        ScoreMessage msg = new ScoreMessage { health = score };
-        NetworkServer.SendToAll(msg);
-    }
-
-    public void OnScore(ScoreMessage msg)
-    {
-        Debug.Log("OnScoreMessage " + msg.health);
-    }
+    // public void SendScore(int score)
+    // {
+    //     ScoreMessage msg = new ScoreMessage { health = score };
+    //     NetworkServer.SendToAll(msg);
+    // }
+    //
+    // public void OnScore(ScoreMessage msg)
+    // {
+    //     Debug.Log("OnScoreMessage " + msg.health);
+    // }
 }
 
 public struct ScoreMessage : NetworkMessage

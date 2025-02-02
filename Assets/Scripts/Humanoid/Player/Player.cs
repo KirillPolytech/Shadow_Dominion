@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
