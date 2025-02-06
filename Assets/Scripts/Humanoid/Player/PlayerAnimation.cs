@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
-using Mirror;
 using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player
 {
-    public class PlayerAnimation : NetworkBehaviour
+    public class PlayerAnimation
     {
         private const float Appromixation = 0.01f;
         private const float VelocityApproximation = 1.5f;
@@ -22,7 +20,6 @@ namespace Shadow_Dominion.Player
         [SerializeField]
         private float aimRigWeightChangeCoeff = 3.5f;
 
-        private MonoInputHandler _inputHandler;
         private PlayerStateMachine _playerStateMachine;
         private Rig _aimRig;
         private Rigidbody _ragdoll;
@@ -37,47 +34,16 @@ namespace Shadow_Dominion.Player
 
         public void Construct(
             Animator animator,
-            MonoInputHandler inputHandler,
             Rig aimRig,
             Rigidbody ragdoll,
             PlayerStateMachine playerStateMachine)
         {
             Animator = animator;
-            _inputHandler = inputHandler;
             _aimRig = aimRig;
             _playerStateMachine = playerStateMachine;
             _ragdoll =ragdoll;
 
             AnimationStateMachine = new AnimationStateMachine(Animator);
-        }
-
-        private void OnEnable()
-        {
-            if (!isLocalPlayer)
-                return;
-
-            _inputHandler.OnInputUpdate += ReceiveInput;
-        }
-        
-        public void OnDisable()
-        {
-            if (isLocalPlayer)
-                return;
-            
-            _inputHandler.OnInputUpdate -= ReceiveInput;
-        }
-
-        private void ReceiveInput(InputData inputData) => _inputData = inputData;
-
-        private void FixedUpdate()
-        {
-            float magnitude = _ragdoll.linearVelocity.magnitude;
-            
-            HandleAimRig();
-            HandleWalkState(magnitude);
-            HandleRunStates(magnitude);
-            HandleHorizontalState(magnitude);
-            HandleIdleState(magnitude);
         }
 
         private void HandleAimRig()
@@ -89,48 +55,36 @@ namespace Shadow_Dominion.Player
 
             if (_lastValue != currentValue)
             {
-                if (_coroutine != null)
-                    StopCoroutine(_coroutine);
+                //if (_coroutine != null)
+                    //StopCoroutine(_coroutine);
 
-                _coroutine = StartCoroutine(ChangeWeight(_aimRig, currentValue));
+                //_coroutine = StartCoroutine(ChangeWeight(_aimRig, currentValue));
             }
 
             _lastValue = currentValue;
         }
 
-        private IEnumerator ChangeWeight(Rig rig, float targetValue)
+        public void HandleIdle()
         {
-            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * aimRigWeightChangeCoeff;
-
-            while (Mathf.Abs(rig.weight - targetValue) > Appromixation)
-            {
-                rig.weight += step;
-                yield return new WaitForFixedUpdate();
-            }
+            _playerStateMachine.SetState<IdleState>();
         }
-
-        private void HandleWalkState(float mag)
+        
+        public void HandleVerticalWalk(float verticalAxisRaw)
         {
-            if (_inputData.LeftShift || _inputData.VerticalAxisRaw != 0 || !CanAnimate || _isStandUp)
-                return;
-
-            switch (mag)
+            switch (verticalAxisRaw)
             {
-                case > VelocityApproximation:
+                case > 0:
                     _playerStateMachine.SetState<WalkForwardState>();
                     break;
-                case < -VelocityApproximation:
+                case < 0:
                     _playerStateMachine.SetState<WalkBackwardState>();
                     break;
             }
         }
 
-        private void HandleRunStates(float mag)
+        public void HandleRun(float verticalAxisRaw)
         {
-            if (mag < Appromixation || !_inputData.LeftShift || !CanAnimate || _isStandUp)
-                return;
-
-            switch (_inputData.VerticalAxisRaw)
+            switch (verticalAxisRaw)
             {
                 case > 0:
                     _playerStateMachine.SetState<RunForwardState>();
@@ -141,12 +95,9 @@ namespace Shadow_Dominion.Player
             }
         }
 
-        private void HandleHorizontalState(float mag)
+        public void HandleHorizontalState(float horizontalAxisRaw)
         {
-            if (mag < VelocityApproximation || !CanAnimate || _isStandUp)
-                return;
-
-            switch (_inputData.HorizontalAxisRaw)
+            switch (horizontalAxisRaw)
             {
                 case < 0:
                     _playerStateMachine.SetState<WalkLeftState>();
@@ -156,22 +107,34 @@ namespace Shadow_Dominion.Player
                     break;
             }
         }
-
-        private void HandleIdleState(float magnitude)
+        
+        public void HandleDiagonal(float x, float y)
         {
-            if (!CanAnimate || _isStandUp)
-                return;
-
-            float mag = _ragdoll.linearVelocity.magnitude;
-            if (mag is < VelocityApproximation and > - VelocityApproximation)
+            switch (y)
             {
-                _playerStateMachine.SetState<IdleState>();
+                case > 0 when x > 0:
+                    _playerStateMachine.SetState<WalkDiagonallyRightState>();
+                    break;
+                case > 0 when x < 0:
+                    _playerStateMachine.SetState<WalkDiagonallyLeftState>();
+                    break;
             }
         }
 
         public void StartStandUp()
         {
-            StartCoroutine(Count());
+            //StartCoroutine(Count());
+        }
+        
+        private IEnumerator ChangeWeight(Rig rig, float targetValue)
+        {
+            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * aimRigWeightChangeCoeff;
+
+            while (Mathf.Abs(rig.weight - targetValue) > Appromixation)
+            {
+                rig.weight += step;
+                yield return new WaitForFixedUpdate();
+            }
         }
         
         private IEnumerator Count()

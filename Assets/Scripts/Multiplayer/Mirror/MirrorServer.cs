@@ -5,9 +5,12 @@ using Shadow_Dominion;
 using Mirror;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public class MirrorServer : NetworkRoomManager
 {
+    private readonly List<GameObject> _instances = new List<GameObject>();
+    
     public event Action ActionOnHostStart;
     public event Action ActionOnHostStop;
     public event Action ActionOnServerAddPlayer;
@@ -26,7 +29,6 @@ public class MirrorServer : NetworkRoomManager
     [SerializeField]
     private NetworkBehaviour[] networkBehaviour;
 
-    private List<GameObject> _instances = new List<GameObject>();
 
     private PlayerPool _playerPool;
 
@@ -98,15 +100,12 @@ public class MirrorServer : NetworkRoomManager
         
         Debug.Log("Objects destroyed!");
     }
-
-    [Server]
+    
     private void OnAnyChange() => ActionOnAnyChange?.Invoke();
 
     [Server]
     private void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
     {
-        return;
-        
         //локально на сервере создаем gameObject
         GameObject go = _playerPool.Pull().gameObject;
         go.transform.SetPositionAndRotation(positionMessage.pos, Quaternion.identity);
@@ -115,13 +114,12 @@ public class MirrorServer : NetworkRoomManager
         Debug.Log($"OnCreateCharacter: {conn.address}");
     }
 
-    [Server]
     private void ActivatePlayerSpawn()
     {
-        return;
-        
+        float value = Random.Range(-5, 5);
+        Vector3 newpos = new Vector3(value,-3.4f,value);
         //создаем struct определенного типа, чтобы сервер понял к чему эти данные относятся
-        PositionMessage message = new PositionMessage { pos = Vector3.zero };
+        PositionMessage message = new PositionMessage { pos = newpos };
         //отправка сообщения на сервер с координатами спавна
         NetworkClient.Send(message);
     }
@@ -133,8 +131,7 @@ public class MirrorServer : NetworkRoomManager
 
         Debug.Log($"OnServerSceneChanged: {sceneName}");
     }
-
-    [Server]
+    
     public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
     {
         base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);

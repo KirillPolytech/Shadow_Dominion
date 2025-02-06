@@ -1,24 +1,26 @@
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class AnimationStandUpFaceUpState : IState
+namespace Shadow_Dominion.AnimStateMachine
 {
-    private readonly Animator _animator;
-    private readonly int _isStandUp;
-    
-    public AnimationStandUpFaceUpState(Animator animator, int isStandUp)
+    public class AnimationStandUpFaceUpState : IState
     {
-        _animator = animator;
-        _isStandUp = isStandUp;
-    }
-    
-    public override void Enter()
-    {
-        _animator.SetTrigger(_isStandUp);
-    }
+        private readonly Animator _animator;
+        private readonly int _hashcode;
 
-    public override void Exit()
-    {
-        
+        public AnimationStandUpFaceUpState(Animator animator, int hashcode)
+        {
+            _animator = animator;
+            _hashcode = hashcode;
+        }
+
+        public override void Enter()
+        {
+            _animator.SetTrigger(_hashcode);
+        }
+
+        public override void Exit()
+        {
+        }
     }
 }

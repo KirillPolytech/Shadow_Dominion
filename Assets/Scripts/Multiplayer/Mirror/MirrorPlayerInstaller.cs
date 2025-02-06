@@ -7,6 +7,7 @@ using Shadow_Dominion.Player.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -36,13 +37,7 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private MonoInputHandler inputHandler;
-
-        [SerializeField]
-        private PlayerAnimation playerAnimation;
-
-        [SerializeField]
-        private PlayerMovement playerMovement;
-
+        
         [SerializeField]
         private CameraLook cameraLook;
 
@@ -108,13 +103,25 @@ namespace Shadow_Dominion
         private Action<HumanBodyBones> _cachedHBB;
         private Action<InputData> _cachedInputData;
 
+        [Inject]
+        public void Construct(InputHandler inputHandler)
+        {
+            
+        }
+
         private void Awake()
         {
-            player.Construct(ragdollRoot.transform, rootRig, playerMovement, playerAnimation, cameraLook, copyTo, inputHandler);
+            PlayerMovement playerMovement = new PlayerMovement();
+            PlayerAnimation playerAnimation = new PlayerAnimation();
+
+            player.Construct(ragdollRoot.transform, rootRig, playerMovement, playerAnimation, cameraLook, copyTo,
+                inputHandler);
             cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, inputHandler);
-            playerAnimation.Construct(animator, inputHandler, aimRig, ragdollRoot, player.playerStateMachine);
+            playerAnimation.Construct(animator, aimRig, ragdollRoot, player.playerStateMachine);
+            playerMovement.Construct(player.playerStateMachine, playerSettings, charRigidbody, cameraLook,
+                ragdollRoot.transform, playerAnimation);
+
             ak47.Construct(inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)

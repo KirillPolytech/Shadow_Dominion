@@ -1,9 +1,10 @@
 using System;
+using Mirror;
 using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class MonoInputHandler : MonoBehaviour
+    public class MonoInputHandler : NetworkBehaviour
     {
         public event Action<InputData> OnInputUpdate;
 
@@ -11,6 +12,9 @@ namespace Shadow_Dominion
 
         private void Update()
         {
+            if (!isLocalPlayer)
+                return;
+            
             _inputData.HorizontalAxisRaw = Input.GetAxisRaw(VariableNames.HorizontalAxis);
             _inputData.VerticalAxisRaw = Input.GetAxisRaw(VariableNames.VerticalAxis);
 

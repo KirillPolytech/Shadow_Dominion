@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Shadow_Dominion.Main;
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -12,125 +11,156 @@ namespace Shadow_Dominion.Player.StateMachine
     {
         private readonly Dictionary<IState, Dictionary<IState, bool>> _transitions = new();
 
-        private readonly IdleState _idleState;
-        private readonly StandUpFaceUpState _standUpFaceUpState;
-        private readonly StandUpFaceDownState _standUpFaceDownState;
-        private readonly RagdollState _ragdollState;
-
-        private readonly WalkForwardState _walkForwardState;
-        private readonly WalkBackwardState _walkBackwardState;
-
-        private readonly RunForwardState _runForwardState;
-        private readonly RunBackwardState _runBackwardState;
-
-        private readonly WalkLeftState _walkLeftState;
-        private readonly WalkRightState _walkRightState;
-
         public PlayerStateMachine(
             Main.Player player,
-            PlayerMovement playerMovement,
             CameraLook cameraLook,
             Transform ragdollRoot,
             PlayerAnimation playerAnimation,
             RigBuilder rootRig,
             BoneController[] boneController)
         {
-            _idleState = new IdleState(playerAnimation);
-            _standUpFaceUpState = new StandUpFaceUpState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
-            _standUpFaceDownState = new StandUpFaceDownState(player, ragdollRoot, playerMovement, rootRig, playerAnimation, cameraLook);
-            _ragdollState = new RagdollState(playerMovement, playerAnimation, cameraLook, rootRig, boneController);
+            IdleState idleState = new IdleState(playerAnimation);
+            StandUpFaceUpState standUpFaceUpState =
+                new StandUpFaceUpState(player, ragdollRoot, rootRig, playerAnimation, cameraLook);
+            StandUpFaceDownState standUpFaceDownState =
+                new StandUpFaceDownState(player, ragdollRoot, rootRig, playerAnimation, cameraLook);
+            RagdollState ragdollState = new RagdollState(playerAnimation, cameraLook, rootRig, boneController);
 
-            _runForwardState = new RunForwardState(playerAnimation);
-            _runBackwardState = new RunBackwardState(playerAnimation);
+            RunForwardState runForwardState = new RunForwardState(playerAnimation);
+            RunBackwardState runBackwardState = new RunBackwardState(playerAnimation);
 
-            _walkForwardState = new WalkForwardState(playerAnimation);
-            _walkBackwardState = new WalkBackwardState(playerAnimation);
+            WalkForwardState walkForwardState = new WalkForwardState(playerAnimation);
+            WalkBackwardState walkBackwardState = new WalkBackwardState(playerAnimation);
 
-            _walkLeftState = new WalkLeftState(playerAnimation);
-            _walkRightState = new WalkRightState(playerAnimation);
+            WalkLeftState walkLeftState = new WalkLeftState(playerAnimation);
+            WalkRightState walkRightState = new WalkRightState(playerAnimation);
+            
+            WalkDiagonallyLeftState walkDiagonallyLeftState = new WalkDiagonallyLeftState(playerAnimation);
+            WalkDiagonallyRightState walkDiagonallyRightState = new WalkDiagonallyRightState(playerAnimation);
 
-            _transitions[_idleState] = new Dictionary<IState, bool>
+            _transitions[idleState] = new Dictionary<IState, bool>
             {
-                [_standUpFaceUpState] = true,
-                [_walkForwardState] = true,
-                [_walkBackwardState] = true,
-                [_runForwardState] = true,
-                [_runBackwardState] = true,
-                [_walkLeftState] = true,
-                [_walkRightState] = true,
+                [standUpFaceUpState] = true,
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                [runForwardState] = true,
+                [runBackwardState] = true,
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                [walkDiagonallyLeftState] = true,
+                [walkDiagonallyRightState] = true,
             };
 
-            _transitions[_standUpFaceUpState] = new Dictionary<IState, bool>
+            _transitions[standUpFaceUpState] = new Dictionary<IState, bool>
             {
-                [_idleState] = true,
+                [idleState] = true,
+            };
+
+            _transitions[standUpFaceDownState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+            };
+
+            _transitions[ragdollState] = new Dictionary<IState, bool>
+            {
+                [standUpFaceUpState] = true,
+                [standUpFaceDownState] = true,
+            };
+
+            _transitions[runForwardState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                [runBackwardState] = true,
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                [ragdollState] = true,
+            };
+
+            _transitions[runBackwardState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkBackwardState] = true,
+                [runForwardState] = true,
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                [ragdollState] = true
+            };
+
+            _transitions[walkForwardState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                [runForwardState] = true,
+                [walkDiagonallyLeftState] = true,
+                [walkDiagonallyRightState] = true,
+            };
+
+            _transitions[walkBackwardState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                [runBackwardState] = true,
+                [walkDiagonallyLeftState] = true,
+                [walkDiagonallyRightState] = true,
+            };
+
+            _transitions[walkLeftState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkRightState] = true,
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                [runForwardState] = true,
+                [runBackwardState] = true,
+                [walkDiagonallyLeftState] = true,
+                [walkDiagonallyRightState] = true,
+            };
+
+            _transitions[walkRightState] = new Dictionary<IState, bool>
+            {
+                [idleState] = true,
+                [walkLeftState] = true,
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                [runForwardState] = true,
+                [runBackwardState] = true,
+                [walkDiagonallyLeftState] = true,
+                [walkDiagonallyRightState] = true,
             };
             
-            _transitions[_standUpFaceDownState] = new Dictionary<IState, bool>
+            _transitions[walkDiagonallyLeftState] = new Dictionary<IState, bool>
             {
-                [_idleState] = true,
+                [idleState] = true,
+                
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                
+                [runForwardState] = true,
+                [runBackwardState] = true,
+                [walkDiagonallyRightState] = true,
             };
-
-            _transitions[_ragdollState] = new Dictionary<IState, bool>
+            
+            _transitions[walkDiagonallyRightState] = new Dictionary<IState, bool>
             {
-                [_standUpFaceUpState] = true,
-                [_standUpFaceDownState] = true,
-            };
-
-            _transitions[_runForwardState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkForwardState] = true,
-                [_walkBackwardState] = true,
-                [_runBackwardState] = true,
-                [_walkLeftState] = true,
-                [_walkRightState] = true,
-                [_ragdollState] = true,
-            };
-
-            _transitions[_runBackwardState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkBackwardState] = true,
-                [_runForwardState] = true,
-                [_walkLeftState] = true,
-                [_walkRightState] = true,
-                [_ragdollState] = true
-            };
-
-            _transitions[_walkForwardState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkLeftState] = true,
-                [_walkRightState] = true,
-                [_runForwardState] = true,
-            };
-
-            _transitions[_walkBackwardState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkLeftState] = true,
-                [_walkRightState] = true,
-                [_runBackwardState] = true,
-            };
-
-            _transitions[_walkLeftState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkRightState] = true,
-                [_walkForwardState] = true,
-                [_walkBackwardState] = true,
-                [_runForwardState] = true,
-                [_runBackwardState] = true,
-            };
-
-            _transitions[_walkRightState] = new Dictionary<IState, bool>
-            {
-                [_idleState] = true,
-                [_walkLeftState] = true,
-                [_walkForwardState] = true,
-                [_walkBackwardState] = true,
-                [_runForwardState] = true,
-                [_runBackwardState] = true,
+                [idleState] = true,
+                
+                [walkLeftState] = true,
+                [walkRightState] = true,
+                
+                [walkForwardState] = true,
+                [walkBackwardState] = true,
+                
+                [runForwardState] = true,
+                [runBackwardState] = true,
+                
+                [walkDiagonallyLeftState] = true,
             };
         }
 
@@ -142,7 +172,10 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void SetState<T>()
         {
             var state =
-                _transitions.First(x => x.Key.GetType() == typeof(T));
+                _transitions.FirstOrDefault(x => x.Key.GetType() == typeof(T));
+            
+            if (state.Key == null)
+                Debug.LogWarning($"No transition: CurrentState: {CurrentState.GetType()} NewState: {typeof(T)}");
 
             if (CurrentState == state.Key)
                 return;

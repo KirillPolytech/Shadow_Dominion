@@ -1,4 +1,6 @@
-﻿namespace Shadow_Dominion.Player.StateMachine
+﻿using Shadow_Dominion.AnimStateMachine;
+
+namespace Shadow_Dominion.Player.StateMachine
 {
     public class WalkRightState : PlayerState
     {

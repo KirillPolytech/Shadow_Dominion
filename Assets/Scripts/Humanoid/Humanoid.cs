@@ -1,6 +1,8 @@
-using UnityEngine;
+using Mirror;
 
-public class Humanoid : MonoBehaviour
+namespace Shadow_Dominion.Player
 {
- 
+    public class Humanoid : NetworkBehaviour
+    {
+    }
 }

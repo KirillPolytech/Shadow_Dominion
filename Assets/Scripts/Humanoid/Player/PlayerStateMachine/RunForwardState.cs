@@ -1,3 +1,5 @@
+using Shadow_Dominion.AnimStateMachine;
+
 namespace Shadow_Dominion.Player.StateMachine
 {
     public class RunForwardState : PlayerState
@@ -5,6 +7,7 @@ namespace Shadow_Dominion.Player.StateMachine
         public RunForwardState(PlayerAnimation playerAnimation) : base(playerAnimation)
         {
         }
+
         public override void Enter()
         {
             _playerAnimation.AnimationStateMachine.SetState<AnimationRunForwardState>();
@@ -12,7 +15,6 @@ namespace Shadow_Dominion.Player.StateMachine
 
         public override void Exit()
         {
-            
         }
     }
 }

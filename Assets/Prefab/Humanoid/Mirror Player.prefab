@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8347335194314820648}
   - component: {fileID: 8112023172692570661}
   - component: {fileID: 7783093052233886016}
+  - component: {fileID: 4666364577006123210}
   m_Layer: 6
   m_Name: mixamorig:RightLeg
   m_TagString: Untagged
@@ -200,6 +201,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4666364577006123210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261707625840933985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 221755870394816993}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &368587053180254904
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,6 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38a12f44b0dcded4fbf1c58037ca4fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &749257996376149362
 GameObject:
   m_ObjectHideFlags: 0
@@ -5515,6 +5552,7 @@ GameObject:
   - component: {fileID: 1452371929905289250}
   - component: {fileID: 4284915588743569131}
   - component: {fileID: 4140470061550081361}
+  - component: {fileID: 3623082059199689626}
   m_Layer: 6
   m_Name: mixamorig:RightFoot
   m_TagString: Untagged
@@ -5718,6 +5756,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.01, z: 0.03}
   m_Center: {x: 0, y: 0.01, z: -0.02}
+--- !u!114 &3623082059199689626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538057529884872056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 6692328950488281931}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &1618310412228688036
 GameObject:
   m_ObjectHideFlags: 0
@@ -5814,6 +5885,7 @@ GameObject:
   - component: {fileID: 6889554813264999064}
   - component: {fileID: 7365762443534313305}
   - component: {fileID: 75881477945937286}
+  - component: {fileID: 7978915107440045814}
   m_Layer: 6
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -6003,6 +6075,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7978915107440045814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716546715496454497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2866002317588881410}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &1756554973086364448
 GameObject:
   m_ObjectHideFlags: 0
@@ -6550,8 +6655,7 @@ GameObject:
   - component: {fileID: 127988981273457825}
   - component: {fileID: 6158517376244881172}
   - component: {fileID: 2883562924446922007}
-  - component: {fileID: 6120852745547044476}
-  - component: {fileID: 5306037140672579532}
+  - component: {fileID: 8961616338611320610}
   m_Layer: 0
   m_Name: Mirror Player
   m_TagString: Untagged
@@ -6615,8 +6719,6 @@ MonoBehaviour:
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
   player: {fileID: 8958827377047444852}
   inputHandler: {fileID: 2883562924446922007}
-  playerAnimation: {fileID: 5306037140672579532}
-  playerMovement: {fileID: 6120852745547044476}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
   cinemachineThirdPersonFollow: {fileID: 5523933377966461769}
@@ -6726,7 +6828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a478afcad0d7de4d90b677de27634be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6120852745547044476
+--- !u!114 &8961616338611320610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6735,28 +6837,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2526803028027871228}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c74b966efd7b5478d62e89c5314c17, type: 3}
+  m_Script: {fileID: 11500000, guid: 32acb068f1802364a8c7146fb15276cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
---- !u!114 &5306037140672579532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2526803028027871228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71be23b1b65dc0246a22f4a94f3ccc37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  aimRigWeightChangeCoeff: 3.5
+  root: {fileID: 1618310412228688036}
 --- !u!1 &2546907414361486742
 GameObject:
   m_ObjectHideFlags: 0
@@ -6802,6 +6886,7 @@ GameObject:
   - component: {fileID: 7050725892569773015}
   - component: {fileID: 3186670643868422875}
   - component: {fileID: 3976304084391554502}
+  - component: {fileID: 4773694059251275355}
   m_Layer: 6
   m_Name: mixamorig:LeftLeg
   m_TagString: Untagged
@@ -6989,6 +7074,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4773694059251275355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718685039784355060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 1591673060238689287}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &2759468512670738166
 GameObject:
   m_ObjectHideFlags: 0
@@ -7033,6 +7151,7 @@ GameObject:
   - component: {fileID: 6594373635313423265}
   - component: {fileID: 8502982800756192560}
   - component: {fileID: 4525024037866853056}
+  - component: {fileID: 5868069697285747792}
   m_Layer: 6
   m_Name: mixamorig:LeftForeArm
   m_TagString: Untagged
@@ -7220,6 +7339,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5868069697285747792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2762917961788230534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5943572732077759703}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &2920847468872308349
 GameObject:
   m_ObjectHideFlags: 0
@@ -7296,6 +7448,7 @@ GameObject:
   - component: {fileID: 1432543747574397680}
   - component: {fileID: 7037940713464155358}
   - component: {fileID: 8545595337008466326}
+  - component: {fileID: 589546650736617577}
   m_Layer: 6
   m_Name: mixamorig:RightToeBase
   m_TagString: Untagged
@@ -7483,6 +7636,39 @@ CapsuleCollider:
   m_Height: 0.31
   m_Direction: 1
   m_Center: {x: -0.02, y: -0.06, z: 0.03}
+--- !u!114 &589546650736617577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3310578725001971099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 7737671995835916142}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &3394826491742200091
 GameObject:
   m_ObjectHideFlags: 0
@@ -7527,6 +7713,7 @@ GameObject:
   - component: {fileID: 4657648545252649341}
   - component: {fileID: 5539745915303370324}
   - component: {fileID: 8734949872019449147}
+  - component: {fileID: 6174079002155239789}
   m_Layer: 6
   m_Name: mixamorig:RightHand
   m_TagString: Untagged
@@ -7716,6 +7903,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6174079002155239789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3428039397674664809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4251350446463361695}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &3546755164634973432
 GameObject:
   m_ObjectHideFlags: 0
@@ -7762,6 +7982,7 @@ GameObject:
   - component: {fileID: 2989026176627318952}
   - component: {fileID: 7540691015247557266}
   - component: {fileID: 2401420622910685683}
+  - component: {fileID: 8319669194928532269}
   m_Layer: 6
   m_Name: mixamorig:LeftFoot
   m_TagString: Untagged
@@ -7965,6 +8186,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.01, z: 0.03}
   m_Center: {x: 0, y: 0.01, z: -0.02}
+--- !u!114 &8319669194928532269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3704389540893055381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 7218561473188905972}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &4159230935115321762
 GameObject:
   m_ObjectHideFlags: 0
@@ -8010,6 +8264,7 @@ GameObject:
   - component: {fileID: 8388347841291716505}
   - component: {fileID: 1470218525038071246}
   - component: {fileID: 4642852751540312353}
+  - component: {fileID: 8718681050926072294}
   m_Layer: 6
   m_Name: mixamorig:LeftArm
   m_TagString: Untagged
@@ -8197,6 +8452,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8718681050926072294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181355864191625344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5379599242902271617}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &4221505567123018533
 GameObject:
   m_ObjectHideFlags: 0
@@ -8210,6 +8498,7 @@ GameObject:
   - component: {fileID: 3964650344071576355}
   - component: {fileID: 1622239496881741987}
   - component: {fileID: 2703599329150564339}
+  - component: {fileID: 1176410014774783665}
   m_Layer: 6
   m_Name: mixamorig:LeftHand
   m_TagString: Untagged
@@ -8399,6 +8688,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1176410014774783665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4221505567123018533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4596694680774596126}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &4245884771903439917
 GameObject:
   m_ObjectHideFlags: 0
@@ -8412,6 +8734,7 @@ GameObject:
   - component: {fileID: 6236746415392945159}
   - component: {fileID: 3344538062243685956}
   - component: {fileID: 5971396312967172568}
+  - component: {fileID: 1460432444089353871}
   m_Layer: 6
   m_Name: mixamorig:LeftShoulder
   m_TagString: Untagged
@@ -8597,6 +8920,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.05, z: 0.05}
   m_Center: {x: 0, y: 0.04, z: 0}
+--- !u!114 &1460432444089353871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245884771903439917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 6900700043922070803}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &4259723829840677927
 GameObject:
   m_ObjectHideFlags: 0
@@ -8799,6 +9155,7 @@ GameObject:
   - component: {fileID: 3380518501751053634}
   - component: {fileID: 3805171249316103565}
   - component: {fileID: 5696393084603799610}
+  - component: {fileID: 8884641997790753223}
   m_Layer: 6
   m_Name: mixamorig:LeftUpLeg
   m_TagString: Untagged
@@ -8986,6 +9343,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8884641997790753223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061778491530072246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2810794149098052510}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &5077082782418114526
 GameObject:
   m_ObjectHideFlags: 0
@@ -9095,6 +9485,7 @@ GameObject:
   - component: {fileID: 88628317619426228}
   - component: {fileID: 6899272411076204551}
   - component: {fileID: 7008565423514185777}
+  - component: {fileID: 3074984349266177858}
   m_Layer: 6
   m_Name: mixamorig:RightUpLeg
   m_TagString: Untagged
@@ -9282,6 +9673,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3074984349266177858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5211564587017819308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 310156304869275018}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &5428665075444028435
 GameObject:
   m_ObjectHideFlags: 0
@@ -9517,6 +9941,7 @@ GameObject:
   - component: {fileID: 9094528971319025985}
   - component: {fileID: 3035289796510678449}
   - component: {fileID: 3681634036527794092}
+  - component: {fileID: 2433135122361851125}
   m_Layer: 6
   m_Name: mixamorig:Spine2
   m_TagString: Untagged
@@ -9704,6 +10129,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2433135122361851125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820017214451494419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5402635194943910204}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &5995525009260068639
 GameObject:
   m_ObjectHideFlags: 0
@@ -9717,6 +10175,7 @@ GameObject:
   - component: {fileID: 6870839633882473241}
   - component: {fileID: 220678337748583343}
   - component: {fileID: 7346854394091919145}
+  - component: {fileID: 9215746854672035787}
   m_Layer: 6
   m_Name: mixamorig:RightArm
   m_TagString: Untagged
@@ -9904,6 +10363,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9215746854672035787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995525009260068639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5959584149758592730}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &6187204961975161433
 GameObject:
   m_ObjectHideFlags: 0
@@ -9949,6 +10441,7 @@ GameObject:
   - component: {fileID: 7074052813757630385}
   - component: {fileID: 8270965726402995083}
   - component: {fileID: 5392273051476249328}
+  - component: {fileID: 1941960630063449516}
   m_Layer: 6
   m_Name: mixamorig:LeftToeBase
   m_TagString: Untagged
@@ -10136,6 +10629,39 @@ CapsuleCollider:
   m_Height: 0.31
   m_Direction: 1
   m_Center: {x: 0.02, y: -0.06, z: 0.03}
+--- !u!114 &1941960630063449516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665257717557270995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4096232093713171209}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &6709826248311039196
 GameObject:
   m_ObjectHideFlags: 0
@@ -10244,6 +10770,7 @@ GameObject:
   - component: {fileID: 1125367098158218243}
   - component: {fileID: 4993940035633609108}
   - component: {fileID: 5261815542681627268}
+  - component: {fileID: 3119228515375801310}
   m_Layer: 6
   m_Name: mixamorig:Spine
   m_TagString: Untagged
@@ -10429,6 +10956,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3119228515375801310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897982563043458302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 1732117457424717309}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &7184249408490091023
 GameObject:
   m_ObjectHideFlags: 0
@@ -10537,6 +11097,7 @@ GameObject:
   - component: {fileID: 8209764559781651994}
   - component: {fileID: 577648706719726483}
   - component: {fileID: 3935117839932635308}
+  - component: {fileID: 1887215454797532897}
   m_Layer: 6
   m_Name: mixamorig:RightForeArm
   m_TagString: Untagged
@@ -10724,6 +11285,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1887215454797532897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728456082004145824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5297296573408064940}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &7755542053233256686
 GameObject:
   m_ObjectHideFlags: 0
@@ -11050,6 +11644,7 @@ GameObject:
   - component: {fileID: 1301138908527791614}
   - component: {fileID: 8402616101412886071}
   - component: {fileID: 2472156556519175680}
+  - component: {fileID: 794799960073010547}
   m_Layer: 6
   m_Name: mixamorig:Spine1
   m_TagString: Untagged
@@ -11235,6 +11830,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &794799960073010547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8415005359641212001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 7605736228217737852}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &8483475512099894117
 GameObject:
   m_ObjectHideFlags: 0
@@ -11280,6 +11908,7 @@ GameObject:
   - component: {fileID: 827675748578868241}
   - component: {fileID: 8706106932891412278}
   - component: {fileID: 5024663554549816908}
+  - component: {fileID: 5914508909399919377}
   m_Layer: 6
   m_Name: mixamorig:RightShoulder
   m_TagString: Untagged
@@ -11465,6 +12094,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.05, z: 0.05}
   m_Center: {x: 0, y: 0.04, z: 0}
+--- !u!114 &5914508909399919377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8545900657884586107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 3535956390885998390}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &8647004915771791223
 GameObject:
   m_ObjectHideFlags: 0
@@ -11509,6 +12171,7 @@ GameObject:
   - component: {fileID: 7139988899592874186}
   - component: {fileID: 6286890817055987268}
   - component: {fileID: 6178637492361280789}
+  - component: {fileID: 6705014410258759953}
   m_Layer: 6
   m_Name: mixamorig:Head
   m_TagString: Untagged
@@ -11694,6 +12357,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626bc47d4811c134290dbcc810f9fdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6705014410258759953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8750107846984373182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4148796724012217463}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &8752374768126675655
 GameObject:
   m_ObjectHideFlags: 0

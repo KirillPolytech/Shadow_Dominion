@@ -1,11 +1,14 @@
-﻿namespace Shadow_Dominion.Player.StateMachine
+﻿using Shadow_Dominion.AnimStateMachine;
+
+namespace Shadow_Dominion.Player.StateMachine
 {
     public class WalkBackwardState : PlayerState
     {
-        public WalkBackwardState(PlayerAnimation playerAnimation) : base(playerAnimation)
+        public WalkBackwardState(
+            PlayerAnimation playerAnimation) : base(playerAnimation)
         {
         }
-        
+
         public override void Enter()
         {
             _playerAnimation.AnimationStateMachine.SetState<AnimationWalkForwardState>();

@@ -2,7 +2,7 @@ using Shadow_Dominion.StateMachine;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class PlayerState : IState
+    public abstract class PlayerState : IState
     {
         protected readonly PlayerAnimation _playerAnimation;
 
@@ -10,7 +10,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             _playerAnimation = playerAnimation;
         }
-        
+
         public override void Enter()
         {
         }

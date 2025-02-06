@@ -1,3 +1,4 @@
+using Shadow_Dominion.Player;
 using UnityEngine;
 
 namespace Shadow_Dominion.Zombie

@@ -1,23 +1,26 @@
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-public class AnimationLayingState : IState
+namespace Shadow_Dominion.AnimStateMachine
 {
-    private readonly Animator _animator;
-    private readonly int _isLaying;
-    
-    public AnimationLayingState(Animator animator, int isLaying)
+    public class AnimationLayingState : IState
     {
-        _animator = animator;
-        _isLaying = isLaying;
-    }
-    
-    public override void Enter()
-    {
-        _animator.SetTrigger(_isLaying);
-    }
+        private readonly Animator _animator;
+        private readonly int _isLaying;
 
-    public override void Exit()
-    {
+        public AnimationLayingState(Animator animator, int isLaying)
+        {
+            _animator = animator;
+            _isLaying = isLaying;
+        }
+
+        public override void Enter()
+        {
+            _animator.SetTrigger(_isLaying);
+        }
+
+        public override void Exit()
+        {
+        }
     }
 }

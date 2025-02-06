@@ -11,10 +11,10 @@ namespace Shadow_Dominion.Main
     {
         public PlayerStateMachine playerStateMachine;
         public IEnumerable<Transform> Position { get; set; }
-
+        
         private MonoInputHandler _monoInputHandler;
+        private PlayerMovement _playerMovement;
         private Rigidbody _rigidbody;
-        private Transform _ragdollRoot;
 
         private void Awake()
         {
@@ -33,23 +33,17 @@ namespace Shadow_Dominion.Main
             MonoInputHandler monoInputHandler)
         {
             playerStateMachine =
-                new PlayerStateMachine(this, playerMovement, cameraLook, ragdollRoot, playerAnimation, rootRig, copyTo);
+                new PlayerStateMachine(this, cameraLook, ragdollRoot, playerAnimation, rootRig, copyTo);
 
             _monoInputHandler = monoInputHandler;
-            _ragdollRoot = ragdollRoot;
+            _playerMovement = playerMovement;
 
             _monoInputHandler.OnInputUpdate += HandleInput;
         }
         
         private void HandleInput(InputData inputData)
         {
-            if (!inputData.F_Down)
-                return;
-
-            if (Vector3.Dot(_ragdollRoot.forward, Vector3.up) > 0)
-                playerStateMachine.SetState<StandUpFaceUpState>();
-            else
-                playerStateMachine.SetState<StandUpFaceDownState>();
+            _playerMovement.HandleInput(inputData, isLocalPlayer);
         }
 
         public void SetPositionAndRotation(Vector3 pos, Quaternion rot)

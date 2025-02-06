@@ -1,4 +1,4 @@
-using Shadow_Dominion.Main;
+using Shadow_Dominion.AnimStateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -6,20 +6,17 @@ namespace Shadow_Dominion.Player.StateMachine
 {
     public class RagdollState : PlayerState
     {
-        private readonly PlayerMovement _playerMovement;
         private readonly RigBuilder _rigBuilder;
         private readonly BoneController[] _boneControllers;
         private readonly CameraLook _cameraLook;
         private readonly Vector3 _forceDirection;
 
         public RagdollState(
-            PlayerMovement playerMovement,
             PlayerAnimation playerAnimation,
             CameraLook cameraLook,
             RigBuilder rigBuilder,
             BoneController[] boneControllers) : base(playerAnimation)
         {
-            _playerMovement = playerMovement;
             _rigBuilder = rigBuilder;
             _boneControllers = boneControllers;
             _cameraLook = cameraLook;
@@ -29,7 +26,6 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Enter()
         {
             _rigBuilder.enabled = false;
-            _playerMovement.CanMove = false;
             _playerAnimation.CanAnimate = false;
             _cameraLook.CanZooming = false;
             
@@ -47,7 +43,6 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Exit()
         {
             _rigBuilder.enabled = true;
-            _playerMovement.CanMove = true;
             _playerAnimation.CanAnimate = true;
             _cameraLook.CanZooming = true;
             

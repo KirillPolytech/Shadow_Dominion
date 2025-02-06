@@ -1,5 +1,5 @@
 using System.Linq;
-using Shadow_Dominion.Player.StateMachine;
+using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
@@ -7,19 +7,31 @@ namespace Shadow_Dominion.Player
 {
     public class AnimationStateMachine : IStateMachine
     {
+        private readonly int[] Hashes;
         private readonly int IsIdle = Animator.StringToHash("IsIdle");
+        
         private readonly int IsWalkForward = Animator.StringToHash("IsWalkForward");
         private readonly int IsWalkBackward = Animator.StringToHash("IsWalkBackward");
+        
         private readonly int IsWalkLeft = Animator.StringToHash("IsWalkLeft");
         private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
+        
         private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
         private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
+        
+        private readonly int IsDiagonallyRight = Animator.StringToHash("IsDiagonallyRight");
+        private readonly int IsDiagonallyLeft = Animator.StringToHash("IsDiagonallyLeft");
+        
         private readonly int StandUpFaceUpHashCode = Animator.StringToHash("StandUpFaceUp");
         private readonly int StandUpFaceDownHashCode = Animator.StringToHash("StandUpFaceDown");
         private readonly int Laying = Animator.StringToHash("Laying");
 
+        private readonly Animator _animator;
+
         public AnimationStateMachine(Animator animator)
         {
+            _animator = animator;
+            
             _states.Add(new AnimationIdleState(animator, IsIdle));
             _states.Add(new AnimationWalkForwardState(animator, IsWalkForward));
             _states.Add(new AnimationWalkBackwardState(animator, IsWalkBackward));
@@ -27,9 +39,20 @@ namespace Shadow_Dominion.Player
             _states.Add(new AnimationWalkRightState(animator, IsWalkRight));
             _states.Add(new AnimationRunForwardState(animator, IsRunForward));
             _states.Add(new AnimationRunBackwardState(animator, IsRunBackward));
+            
+            _states.Add(new AnimationWalkDiagonallyRightState(animator, IsDiagonallyRight));
+            _states.Add(new AnimationWalkDiagonallyLeftState(animator, IsDiagonallyLeft));
+            
             _states.Add(new AnimationStandUpFaceUpState(animator, StandUpFaceUpHashCode));
             _states.Add(new AnimationStandUpFaceDownState(animator, StandUpFaceDownHashCode));
             _states.Add(new AnimationLayingState(animator, Laying));
+
+            Hashes = new[]
+            {
+                IsIdle, IsWalkForward, IsWalkBackward, IsWalkLeft,
+                IsWalkRight, IsRunForward, IsRunBackward, IsDiagonallyRight, IsDiagonallyLeft,
+                StandUpFaceUpHashCode, StandUpFaceDownHashCode, Laying
+            };
         }
 
         public override void SetState<T>()
@@ -44,6 +67,14 @@ namespace Shadow_Dominion.Player
             CurrentState.Enter();
 
             //Debug.Log($"Current anim state: {CurrentState.GetType()}");
+        }
+
+        public void Reset()
+        {
+            foreach (int hash in Hashes)
+            {
+                _animator.SetBool(hash, false);
+            }
         }
     }
 }
