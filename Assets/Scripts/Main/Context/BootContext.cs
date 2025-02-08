@@ -1,3 +1,4 @@
+using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
 using Zenject;
@@ -6,6 +7,11 @@ namespace Shadow_Dominion
 {
     public class BootContext : MonoInstaller
     {
+        [Header("Configs")]
+        [SerializeField]
+        private RoomSettings roomSettings;
+        [Space]
+        
         [SerializeField] private MirrorServer server;
         [Space] [SerializeField] private MirrorPlayerInstaller playerPrefab;
         [Range(0, 4)] [SerializeField] private int count;
@@ -15,8 +21,9 @@ namespace Shadow_Dominion
         public override void InstallBindings()
         {
             Container.BindInstance(server).AsSingle();
+            Container.BindInstance(roomSettings).AsSingle();
             
-            Container.Bind<InputHandler>().AsTransient();
+            Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();

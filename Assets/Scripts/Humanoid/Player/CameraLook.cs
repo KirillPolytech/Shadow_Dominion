@@ -1,4 +1,5 @@
 using Mirror;
+using Shadow_Dominion.InputSystem;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Shadow_Dominion
         public bool CanZooming { get; set; } = true;
 
         private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
-        private MonoInputHandler _monoInputHandler;
+        private IInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
 
@@ -24,7 +25,7 @@ namespace Shadow_Dominion
 
         public void Construct(
             CameraSettings camSettings,
-            MonoInputHandler monoInputHandler,
+            IInputHandler monoInputHandler,
             CinemachineThirdPersonFollow cinemachineThirdPersonFollow)
         {
             _cameraSettings = camSettings;

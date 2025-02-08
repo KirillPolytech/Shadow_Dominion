@@ -1,3 +1,4 @@
+using Shadow_Dominion.InputSystem;
 using UnityEngine;
 
 namespace Shadow_Dominion
@@ -16,12 +17,12 @@ namespace Shadow_Dominion
         public Vector3 HitPoint => _hit.point;
         public Vector3 BulletStartPosition => bulletStartPosition.position;
 
-        private MonoInputHandler _monoInputHandler;
+        private IInputHandler _monoInputHandler;
         private RaycastHit _hit;
         private Transform _lookTarget;
         private Transform _cachedTransform;
 
-        public void Construct(MonoInputHandler monoInputHandler, Transform lookTarget)
+        public void Construct(IInputHandler monoInputHandler, Transform lookTarget)
         {
             _monoInputHandler = monoInputHandler;
             _lookTarget = lookTarget;

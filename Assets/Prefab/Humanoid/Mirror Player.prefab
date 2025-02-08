@@ -6718,7 +6718,6 @@ MonoBehaviour:
   cameraSettings: {fileID: 11400000, guid: 327ad2879cf30d0479600b8a80891c39, type: 2}
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
   player: {fileID: 8958827377047444852}
-  inputHandler: {fileID: 2883562924446922007}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
   cinemachineThirdPersonFollow: {fileID: 5523933377966461769}
@@ -6828,6 +6827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a478afcad0d7de4d90b677de27634be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!114 &8961616338611320610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12762,7 +12764,7 @@ PrefabInstance:
     - target: {fileID: 4458355017963517263, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: bf9b917f8c32223498acec73e3200c6c, type: 2}
+      objectReference: {fileID: 9100000, guid: ee33276b9b1d500468e803b3e1d1ced8, type: 2}
     - target: {fileID: 4607302412166420443, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

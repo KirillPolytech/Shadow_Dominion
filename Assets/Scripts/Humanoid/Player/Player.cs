@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.Zombie;
@@ -12,7 +13,7 @@ namespace Shadow_Dominion.Main
         public PlayerStateMachine playerStateMachine;
         public IEnumerable<Transform> Position { get; set; }
         
-        private MonoInputHandler _monoInputHandler;
+        private IInputHandler _monoInputHandler;
         private PlayerMovement _playerMovement;
         private Rigidbody _rigidbody;
 
@@ -30,7 +31,7 @@ namespace Shadow_Dominion.Main
             PlayerAnimation playerAnimation,
             CameraLook cameraLook,
             BoneController[] copyTo,
-            MonoInputHandler monoInputHandler)
+            IInputHandler monoInputHandler)
         {
             playerStateMachine =
                 new PlayerStateMachine(this, cameraLook, ragdollRoot, playerAnimation, rootRig, copyTo);

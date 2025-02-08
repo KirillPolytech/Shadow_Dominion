@@ -11,7 +11,6 @@ namespace Shadow_Dominion
         public override void InstallBindings()
         {
             Container.Bind<ButtonsFactory>().AsSingle();
-            Container.Bind<CursorService>().AsSingle();
             Container.BindInstance(windowsController).AsSingle();
             Container.BindInterfacesAndSelfTo<LevelStateMachine>().AsSingle().NonLazy();
         }

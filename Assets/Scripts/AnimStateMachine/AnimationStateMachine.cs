@@ -57,6 +57,8 @@ namespace Shadow_Dominion.Player
 
         public override void SetState<T>()
         {
+            ResetConditions();
+            
             IState state = _states.First(x => x.GetType() == typeof(T));
 
             if (CurrentState == state)
@@ -69,7 +71,7 @@ namespace Shadow_Dominion.Player
             //Debug.Log($"Current anim state: {CurrentState.GetType()}");
         }
 
-        public void Reset()
+        public void ResetConditions()
         {
             foreach (int hash in Hashes)
             {

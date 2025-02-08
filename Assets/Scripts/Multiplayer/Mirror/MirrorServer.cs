@@ -117,7 +117,7 @@ public class MirrorServer : NetworkRoomManager
     private void ActivatePlayerSpawn()
     {
         float value = Random.Range(-5, 5);
-        Vector3 newpos = new Vector3(value,-3.4f,value);
+        Vector3 newpos = new Vector3(value,-2,value);
         //создаем struct определенного типа, чтобы сервер понял к чему эти данные относятся
         PositionMessage message = new PositionMessage { pos = newpos };
         //отправка сообщения на сервер с координатами спавна

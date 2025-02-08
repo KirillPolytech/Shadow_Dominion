@@ -10,7 +10,6 @@ namespace Shadow_Dominion.Player.StateMachine
 
         public override void Enter()
         {
-            _playerAnimation.AnimationStateMachine.Reset();
             _playerAnimation.AnimationStateMachine.SetState<AnimationWalkDiagonallyLeftState>();
         }
 

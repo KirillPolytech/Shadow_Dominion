@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
@@ -34,9 +35,6 @@ namespace Shadow_Dominion
         [Header("Limits")]
         [SerializeField]
         private Main.Player player;
-
-        [SerializeField]
-        private MonoInputHandler inputHandler;
         
         [SerializeField]
         private CameraLook cameraLook;
@@ -102,11 +100,12 @@ namespace Shadow_Dominion
         private Action<Vector3> _cachedV3;
         private Action<HumanBodyBones> _cachedHBB;
         private Action<InputData> _cachedInputData;
+        private InputHandler _inputHandler;
 
         [Inject]
         public void Construct(InputHandler inputHandler)
         {
-            
+            _inputHandler = inputHandler;
         }
 
         private void Awake()
@@ -115,14 +114,14 @@ namespace Shadow_Dominion
             PlayerAnimation playerAnimation = new PlayerAnimation();
 
             player.Construct(ragdollRoot.transform, rootRig, playerMovement, playerAnimation, cameraLook, copyTo,
-                inputHandler);
-            cameraLook.Construct(cameraSettings, inputHandler, cinemachineThirdPersonFollow);
+                _inputHandler);
+            cameraLook.Construct(cameraSettings, _inputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerAnimation.Construct(animator, aimRig, ragdollRoot, player.playerStateMachine);
             playerMovement.Construct(player.playerStateMachine, playerSettings, charRigidbody, cameraLook,
                 ragdollRoot.transform, playerAnimation);
 
-            ak47.Construct(inputHandler, aim);
+            ak47.Construct(_inputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -132,7 +131,7 @@ namespace Shadow_Dominion
 
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
-                inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
+                _inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
 
                 _cachedV3 = dir => player.playerStateMachine.SetState<RagdollState>();
                 copyTo[i].OnCollision += _cachedV3;

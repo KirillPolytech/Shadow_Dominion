@@ -2,15 +2,20 @@ using System;
 using UnityEngine;
 using Zenject;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.InputSystem
 {
-    public class InputHandler : ITickable
+    public class InputHandler : IInputHandler, ITickable
     {
         public event Action<InputData> OnInputUpdate;
 
         private InputData _inputData;
 
         public void Tick()
+        {
+            HandleInput();
+        }
+
+        public void HandleInput()
         {
             _inputData.HorizontalAxisRaw = Input.GetAxisRaw(VariableNames.HorizontalAxis);
             _inputData.VerticalAxisRaw = Input.GetAxisRaw(VariableNames.VerticalAxis);
@@ -35,6 +40,8 @@ namespace Shadow_Dominion
             _inputData.RightMouseButtonUp = Input.GetMouseButtonUp(VariableNames.RightMouseButton);
             
             _inputData.MouseWheelScroll = Input.mouseScrollDelta.y;
+            
+            _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);
         }

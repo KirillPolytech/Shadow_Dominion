@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd2d0c2bfba4be4cb6a75a7e58ba41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomSettings: {fileID: 11400000, guid: 29fdb405c980cd444ba8d840d9775754, type: 2}
   server: {fileID: 8832471704378920471}
   playerPrefab: {fileID: 127988981273457825, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
   count: 0
