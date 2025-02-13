@@ -7,38 +7,29 @@ namespace Shadow_Dominion.Main
 {
     public class PlayerMovement
     {
-        private PlayerStateMachine _playerStateMachine;
         private PlayerSettings _playerSettings;
         private CameraLook _cameraLook;
         private Rigidbody _charRigidbody;
         private PlayerAnimation _playerAnimation;
 
         private Transform _transform;
-        private Transform _ragdollRoot;
         private Quaternion _cachedRot;
 
         public void Construct(
-            PlayerStateMachine playerStateMachine,
             PlayerSettings playerSettings,
             Rigidbody characterController,
             CameraLook cameraLook,
-            Transform ragdollRoot,
             PlayerAnimation playerAnimation)
         {
-            _playerStateMachine = playerStateMachine;
             _playerSettings = playerSettings;
             _charRigidbody = characterController;
             _cameraLook = cameraLook;
             _transform = _charRigidbody.transform;
-            _ragdollRoot = ragdollRoot;
             _playerAnimation = playerAnimation;
         }
 
-        public void HandleInput(InputData data, bool isLocalPlayer)
+        public void HandleInput(InputData data)
         {
-            if (!isLocalPlayer)
-                return;
-
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
             Rotate();
             HandleAnim(data);
@@ -85,17 +76,6 @@ namespace Shadow_Dominion.Main
                 _playerSettings.rotSpeed * Time.fixedDeltaTime);
 
             _charRigidbody.MoveRotation(rot);
-        }
-
-        public void StandUp(InputData data)
-        {
-            if (!data.F_Down)
-                return;
-
-            if (Vector3.Dot(_ragdollRoot.forward, Vector3.up) > 0)
-                _playerStateMachine.SetState<StandUpFaceUpState>();
-            else
-                _playerStateMachine.SetState<StandUpFaceDownState>();
         }
     }
 }

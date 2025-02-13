@@ -1,33 +1,46 @@
 using Mirror;
-using Shadow_Dominion;
 using UnityEngine;
-using Object = System.Object;
 
-public class MirrorShootHandler : NetworkBehaviour
+namespace Shadow_Dominion
 {
-    private const int ShootRange = 500;
-    
-    [Command]
-    public void Raycast(Vector3 origin, Vector3 direction)
+    public class MirrorShootHandler : NetworkBehaviour
     {
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, ShootRange))
+        private const int ShootRange = 500;
+
+        [Command]
+        public void CmdCastRay(Vector3 origin, Vector3 direction)
         {
+            if (!Physics.Raycast(origin, direction, out RaycastHit hit, ShootRange))
+                return;
+
             Debug.Log($"[Server] Hit {hit.collider.name}");
 
-            if (hit.collider.TryGetComponent(out BoneController boneController))
-            {
-                
-            }
+            if (!hit.collider.TryGetComponent(out BoneController boneController)) 
+                return;
+            
+            NetworkIdentity boneNetIdentity = boneController.GetComponentInParent<NetworkIdentity>();
 
-            RpcShowImpact(hit.point, hit.normal);
+            if (boneNetIdentity != null)
+            {
+                RpcShowImpact(boneNetIdentity.netId, direction, boneController.name);
+            }
         }
 
-        return;
-    }
-    
-    [ClientRpc]
-    public void RpcShowImpact(Vector3 hitPosition, Vector3 hitNormal)
-    {
-        
+        [ClientRpc]
+        public void RpcShowImpact(uint netId, Vector3 direction, string boneName)
+        {
+            if (!NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity)) 
+                return;
+            
+            BoneController[] boneController = identity.GetComponentsInChildren<BoneController>();
+
+            foreach (var bone in boneController)
+            {
+                if (bone.name == boneName)
+                {
+                    bone.GetComponent<BoneController>().ReceiveDamage(direction);
+                }
+            }
+        }
     }
 }

@@ -10,11 +10,8 @@ namespace Shadow_Dominion.Main
 {
     public class Player : Humanoid, IZombieTarget
     {
-        public PlayerStateMachine playerStateMachine;
         public IEnumerable<Transform> Position { get; set; }
         
-        private IInputHandler _monoInputHandler;
-        private PlayerMovement _playerMovement;
         private Rigidbody _rigidbody;
 
         private void Awake()
@@ -23,41 +20,7 @@ namespace Shadow_Dominion.Main
 
             Position = new []{transform};
         }
-
-        public void Construct(
-            PlayerMovement playerMovement,
-            IInputHandler monoInputHandler,
-            PlayerStateMachine stateMachine)
-        {
-            playerStateMachine = stateMachine;
-            _monoInputHandler = monoInputHandler;
-            _playerMovement = playerMovement;
-        }
-
-        private void OnEnable()
-        {
-            _monoInputHandler.OnInputUpdate += HandleInput;
-        }
-
-        private void OnDestroy()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleInput;
-        }
         
-        private void HandleInput(InputData inputData)
-        {
-            if (playerStateMachine.CurrentState == null ||
-                playerStateMachine.CurrentState.GetType() == typeof(RagdollState) 
-                || playerStateMachine.CurrentState.GetType() == typeof(StandUpFaceDownState)
-                || playerStateMachine.CurrentState.GetType() == typeof(StandUpFaceDownState))
-            {
-                _playerMovement.StandUp(inputData);
-                return;
-            }          
-            
-            _playerMovement.HandleInput(inputData, isLocalPlayer);
-        }
-
         public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
         {
             _rigidbody.position = pos;

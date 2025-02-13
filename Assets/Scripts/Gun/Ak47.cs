@@ -18,15 +18,20 @@ namespace Shadow_Dominion
         public Vector3 BulletStartPosition => bulletStartPosition.position;
 
         private IInputHandler _monoInputHandler;
+        private MirrorShootHandler _mirrorShootHandler;
         private RaycastHit _hit;
         private Transform _lookTarget;
         private Transform _cachedTransform;
 
-        public void Construct(IInputHandler monoInputHandler, Transform lookTarget)
+        public void Construct(
+            IInputHandler monoInputHandler, 
+            Transform lookTarget, 
+            MirrorShootHandler mirrorShootHandler)
         {
             _monoInputHandler = monoInputHandler;
             _lookTarget = lookTarget;
             _cachedTransform = transform;
+            _mirrorShootHandler = mirrorShootHandler;
 
             _monoInputHandler.OnInputUpdate += Fire;
         }
@@ -35,6 +40,10 @@ namespace Shadow_Dominion
         {
             if (!inputData.LeftMouseButton)
                 return;
+
+            _mirrorShootHandler.CmdCastRay(bulletStartPosition.position, transform.forward);
+            
+            return;
             
             if (fireEffect.isPlaying)
                 fireEffect.Stop();
@@ -49,7 +58,6 @@ namespace Shadow_Dominion
                 return;
 
             boneController.ReceiveDamage((boneController.CurrentPosition - _cachedTransform.position) * damage);
-            //boneController.ReceiveHitPoint(_hit.point);
         }
 
         private void FixedUpdate()

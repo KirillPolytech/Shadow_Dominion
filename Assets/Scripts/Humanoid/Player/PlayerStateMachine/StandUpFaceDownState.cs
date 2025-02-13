@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine

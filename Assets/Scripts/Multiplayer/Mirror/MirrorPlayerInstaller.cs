@@ -99,6 +99,13 @@ namespace Shadow_Dominion
         private CoroutineExecuter coroutineExecuter;
 
         [Space]
+        [Header("Network")]
+        [SerializeField]
+        private MirrorShootHandler mirrorShootHandler;
+        [SerializeField]
+        private MirrorStateHandler mirrorStateHandler;
+
+        [Space]
         [Header("Debug")]
         [SerializeField]
         private bool debug;
@@ -112,16 +119,24 @@ namespace Shadow_Dominion
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
-                player, cameraLook, ragdollRoot.transform, playerAnimation, rootRig, copyTo, coroutineExecuter );
+                player, 
+                cameraLook, 
+                ragdollRoot.transform, 
+                playerAnimation, 
+                rootRig, 
+                copyTo, 
+                coroutineExecuter, 
+                playerMovement, 
+                monoInputHandler );
 
-            player.Construct( playerMovement, monoInputHandler, playerStateMachine);
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerAnimation.Construct(animator, aimRig, ragdollRoot, player.playerStateMachine);
-            playerMovement.Construct(player.playerStateMachine, playerSettings, charRigidbody, cameraLook,
-                ragdollRoot.transform, playerAnimation);
+            playerAnimation.Construct(animator, aimRig, ragdollRoot, playerStateMachine);
+            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
+            
+            mirrorStateHandler.Construct(playerStateMachine);
 
-            ak47.Construct(monoInputHandler, aim);
+            ak47.Construct(monoInputHandler, aim, mirrorShootHandler);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -150,7 +165,7 @@ namespace Shadow_Dominion
                     {
                         if (  deltaDist.magnitude > springData.DetachDistance)
                         {
-                            player.playerStateMachine.SetState<RagdollState>();
+                            playerStateMachine.SetState<RagdollState>();
                         }
                         
                         return;
