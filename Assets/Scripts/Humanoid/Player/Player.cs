@@ -25,25 +25,36 @@ namespace Shadow_Dominion.Main
         }
 
         public void Construct(
-            Transform ragdollRoot,
-            RigBuilder rootRig,
             PlayerMovement playerMovement,
-            PlayerAnimation playerAnimation,
-            CameraLook cameraLook,
-            BoneController[] copyTo,
-            IInputHandler monoInputHandler)
+            IInputHandler monoInputHandler,
+            PlayerStateMachine stateMachine)
         {
-            playerStateMachine =
-                new PlayerStateMachine(this, cameraLook, ragdollRoot, playerAnimation, rootRig, copyTo);
-
+            playerStateMachine = stateMachine;
             _monoInputHandler = monoInputHandler;
             _playerMovement = playerMovement;
+        }
 
+        private void OnEnable()
+        {
             _monoInputHandler.OnInputUpdate += HandleInput;
+        }
+
+        private void OnDestroy()
+        {
+            _monoInputHandler.OnInputUpdate -= HandleInput;
         }
         
         private void HandleInput(InputData inputData)
         {
+            if (playerStateMachine.CurrentState == null ||
+                playerStateMachine.CurrentState.GetType() == typeof(RagdollState) 
+                || playerStateMachine.CurrentState.GetType() == typeof(StandUpFaceDownState)
+                || playerStateMachine.CurrentState.GetType() == typeof(StandUpFaceDownState))
+            {
+                _playerMovement.StandUp(inputData);
+                return;
+            }          
+            
             _playerMovement.HandleInput(inputData, isLocalPlayer);
         }
 
@@ -51,11 +62,6 @@ namespace Shadow_Dominion.Main
         {
             _rigidbody.position = pos;
             _rigidbody.rotation = rot;
-        }
-
-        private void OnDestroy()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleInput;
         }
     }
 }

@@ -41,53 +41,15 @@ namespace Shadow_Dominion.Main
 
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
             Rotate();
-            StandUp(data);
-
-            HandleIdle(data);
-            HandleWalk(data);
-            HandleRun(data);
-            HandleStrafe(data);
-            HandleDiagonal(data);
+            HandleAnim(data);
         }
         
-        private void HandleIdle(InputData data)
+        private void HandleAnim(InputData data)
         {
-            if (data.HorizontalAxisRaw != 0 || data.VerticalAxisRaw != 0)
-                return;
-
-            _playerAnimation.HandleIdle();
-        }
-
-        private void HandleWalk(InputData data)
-        {
-            if (data.LeftShift || data.HorizontalAxisRaw != 0 || data.VerticalAxisRaw == 0)
-                return;
-
-            _playerAnimation.HandleVerticalWalk(data.VerticalAxisRaw);
-        }
-
-        private void HandleRun(InputData data)
-        {
-            if (!data.LeftShift || data.HorizontalAxisRaw != 0 || data.VerticalAxisRaw == 0)
-                return;
-
-            _playerAnimation.HandleRun(data.VerticalAxisRaw);
-        }
-
-        private void HandleStrafe(InputData data)
-        {
-            if (data.HorizontalAxisRaw == 0 || data.VerticalAxisRaw != 0)
-                return;
-
-            _playerAnimation.HandleHorizontalState(data.HorizontalAxisRaw);
-        }
-
-        private void HandleDiagonal(InputData data)
-        {
-            if (data.HorizontalAxisRaw == 0 || data.VerticalAxisRaw == 0)
-                return;
-
-            _playerAnimation.HandleDiagonal(data.HorizontalAxisRaw, data.VerticalAxisRaw);
+            int leftShift = data.LeftShift ? 1 : 0;
+            
+            // todo: refactor
+            _playerAnimation.AnimationStateMachine.SetXY(data.HorizontalAxisRaw, data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
         }
 
         private void Move(bool isRun, float x, float y)
@@ -97,12 +59,11 @@ namespace Shadow_Dominion.Main
 
             int isRunInt = isRun ? 1 : 0;
 
-            Vector3 dir = -(_cameraLook.CameraTransform.forward * y +
-                            _cameraLook.CameraTransform.right * x).normalized *
-                          (_playerSettings.walkSpeed * ~isRunInt + _playerSettings.runSpeed * isRunInt);
+            Vector3 dir = (_cameraLook.CameraTransform.forward * y +
+                            _cameraLook.CameraTransform.right * x).normalized;
+            dir *= _playerSettings.walkSpeed * (1 - isRunInt) + _playerSettings.runSpeed * isRunInt;
             dir.y = 0;
 
-            // fix
             _charRigidbody.linearVelocity = dir;
 
             Debug.DrawRay(_transform.position + Vector3.up, dir * 10, Color.red);
@@ -126,7 +87,7 @@ namespace Shadow_Dominion.Main
             _charRigidbody.MoveRotation(rot);
         }
 
-        private void StandUp(InputData data)
+        public void StandUp(InputData data)
         {
             if (!data.F_Down)
                 return;

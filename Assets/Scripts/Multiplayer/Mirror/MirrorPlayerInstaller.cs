@@ -8,7 +8,6 @@ using Shadow_Dominion.Player.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -35,7 +34,7 @@ namespace Shadow_Dominion
         [Header("Limits")]
         [SerializeField]
         private Main.Player player;
-        
+
         [SerializeField]
         private CameraLook cameraLook;
 
@@ -61,6 +60,9 @@ namespace Shadow_Dominion
         private Animator animator;
 
         [Header("PlayerMovement")]
+        [SerializeField]
+        private MonoInputHandler monoInputHandler;
+
         [SerializeField]
         private Rigidbody charRigidbody;
 
@@ -93,35 +95,33 @@ namespace Shadow_Dominion
         private Rigidbody ragdollRoot;
 
         [Space]
+        [SerializeField]
+        private CoroutineExecuter coroutineExecuter;
+
+        [Space]
         [Header("Debug")]
         [SerializeField]
         private bool debug;
 
         private Action<Vector3> _cachedV3;
-        private Action<HumanBodyBones> _cachedHBB;
+        private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
-        private InputHandler _inputHandler;
-
-        [Inject]
-        public void Construct(InputHandler inputHandler)
-        {
-            _inputHandler = inputHandler;
-        }
 
         private void Awake()
         {
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
+            PlayerStateMachine playerStateMachine = new PlayerStateMachine(
+                player, cameraLook, ragdollRoot.transform, playerAnimation, rootRig, copyTo, coroutineExecuter );
 
-            player.Construct(ragdollRoot.transform, rootRig, playerMovement, playerAnimation, cameraLook, copyTo,
-                _inputHandler);
-            cameraLook.Construct(cameraSettings, _inputHandler, cinemachineThirdPersonFollow);
+            player.Construct( playerMovement, monoInputHandler, playerStateMachine);
+            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerAnimation.Construct(animator, aimRig, ragdollRoot, player.playerStateMachine);
             playerMovement.Construct(player.playerStateMachine, playerSettings, charRigidbody, cameraLook,
                 ragdollRoot.transform, playerAnimation);
 
-            ak47.Construct(_inputHandler, aim);
+            ak47.Construct(monoInputHandler, aim);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -131,17 +131,39 @@ namespace Shadow_Dominion
 
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
-                _inputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
+                monoInputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
 
-                _cachedV3 = dir => player.playerStateMachine.SetState<RagdollState>();
+                _cachedV3 = deltaDist =>
+                {
+                    if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
+                        || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
+                        || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
+                        || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
+                    {
+                        aimRig.weight = 0;
+                    }
+                    
+                    if (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
+                        || copyTo[ind].BoneType == HumanBodyBones.LeftUpperLeg
+                        || copyTo[ind].BoneType == HumanBodyBones.RightUpperLeg
+                        || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)
+                    {
+                        if (  deltaDist.magnitude > springData.DetachDistance)
+                        {
+                            player.playerStateMachine.SetState<RagdollState>();
+                        }
+                        
+                        return;
+                    }
+                    
+                    copyTo[ind].IsPositionApplying(false);
+                    copyTo[ind].IsRotationApplying(false);
+                };
                 copyTo[i].OnCollision += _cachedV3;
-
-                _cachedHBB = dir => player.playerStateMachine.SetState<RagdollState>();
-                copyTo[i].OnBoneDetach += _cachedHBB;
             }
 
             return;
-
+            
             void HandleInput(InputData inputData, BoneController boneController)
             {
                 if (!debug)
@@ -183,7 +205,6 @@ namespace Shadow_Dominion
             for (int i = 0; i < copyFrom.Length; i++)
             {
                 copyTo[i].OnCollision -= _cachedV3;
-                copyTo[i].OnBoneDetach -= _cachedHBB;
             }
         }
     }

@@ -1,4 +1,3 @@
-using Shadow_Dominion.AnimStateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -10,18 +9,24 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly Main.Player _player;
         private readonly CameraLook _cameraLook;
         private readonly Transform _ragdollRoot;
+        private readonly CoroutineExecuter _coroutineExecuter;
+        private readonly PlayerStateMachine _playerStateMachine;
         
         public StandUpFaceUpState(
             Main.Player player,
             Transform ragdollRoot,
             RigBuilder rigBuilder,
             PlayerAnimation playerAnimation,
-            CameraLook cameraLook) : base(playerAnimation)
+            CameraLook cameraLook,
+            CoroutineExecuter coroutineExecuter,
+            PlayerStateMachine playerStateMachine) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _player = player;
             _ragdollRoot = ragdollRoot;
             _cameraLook = cameraLook;
+            _coroutineExecuter = coroutineExecuter;
+            _playerStateMachine = playerStateMachine;
         }
         
         public override void Enter()
@@ -34,9 +39,11 @@ namespace Shadow_Dominion.Player.StateMachine
             Quaternion q = Quaternion.LookRotation(-dirUp);
             _player.SetPositionAndRotation(pos, q);
             
-            _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceUpState>();
+            _playerAnimation.AnimationStateMachine.StandUpFaceUp();
 
-            _playerAnimation.StartStandUp();
+            //var clip = _playerAnimation.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+            //float length = clip.length;
+            _coroutineExecuter.StartCoroutine(8, _playerStateMachine.SetState<DefaultState>);
         }
 
         public override void Exit()

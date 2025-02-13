@@ -1,82 +1,36 @@
-using System.Linq;
-using Shadow_Dominion.AnimStateMachine;
-using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-namespace Shadow_Dominion.Player
+namespace Shadow_Dominion.AnimStateMachine
 {
-    public class AnimationStateMachine : IStateMachine
+    public class AnimationStateMachine
     {
-        private readonly int[] Hashes;
-        private readonly int IsIdle = Animator.StringToHash("IsIdle");
+        private readonly int VelocityX = Animator.StringToHash("VelocityX");
+        private readonly int VelocityY = Animator.StringToHash("VelocityY");
         
-        private readonly int IsWalkForward = Animator.StringToHash("IsWalkForward");
-        private readonly int IsWalkBackward = Animator.StringToHash("IsWalkBackward");
+        private readonly int StandUp_Face_Up = Animator.StringToHash("StandUp_Face_Up");
+        private readonly int StandUp_Face_Down = Animator.StringToHash("StandUp_Face_Down");
         
-        private readonly int IsWalkLeft = Animator.StringToHash("IsWalkLeft");
-        private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
-        
-        private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
-        private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
-        
-        private readonly int IsDiagonallyRight = Animator.StringToHash("IsDiagonallyRight");
-        private readonly int IsDiagonallyLeft = Animator.StringToHash("IsDiagonallyLeft");
-        
-        private readonly int StandUpFaceUpHashCode = Animator.StringToHash("StandUpFaceUp");
-        private readonly int StandUpFaceDownHashCode = Animator.StringToHash("StandUpFaceDown");
-        private readonly int Laying = Animator.StringToHash("Laying");
-
         private readonly Animator _animator;
 
         public AnimationStateMachine(Animator animator)
         {
             _animator = animator;
-            
-            _states.Add(new AnimationIdleState(animator, IsIdle));
-            _states.Add(new AnimationWalkForwardState(animator, IsWalkForward));
-            _states.Add(new AnimationWalkBackwardState(animator, IsWalkBackward));
-            _states.Add(new AnimationWalkLeftState(animator, IsWalkLeft));
-            _states.Add(new AnimationWalkRightState(animator, IsWalkRight));
-            _states.Add(new AnimationRunForwardState(animator, IsRunForward));
-            _states.Add(new AnimationRunBackwardState(animator, IsRunBackward));
-            
-            _states.Add(new AnimationWalkDiagonallyRightState(animator, IsDiagonallyRight));
-            _states.Add(new AnimationWalkDiagonallyLeftState(animator, IsDiagonallyLeft));
-            
-            _states.Add(new AnimationStandUpFaceUpState(animator, StandUpFaceUpHashCode));
-            _states.Add(new AnimationStandUpFaceDownState(animator, StandUpFaceDownHashCode));
-            _states.Add(new AnimationLayingState(animator, Laying));
-
-            Hashes = new[]
-            {
-                IsIdle, IsWalkForward, IsWalkBackward, IsWalkLeft,
-                IsWalkRight, IsRunForward, IsRunBackward, IsDiagonallyRight, IsDiagonallyLeft,
-                StandUpFaceUpHashCode, StandUpFaceDownHashCode, Laying
-            };
         }
 
-        public override void SetState<T>()
+        public void SetXY(float x, float y)
         {
-            ResetConditions();
-            
-            IState state = _states.First(x => x.GetType() == typeof(T));
-
-            if (CurrentState == state)
-                return;
-
-            CurrentState?.Exit();
-            CurrentState = state;
-            CurrentState.Enter();
-
-            //Debug.Log($"Current anim state: {CurrentState.GetType()}");
+            _animator.SetFloat(VelocityX, x);
+            _animator.SetFloat(VelocityY, y);
         }
 
-        public void ResetConditions()
+        public void StandUpFaceUp()
         {
-            foreach (int hash in Hashes)
-            {
-                _animator.SetBool(hash, false);
-            }
+            _animator.SetTrigger(StandUp_Face_Up);
+        }
+        
+        public void StandUpFaceDown()
+        {
+            _animator.SetTrigger(StandUp_Face_Down);
         }
     }
 }

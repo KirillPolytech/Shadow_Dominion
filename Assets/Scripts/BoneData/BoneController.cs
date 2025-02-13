@@ -6,7 +6,8 @@ namespace Shadow_Dominion
     public class BoneController : MonoBehaviour
     {
         public event Action<Vector3> OnCollision;
-        public event Action<HumanBodyBones> OnBoneDetach;
+        
+        public HumanBodyBones BoneType { get; private set; }
 
         public Vector3 CurrentPosition => _rigidbody.position;
         public Quaternion CurrentRotation => _rigidbody.rotation;
@@ -23,16 +24,14 @@ namespace Shadow_Dominion
 
         public BoneSettings BoneSettings;
 
-        private Quaternion _cachedStartRot;
-        private float _cachedInitialPositionSpring, _cachedPositionDamper;
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
-        private Transform _copyTarget;
         private PIDData _pidData;
         private SpringData _springData;
-
+        private Transform _copyTarget;
+        private Quaternion _cachedStartRot;
+        private float _cachedInitialPositionSpring, _cachedPositionDamper;
         private float _springRate = 1;
-
         private Vector3 _previousError;
         private Renderer _renderer;
         private HumanBodyBones _humanBodyBones;
@@ -59,6 +58,7 @@ namespace Shadow_Dominion
             _cachedStartRot = transform.localRotation;
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
             _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;
+            BoneType = _humanBodyBones;
         }
 
         private void Start()
@@ -70,17 +70,6 @@ namespace Shadow_Dominion
         {
             UpdatePosition();
             UpdateConfigurableJoint();
-            //CheckDistance();
-        }
-
-        private void CheckDistance()
-        {
-            Debug.Log("Distance: " + Vector3.Distance(_copyTarget.position, _rigidbody.position));
-            
-            if (Vector3.Distance(_copyTarget.position, _rigidbody.position) < 1.2f)
-                return;
-            
-            OnBoneDetach?.Invoke(_humanBodyBones);
         }
 
         private void UpdatePosition()
@@ -106,44 +95,36 @@ namespace Shadow_Dominion
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
             _configurableJoint.targetRotation = newRot;
         }
+        
+        public void HasSpring(bool state)
+        {
+            _springRate = Mathf.Clamp(_springRate - 1f * (state ? -1 : 1), 0f, 1);
+            
+            UpdatePositionSpring(_cachedInitialPositionSpring * _springRate);
+        }
 
         private void UpdatePositionSpring(float value)
         {
-            JointDrive drive = new JointDrive
-            {
-                maximumForce = _configurableJoint.xDrive.maximumForce,
-                positionSpring = Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
-                positionDamper = Mathf.Clamp(value, 0, value / (_cachedInitialPositionSpring - _cachedPositionDamper)),
-                useAcceleration = _configurableJoint.xDrive.useAcceleration
-            };
-
-            _configurableJoint.angularXDrive = drive;
-            _configurableJoint.angularYZDrive = drive;
-
-            _configurableJoint.xDrive = drive;
-            _configurableJoint.yDrive = drive;
-            _configurableJoint.zDrive = drive;
+            BoneSettings.SetDrive(
+                _configurableJoint.xDrive.maximumForce,
+                 Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
+                 Mathf.Clamp(value, 0, value / (_cachedInitialPositionSpring - _cachedPositionDamper)),
+                 _configurableJoint.xDrive.useAcceleration,
+                 _configurableJoint.angularXDrive.maximumForce,
+                 value,
+                 value,
+                 _configurableJoint.angularXDrive.useAcceleration
+                );
         }
 
         public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
-
-        public void UpdateSpring(bool state)
-        {
-            _springRate = Mathf.Clamp(_springRate - 1f * (state ? -1 : 1), 0f, 1);
-
-            UpdatePositionSpring(CurrentPositionSpring * _springRate);
-        }
+        public void ReceiveHitDirection(Vector3 dir) => BodyInjuryService.DrawHole(_renderer, dir);
 
         public void ReceiveDamage(Vector3 dir)
         {
             OnCollision?.Invoke(dir);
         }
-
-        public void ReceiveHitDirection(Vector3 dir)
-        {
-            BodyInjuryService.DrawHole(_renderer, dir);
-        }
-
+        
         private void OnCollisionStay(Collision other)
         {
             if (!CurrentPosState)
@@ -152,7 +133,7 @@ namespace Shadow_Dominion
             if (!other.gameObject.CompareTag(TagStorage.Obstacle))
                 return;
 
-            Vector3 dir = (other.transform.position - transform.position).normalized;
+            Vector3 dir = other.transform.position - transform.position;
             OnCollision?.Invoke(dir);
         }
     }

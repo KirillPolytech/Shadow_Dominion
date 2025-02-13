@@ -9,5 +9,6 @@ namespace Shadow_Dominion
         public float DeltaTime = 100;
         public float DeltaMax = 100;
         public int SpringDelta = 50;
+        public float DetachDistance = 0.25f;
     }
 }

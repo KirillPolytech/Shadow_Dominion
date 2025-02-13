@@ -1,4 +1,5 @@
 using System.Collections;
+using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
@@ -9,7 +10,6 @@ namespace Shadow_Dominion.Player
     public class PlayerAnimation
     {
         private const float Appromixation = 0.01f;
-        private const float VelocityApproximation = 1.5f;
 
         public bool CanAnimate { get; set; } = true;
 
@@ -63,63 +63,6 @@ namespace Shadow_Dominion.Player
             }
 
             _lastValue = currentValue;
-        }
-
-        public void HandleIdle()
-        {
-            _playerStateMachine.SetState<IdleState>();
-        }
-        
-        public void HandleVerticalWalk(float verticalAxisRaw)
-        {
-            switch (verticalAxisRaw)
-            {
-                case > 0:
-                    _playerStateMachine.SetState<WalkForwardState>();
-                    break;
-                case < 0:
-                    _playerStateMachine.SetState<WalkBackwardState>();
-                    break;
-            }
-        }
-
-        public void HandleRun(float verticalAxisRaw)
-        {
-            switch (verticalAxisRaw)
-            {
-                case > 0:
-                    _playerStateMachine.SetState<RunForwardState>();
-                    break;
-                case < 0:
-                    _playerStateMachine.SetState<RunBackwardState>();
-                    break;
-            }
-        }
-
-        public void HandleHorizontalState(float horizontalAxisRaw)
-        {
-            switch (horizontalAxisRaw)
-            {
-                case < 0:
-                    _playerStateMachine.SetState<WalkLeftState>();
-                    break;
-                case > 0:
-                    _playerStateMachine.SetState<WalkRightState>();
-                    break;
-            }
-        }
-        
-        public void HandleDiagonal(float x, float y)
-        {
-            switch (y)
-            {
-                case > 0 when x > 0:
-                    _playerStateMachine.SetState<WalkDiagonallyRightState>();
-                    break;
-                case > 0 when x < 0:
-                    _playerStateMachine.SetState<WalkDiagonallyLeftState>();
-                    break;
-            }
         }
 
         public void StartStandUp()

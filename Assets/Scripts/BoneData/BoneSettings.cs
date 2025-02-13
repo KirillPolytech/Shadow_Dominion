@@ -20,9 +20,6 @@ public class BoneSettings
         float linearLimitSpring,
         float linearLimitSpringDamper)
     {
-        if (!_configurableJoint)
-            return;
-
         _configurableJoint.angularYLimit = new SoftJointLimit { limit = angularYLimit };
         _configurableJoint.angularZLimit = new SoftJointLimit { limit = angularZLimit };
         _configurableJoint.highAngularXLimit = new SoftJointLimit { limit = highAngularXLimit };
@@ -37,14 +34,11 @@ public class BoneSettings
         float positionSpring,
         float positionDamper,
         bool usePosAcceleration,
-        float angularMaxForce,
-        float angularPositionSpring,
-        float angularPositionDamper,
+        float angularXYZMaxForce,
+        float angularXYZDrivePositionSpring,
+        float angularXYZDrivePositionDamper,
         bool useRotAcceleration)
     {
-        if (!_configurableJoint)
-            return;
-
         JointDrive drive = new JointDrive
         {
             maximumForce = posMaximumForce,
@@ -55,9 +49,9 @@ public class BoneSettings
 
         JointDrive angularXDrive = new JointDrive
         {
-            positionSpring = angularPositionSpring,
-            maximumForce = angularMaxForce,
-            positionDamper = angularPositionDamper,
+            maximumForce = angularXYZMaxForce,
+            positionSpring = angularXYZDrivePositionSpring,
+            positionDamper = angularXYZDrivePositionDamper,
             useAcceleration = useRotAcceleration
         };
 
@@ -71,9 +65,6 @@ public class BoneSettings
 
     public void SetPositionMotionState(ConfigurableJointMotion configurableJointMotion)
     {
-        if (!_configurableJoint)
-            return;
-
         _configurableJoint.xMotion = configurableJointMotion;
         _configurableJoint.yMotion = configurableJointMotion;
         _configurableJoint.zMotion = configurableJointMotion;
@@ -94,9 +85,6 @@ public class BoneSettings
         Quaternion targetRotation,
         Vector3 targetVelocity)
     {
-        if (!_configurableJoint)
-            return;
-
         _configurableJoint.targetPosition = targetPosition;
         
         _configurableJoint.targetRotation = 
@@ -110,9 +98,6 @@ public class BoneSettings
         RotationDriveMode rotationDriveMode,
         bool enablePreprocessing)
     {
-        if (!_configurableJoint)
-            return;
-
         _configurableJoint.projectionMode = jointProjectionMode;
         _configurableJoint.enablePreprocessing = enablePreprocessing;
         _configurableJoint.rotationDriveMode = rotationDriveMode;

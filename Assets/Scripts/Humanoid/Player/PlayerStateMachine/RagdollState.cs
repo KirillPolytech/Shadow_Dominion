@@ -1,4 +1,3 @@
-using Shadow_Dominion.AnimStateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -34,10 +33,8 @@ namespace Shadow_Dominion.Player.StateMachine
                 _boneControllers[i].IsPositionApplying(false);
                 _boneControllers[i].IsRotationApplying(false);
                 _boneControllers[i].AddForce(_forceDirection);
-                //boneController[i].UpdateSpring(isEnabled);
+                _boneControllers[i].HasSpring(false);
             }
-
-            _playerAnimation.AnimationStateMachine.SetState<AnimationLayingState>();
         }
 
         public override void Exit()
@@ -51,7 +48,7 @@ namespace Shadow_Dominion.Player.StateMachine
                 _boneControllers[i].IsPositionApplying(true);
                 _boneControllers[i].IsRotationApplying(true);
                 _boneControllers[i].AddForce(Vector3.zero);
-                //boneController[i].UpdateSpring(isEnabled);
+                _boneControllers[i].HasSpring(true);
             }
         }
     }
