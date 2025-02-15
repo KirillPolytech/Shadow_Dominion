@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.StateMachine;
@@ -15,7 +16,12 @@ namespace Shadow_Dominion
 
             _playerStateMachine.OnStateChanged += Serialize;
         }
-        
+
+        private void OnDestroy()
+        {
+            _playerStateMachine.OnStateChanged -= Serialize; 
+        }
+
         private void Serialize(IState newState)
         {
             // Сообщаем всем клиентам
@@ -25,7 +31,7 @@ namespace Shadow_Dominion
         }
         
         [Command]
-        public void CmdSetState(string newState)
+        private void CmdSetState(string newState)
         {
             // Сообщаем всем клиентам
             RpcUpdateState(newState);

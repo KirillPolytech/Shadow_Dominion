@@ -27,9 +27,9 @@ namespace Shadow_Dominion
         }
 
         [ClientRpc]
-        public void RpcShowImpact(uint netId, Vector3 direction, string boneName)
+        public void RpcShowImpact(uint netID, Vector3 direction, string boneName)
         {
-            if (!NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity)) 
+            if (!NetworkClient.spawned.TryGetValue(netID, out NetworkIdentity identity)) 
                 return;
             
             BoneController[] boneController = identity.GetComponentsInChildren<BoneController>();

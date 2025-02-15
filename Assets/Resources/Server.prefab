@@ -89,6 +89,7 @@ MonoBehaviour:
   clientIndex: 0
   networkBehaviour:
   - {fileID: 4783087809756892643, guid: e7060170a22fe2e47a44910e51d047c1, type: 3}
+  lobby: {fileID: 4783087809756892643, guid: e7060170a22fe2e47a44910e51d047c1, type: 3}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0

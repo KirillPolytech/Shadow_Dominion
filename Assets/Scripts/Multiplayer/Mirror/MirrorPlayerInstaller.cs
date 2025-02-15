@@ -5,6 +5,7 @@ using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
+using Shadow_Dominion.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -102,15 +103,23 @@ namespace Shadow_Dominion
         [Header("Network")]
         [SerializeField]
         private MirrorShootHandler mirrorShootHandler;
+
         [SerializeField]
         private MirrorStateHandler mirrorStateHandler;
+
+        [Space]
+        [SerializeField]
+        private AnimationClip standUpFaceUpClip;
+        [SerializeField]
+        private AnimationClip standUpFaceDownClip;
+
 
         [Space]
         [Header("Debug")]
         [SerializeField]
         private bool debug;
 
-        private Action<Vector3> _cachedV3;
+        private Action<Vector3> _cachedOnCollision;
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
 
@@ -119,23 +128,23 @@ namespace Shadow_Dominion
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
-                player, 
-                cameraLook, 
-                ragdollRoot.transform, 
-                playerAnimation, 
-                rootRig, 
-                copyTo, 
-                coroutineExecuter, 
-                playerMovement, 
-                monoInputHandler );
+                player,
+                cameraLook,
+                ragdollRoot.transform,
+                playerAnimation,
+                rootRig,
+                copyTo,
+                coroutineExecuter,
+                playerMovement,
+                monoInputHandler,
+                standUpFaceUpClip,
+                standUpFaceDownClip);
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerAnimation.Construct(animator, aimRig, ragdollRoot, playerStateMachine);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
-            
             mirrorStateHandler.Construct(playerStateMachine);
-
             ak47.Construct(monoInputHandler, aim, mirrorShootHandler);
 
             for (int i = 0; i < copyFrom.Length; i++)
@@ -146,39 +155,14 @@ namespace Shadow_Dominion
 
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
-                monoInputHandler.OnInputUpdate += inp => HandleInput(inp, copyTo[ind]);
+                monoInputHandler.OnInputUpdate += _cachedInputData;
 
-                _cachedV3 = deltaDist =>
-                {
-                    if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
-                        || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
-                        || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
-                        || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
-                    {
-                        aimRig.weight = 0;
-                    }
-                    
-                    if (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
-                        || copyTo[ind].BoneType == HumanBodyBones.LeftUpperLeg
-                        || copyTo[ind].BoneType == HumanBodyBones.RightUpperLeg
-                        || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)
-                    {
-                        if (  deltaDist.magnitude > springData.DetachDistance)
-                        {
-                            playerStateMachine.SetState<RagdollState>();
-                        }
-                        
-                        return;
-                    }
-                    
-                    copyTo[ind].IsPositionApplying(false);
-                    copyTo[ind].IsRotationApplying(false);
-                };
-                copyTo[i].OnCollision += _cachedV3;
+                _cachedOnCollision = deltaDist => OnCollision(deltaDist, ind, playerStateMachine);
+                copyTo[i].OnCollision += _cachedOnCollision;
             }
 
             return;
-            
+
             void HandleInput(InputData inputData, BoneController boneController)
             {
                 if (!debug)
@@ -187,6 +171,29 @@ namespace Shadow_Dominion
                 boneController.IsPositionApplying(!inputData.T);
                 boneController.IsRotationApplying(!inputData.T);
             }
+        }
+
+        private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
+        {
+            if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
+                || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
+                || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
+                || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
+            {
+                aimRig.weight = 0;
+            }
+
+            if (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
+                || copyTo[ind].BoneType == HumanBodyBones.LeftUpperLeg
+                || copyTo[ind].BoneType == HumanBodyBones.RightUpperLeg
+                || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)
+            {
+                playerStateMachine.SetState<RagdollState>();
+                return;
+            }
+
+            copyTo[ind].IsPositionApplying(false);
+            copyTo[ind].IsRotationApplying(false);
         }
 
         [Button("InitializeMotion")]
@@ -219,7 +226,7 @@ namespace Shadow_Dominion
         {
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                copyTo[i].OnCollision -= _cachedV3;
+                copyTo[i].OnCollision -= _cachedOnCollision;
             }
         }
     }

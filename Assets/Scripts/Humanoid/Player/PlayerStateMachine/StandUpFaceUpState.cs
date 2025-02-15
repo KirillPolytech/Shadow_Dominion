@@ -11,6 +11,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly Transform _ragdollRoot;
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly PlayerStateMachine _playerStateMachine;
+        private readonly float _clipLength;
         
         public StandUpFaceUpState(
             Main.Player player,
@@ -19,7 +20,8 @@ namespace Shadow_Dominion.Player.StateMachine
             PlayerAnimation playerAnimation,
             CameraLook cameraLook,
             CoroutineExecuter coroutineExecuter,
-            PlayerStateMachine playerStateMachine) : base(playerAnimation)
+            PlayerStateMachine playerStateMachine,
+            float clipLength) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _player = player;
@@ -27,6 +29,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _cameraLook = cameraLook;
             _coroutineExecuter = coroutineExecuter;
             _playerStateMachine = playerStateMachine;
+            _clipLength = clipLength;
         }
         
         public override void Enter()
@@ -41,9 +44,7 @@ namespace Shadow_Dominion.Player.StateMachine
             
             _playerAnimation.AnimationStateMachine.StandUpFaceUp();
 
-            //var clip = _playerAnimation.Animator.GetCurrentAnimatorClipInfo(0)[0].clip;
-            //float length = clip.length;
-            _coroutineExecuter.StartCoroutine(8, _playerStateMachine.SetState<DefaultState>);
+            _coroutineExecuter.StartCoroutine(_clipLength, _playerStateMachine.SetState<DefaultState>);
         }
 
         public override void Exit()

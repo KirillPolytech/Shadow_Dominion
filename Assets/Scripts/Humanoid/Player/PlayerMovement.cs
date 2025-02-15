@@ -1,6 +1,5 @@
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Player;
-using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 
 namespace Shadow_Dominion.Main
@@ -14,6 +13,7 @@ namespace Shadow_Dominion.Main
 
         private Transform _transform;
         private Quaternion _cachedRot;
+        private float _x, _y;
 
         public void Construct(
             PlayerSettings playerSettings,
@@ -38,9 +38,22 @@ namespace Shadow_Dominion.Main
         private void HandleAnim(InputData data)
         {
             int leftShift = data.LeftShift ? 1 : 0;
+
+            float temp = 0.01f;
+
+            float newXvalue = _x + data.HorizontalAxisRaw * temp;
+            newXvalue *= data.HorizontalAxisRaw == 0 ? 0 : 1;
+            _x = Mathf.Clamp(newXvalue, -1f,1f);
+            
+            float newYvalue = _y + data.VerticalAxisRaw * temp;
+            newYvalue *= data.VerticalAxisRaw == 0 ? 0 : 1;
+
+            //float runY = Mathf.Clamp(data.VerticalAxisRaw * leftShift * temp, -0.5f, 0.5f);
+
+            _y = Mathf.Clamp(newYvalue, -0.5f, 0.5f); //+ runY;
             
             // todo: refactor
-            _playerAnimation.AnimationStateMachine.SetXY(data.HorizontalAxisRaw, data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
+            _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
         }
 
         private void Move(bool isRun, float x, float y)

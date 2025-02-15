@@ -35,6 +35,11 @@ namespace Shadow_Dominion
 
             _monoInputHandler.OnInputUpdate += Fire;
         }
+        
+        private void OnDestroy()
+        {
+            _monoInputHandler.OnInputUpdate -= Fire;
+        }
 
         private void Fire(InputData inputData)
         {
@@ -93,11 +98,6 @@ namespace Shadow_Dominion
         private void OnDrawGizmos()
         {
             Debug.DrawLine(bulletStartPosition.position, _hit.point, Color.red);
-        }
-
-        private void OnDisable()
-        {
-            _monoInputHandler.OnInputUpdate -= Fire;
         }
     }
 }

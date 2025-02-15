@@ -21,12 +21,16 @@ namespace Shadow_Dominion.Player.StateMachine
             BoneController[] boneController,
             CoroutineExecuter coroutineExecuter, 
             PlayerMovement playerMovement,
-            IInputHandler inputHandler)
+            IInputHandler inputHandler,
+            AnimationClip standUpFaceUp,
+            AnimationClip standUpFaceDown)
         {
             StandUpFaceUpState standUpFaceUpState =
-                new StandUpFaceUpState(player, ragdollRoot, rootRig, playerAnimation, cameraLook, coroutineExecuter, this);
+                new StandUpFaceUpState(player, ragdollRoot, rootRig, playerAnimation, 
+                    cameraLook, coroutineExecuter, this, standUpFaceUp.length);
             StandUpFaceDownState standUpFaceDownState =
-                new StandUpFaceDownState(player, ragdollRoot, rootRig, playerAnimation, cameraLook, coroutineExecuter, this);
+                new StandUpFaceDownState(player, ragdollRoot, rootRig, playerAnimation, 
+                    cameraLook, coroutineExecuter, this, standUpFaceDown.length);
             RagdollState ragdollState = 
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneController, inputHandler, ragdollRoot, this);
 

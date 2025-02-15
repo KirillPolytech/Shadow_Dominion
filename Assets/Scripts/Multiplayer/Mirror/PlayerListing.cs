@@ -18,7 +18,7 @@ public class PlayerListing : MonoBehaviour
         Debug.Log("PlayerListing created.");
     }
 
-    public void UpdateUI(List<string> players)
+    public void UpdateUI(string[] players)
     {
         Clear();
 

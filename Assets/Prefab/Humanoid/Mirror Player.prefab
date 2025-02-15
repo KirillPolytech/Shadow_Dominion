@@ -6680,6 +6680,8 @@ MonoBehaviour:
   coroutineExecuter: {fileID: 2612903666360058253}
   mirrorShootHandler: {fileID: 6562452125269414045}
   mirrorStateHandler: {fileID: 5842439262446657154}
+  standUpFaceUpClip: {fileID: 7400000, guid: ba0fbf4c311f549458ac3adcb30d06aa, type: 2}
+  standUpFaceDownClip: {fileID: 7400000, guid: c1c086eeb41db99468fbfc47e1508308, type: 2}
   debug: 0
 --- !u!114 &6158517376244881172
 MonoBehaviour:

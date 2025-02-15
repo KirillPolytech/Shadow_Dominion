@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Shadow_Dominion;
 using Mirror;
@@ -7,10 +6,8 @@ using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-public class MirrorServer : NetworkRoomManager
+public class MirrorServer : NetworkManager
 {
-    private readonly List<GameObject> _instances = new List<GameObject>();
-    
     public event Action ActionOnHostStart;
     public event Action ActionOnHostStop;
     public event Action ActionOnServerAddPlayer;
@@ -25,10 +22,11 @@ public class MirrorServer : NetworkRoomManager
     public event Action ActionOnClientDisconnect;
 
     public event Action ActionOnAnyChange;
-
+    
     [SerializeField]
-    private NetworkBehaviour[] networkBehaviour;
-
+    private Lobby lobby;
+    
+    private Lobby _lobby;
 
     private PlayerPool _playerPool;
 
@@ -49,8 +47,9 @@ public class MirrorServer : NetworkRoomManager
 
         ActionOnServerConnect += DestroyNetworkBehaviours;
         ActionOnServerConnect += SpawnNetworkBehaviours;
+        ActionOnServerConnect += UpdateListing;
     }
-    
+
     public override void OnDestroy()
     {
         base.OnDestroy();
@@ -64,43 +63,60 @@ public class MirrorServer : NetworkRoomManager
         ActionOnStopClient -= OnAnyChange;
         ActionOnClientConnect -= OnAnyChange;
         ActionOnClientDisconnect -= OnAnyChange;
-        
+
         ActionOnServerConnect -= DestroyNetworkBehaviours;
         ActionOnServerConnect -= SpawnNetworkBehaviours;
+        ActionOnServerConnect -= UpdateListing;
     }
-    
+
     [Inject]
     public void Construct(PlayerPool playerPool)
     {
         _playerPool = playerPool;
     }
+
+    public override void Update()
+    {
+        base.Update();
+        
+        if (Input.GetKeyDown(KeyCode.U))
+            UpdateListing();
+        
+        if (Input.GetKeyDown(KeyCode.K))
+            SpawnNetworkBehaviours();
+        
+        if (Input.GetKeyDown(KeyCode.L))
+            DestroyNetworkBehaviours();
+    }
+
+    private void UpdateListing()
+    {
+        string[] names = NetworkServer.connections
+            .Select(x => x.Value.address).ToArray();
+        _lobby.UpdateList(names);
+    }
     
     [Server]
     private void SpawnNetworkBehaviours()
     {
-        foreach (var behaviour in networkBehaviour)
-        {
-            GameObject instance = Instantiate(behaviour.gameObject);
-            _instances.Add(instance);
-            NetworkServer.Spawn(instance);
-        }
+        _lobby = Instantiate(lobby);
+        NetworkServer.Spawn(_lobby.gameObject);
         
         Debug.Log("Objects spawned!");
     }
-    
+
     [Server]
     private void DestroyNetworkBehaviours()
     {
-        for (int i = 0; i < _instances.Count; i++)
+        if (_lobby)
         {
-            Destroy(_instances.ElementAt(0).gameObject);
+            NetworkServer.Destroy(_lobby.gameObject);
+            Destroy(_lobby.gameObject);
         }
-        
-        _instances.Clear();
         
         Debug.Log("Objects destroyed!");
     }
-    
+
     private void OnAnyChange() => ActionOnAnyChange?.Invoke();
 
     [Server]
@@ -117,7 +133,7 @@ public class MirrorServer : NetworkRoomManager
     private void ActivatePlayerSpawn()
     {
         float value = Random.Range(-5, 5);
-        Vector3 newpos = new Vector3(value,-2,value);
+        Vector3 newpos = new Vector3(value, 2, value);
         //создаем struct определенного типа, чтобы сервер понял к чему эти данные относятся
         PositionMessage message = new PositionMessage { pos = newpos };
         //отправка сообщения на сервер с координатами спавна
@@ -131,7 +147,7 @@ public class MirrorServer : NetworkRoomManager
 
         Debug.Log($"OnServerSceneChanged: {sceneName}");
     }
-    
+
     public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
     {
         base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
@@ -181,16 +197,12 @@ public class MirrorServer : NetworkRoomManager
         ActionOnServerConnect?.Invoke();
         ActionOnServerConnectWithArg?.Invoke(conn);
 
-        foreach (var VARIABLE in roomSlots)
-        {
-            Debug.Log($"roomSlots: {VARIABLE.connectionToClient.address}");
-        }
         //NetworkRoomPlayer roomPrefab = Instantiate(roomPlayerPrefab);
         //NetworkServer.AddPlayerForConnection(conn, roomPrefab.gameObject);
 
         //Debug.Log($"OnServerConnect. {conn.address}");
     }
-
+/*
     [Server]
     public override void OnRoomServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -207,6 +219,7 @@ public class MirrorServer : NetworkRoomManager
 
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
+    */
 
     [Server]
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
@@ -250,7 +263,7 @@ public class MirrorServer : NetworkRoomManager
 
         // Debug.Log($"OnStartClient: networkAddress:{networkAddress}");
     }
-    
+
     public override void OnClientConnect()
     {
         base.OnClientConnect();
@@ -259,7 +272,7 @@ public class MirrorServer : NetworkRoomManager
 
         // Debug.Log($"OnClientConnect: networkAddress:{networkAddress}");
     }
-    
+
     public override void OnClientDisconnect()
     {
         base.OnClientDisconnect();
