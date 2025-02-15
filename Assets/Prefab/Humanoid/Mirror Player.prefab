@@ -6551,9 +6551,9 @@ GameObject:
   - component: {fileID: 6692371360007783292}
   - component: {fileID: 5306936754135648157}
   - component: {fileID: 127988981273457825}
+  - component: {fileID: 8961616338611320610}
   - component: {fileID: 6158517376244881172}
   - component: {fileID: 2883562924446922007}
-  - component: {fileID: 8961616338611320610}
   - component: {fileID: 2612903666360058253}
   - component: {fileID: 6562452125269414045}
   - component: {fileID: 5842439262446657154}
@@ -6618,6 +6618,7 @@ MonoBehaviour:
   pidData: {fileID: 11400000, guid: 989e8b9d088075b4e97adfb789d7d70b, type: 2}
   cameraSettings: {fileID: 11400000, guid: 327ad2879cf30d0479600b8a80891c39, type: 2}
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
+  weaponSO: {fileID: 11400000, guid: e4f8681f97530264da15e76fbd6c5e63, type: 2}
   player: {fileID: 8958827377047444852}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
@@ -6683,6 +6684,20 @@ MonoBehaviour:
   standUpFaceUpClip: {fileID: 7400000, guid: ba0fbf4c311f549458ac3adcb30d06aa, type: 2}
   standUpFaceDownClip: {fileID: 7400000, guid: c1c086eeb41db99468fbfc47e1508308, type: 2}
   debug: 0
+--- !u!114 &8961616338611320610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526803028027871228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32acb068f1802364a8c7146fb15276cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ragdollRoot: {fileID: 1618310412228688036}
+  animRoot: {fileID: 4332306446851996902}
 --- !u!114 &6158517376244881172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6737,20 +6752,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
---- !u!114 &8961616338611320610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2526803028027871228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32acb068f1802364a8c7146fb15276cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ragdollRoot: {fileID: 1618310412228688036}
-  animRoot: {fileID: 4332306446851996902}
 --- !u!114 &2612903666360058253
 MonoBehaviour:
   m_ObjectHideFlags: 0

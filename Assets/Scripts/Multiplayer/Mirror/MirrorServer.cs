@@ -79,7 +79,7 @@ public class MirrorServer : NetworkManager
     {
         base.Update();
         
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.J))
             UpdateListing();
         
         if (Input.GetKeyDown(KeyCode.K))

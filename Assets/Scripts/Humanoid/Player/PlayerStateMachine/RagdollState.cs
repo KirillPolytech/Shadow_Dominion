@@ -50,7 +50,6 @@ namespace Shadow_Dominion.Player.StateMachine
             _inputHandler.OnInputUpdate += HandleInput;
             
             _rigBuilder.enabled = false;
-            _playerAnimation.CanAnimate = false;
             _cameraLook.CanZooming = false;
             
             for (int i = 0; i < _boneControllers.Length; i++)
@@ -67,7 +66,6 @@ namespace Shadow_Dominion.Player.StateMachine
             _inputHandler.OnInputUpdate -= HandleInput;
             
             _rigBuilder.enabled = true;
-            _playerAnimation.CanAnimate = true;
             _cameraLook.CanZooming = true;
             
             for (int i = 0; i < _boneControllers.Length; i++)

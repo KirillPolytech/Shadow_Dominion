@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Main;
+using Shadow_Dominion.Network;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.StateMachine;
@@ -30,6 +32,9 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private PlayerSettings playerSettings;
+        
+        [SerializeField]
+        private WeaponSO weaponSO;
 
         [Space]
         [Header("Limits")]
@@ -112,8 +117,7 @@ namespace Shadow_Dominion
         private AnimationClip standUpFaceUpClip;
         [SerializeField]
         private AnimationClip standUpFaceDownClip;
-
-
+        
         [Space]
         [Header("Debug")]
         [SerializeField]
@@ -127,6 +131,7 @@ namespace Shadow_Dominion
         {
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
+            AnimationStateMachine animationStateMachine = new AnimationStateMachine(animator);
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
                 player,
                 cameraLook,
@@ -142,10 +147,11 @@ namespace Shadow_Dominion
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerAnimation.Construct(animator, aimRig, ragdollRoot, playerStateMachine);
+            playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
             mirrorStateHandler.Construct(playerStateMachine);
-            ak47.Construct(monoInputHandler, aim, mirrorShootHandler);
+            ak47.Construct(monoInputHandler, aim, weaponSO);
+            mirrorShootHandler.Construct(ak47);
 
             for (int i = 0; i < copyFrom.Length; i++)
             {

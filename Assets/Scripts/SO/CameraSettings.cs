@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CameraSettings", menuName = "HellBeaversData/CameraSettings")]
+[CreateAssetMenu(fileName = "CameraSettings", menuName = PathStorage.ScriptableObjectMenu + "/CameraSettings")]
 public class CameraSettings : ScriptableObject
 {
     public float zoom = 1;

@@ -1,11 +1,25 @@
 using Mirror;
 using UnityEngine;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.Network
 {
     public class MirrorShootHandler : NetworkBehaviour
     {
         private const int ShootRange = 500;
+
+        private Ak47 _ak47;
+
+        public void Construct(Ak47 ak47)
+        {
+            _ak47 = ak47;
+
+            _ak47.OnFired += CmdCastRay;
+        }
+
+        private void OnDestroy()
+        {
+            _ak47.OnFired -= CmdCastRay;
+        }
 
         [Command]
         public void CmdCastRay(Vector3 origin, Vector3 direction)

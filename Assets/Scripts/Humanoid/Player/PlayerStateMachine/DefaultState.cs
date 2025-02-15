@@ -7,7 +7,7 @@ namespace Shadow_Dominion.Player.StateMachine
     {
         private readonly IInputHandler _inputHandler;
         private readonly PlayerMovement _playerMovement;
-        
+
         public DefaultState(PlayerAnimation playerAnimation,
             PlayerMovement playerMovement,
             IInputHandler inputHandler) : base(playerAnimation)
@@ -19,11 +19,13 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Enter()
         {
             _inputHandler.OnInputUpdate += _playerMovement.HandleInput;
+            _inputHandler.OnInputUpdate += _playerAnimation.HandleAimRig;
         }
 
         public override void Exit()
         {
             _inputHandler.OnInputUpdate -= _playerMovement.HandleInput;
+            _inputHandler.OnInputUpdate -= _playerAnimation.HandleAimRig;
         }
     }
 }

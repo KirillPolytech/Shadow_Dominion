@@ -1,3 +1,4 @@
+using System;
 using Shadow_Dominion.InputSystem;
 using UnityEngine;
 
@@ -7,31 +8,28 @@ namespace Shadow_Dominion
     {
         private const int Distance = 1000;
 
+        public Action<Vector3, Vector3> OnFired;
+
         [SerializeField] private Transform bulletStartPosition;
         [SerializeField] private Transform weaponPose;
-        [SerializeField] private float damage = 100;
-        [SerializeField] private float rotationSpeed = 15;
-        [SerializeField] private float limit = 30;
         [SerializeField] private ParticleSystem fireEffect;
 
         public Vector3 HitPoint => _hit.point;
         public Vector3 BulletStartPosition => bulletStartPosition.position;
 
         private IInputHandler _monoInputHandler;
-        private MirrorShootHandler _mirrorShootHandler;
+        private WeaponSO _weaponSo;
         private RaycastHit _hit;
         private Transform _lookTarget;
-        private Transform _cachedTransform;
 
         public void Construct(
             IInputHandler monoInputHandler, 
             Transform lookTarget, 
-            MirrorShootHandler mirrorShootHandler)
+            WeaponSO weaponSo)
         {
             _monoInputHandler = monoInputHandler;
             _lookTarget = lookTarget;
-            _cachedTransform = transform;
-            _mirrorShootHandler = mirrorShootHandler;
+            _weaponSo = weaponSo;
 
             _monoInputHandler.OnInputUpdate += Fire;
         }
@@ -45,24 +43,12 @@ namespace Shadow_Dominion
         {
             if (!inputData.LeftMouseButton)
                 return;
-
-            _mirrorShootHandler.CmdCastRay(bulletStartPosition.position, transform.forward);
             
-            return;
+            OnFired?.Invoke(bulletStartPosition.position, transform.forward * _weaponSo.Damage);
             
             if (fireEffect.isPlaying)
                 fireEffect.Stop();
             fireEffect.Play();
-            
-            if (!_hit.collider)
-                return;
-            
-            BoneController boneController = _hit.collider.GetComponent<BoneController>();
-
-            if (!boneController)
-                return;
-
-            boneController.ReceiveDamage((boneController.CurrentPosition - _cachedTransform.position) * damage);
         }
 
         private void FixedUpdate()
@@ -86,11 +72,11 @@ namespace Shadow_Dominion
         {
             weaponPose.rotation = Quaternion.Lerp(transform.rotation,
                 Quaternion.LookRotation(_lookTarget.position - transform.position),
-                rotationSpeed * Time.fixedDeltaTime);
+                _weaponSo.RotationSpeed * Time.fixedDeltaTime);
             
             Vector3 euler = weaponPose.rotation.eulerAngles;
             euler.x = euler.x > 180 ? euler.x - 360 : euler.x;
-            euler.x = Mathf.Clamp(euler.x, -limit, limit);
+            euler.x = Mathf.Clamp(euler.x, -_weaponSo.Limit, _weaponSo.Limit);
             
             weaponPose.rotation = Quaternion.Euler(euler);
         }

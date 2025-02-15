@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine
@@ -44,7 +46,14 @@ namespace Shadow_Dominion.Player.StateMachine
             
             _playerAnimation.AnimationStateMachine.StandUpFaceDown();
 
-            _coroutineExecuter.StartCoroutine(_clipLength, _playerStateMachine.SetState<DefaultState>);
+            _coroutineExecuter.Execute(ExecutingCoroutine(_clipLength, _playerStateMachine.SetState<DefaultState>));
+        }
+        
+        private IEnumerator ExecutingCoroutine(float waitTime, Action callBack)
+        {
+            yield return new WaitForSeconds(waitTime);
+
+            callBack?.Invoke();
         }
 
         public override void Exit()

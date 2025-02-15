@@ -1,18 +1,9 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class CoroutineExecuter : MonoBehaviour
 {
-    public void StartCoroutine(float waitTime, Action callBack)
-    {
-        StartCoroutine(ExecutingCoroutine(waitTime, callBack));
-    }
+    public Coroutine Execute(IEnumerator coroutine) => StartCoroutine(coroutine);
 
-    private IEnumerator ExecutingCoroutine(float waitTime, Action callBack)
-    {
-        yield return new WaitForSeconds(waitTime);
-
-        callBack?.Invoke();
-    }
+    public void Stop(IEnumerator coroutine) => StopCoroutine(coroutine);
 }
