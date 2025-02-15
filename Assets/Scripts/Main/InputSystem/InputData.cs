@@ -1,4 +1,4 @@
-namespace Shadow_Dominion
+namespace Shadow_Dominion.InputSystem
 {
     public struct InputData
     {
@@ -24,5 +24,7 @@ namespace Shadow_Dominion
         public bool RightMouseButton;
         public bool RightMouseButtonDown;
         public bool RightMouseButtonUp;
+        
+        public bool ESC;
     }
 }

@@ -51,7 +51,7 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: 
+  offlineScene: Assets/Scenes/Menu.unity
   onlineScene: 
   offlineSceneLoadDelay: 0
   transport: {fileID: 427922648950834434}
@@ -63,7 +63,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 2526803028027871228, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
   autoCreatePlayer: 0
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 8804300468676099362, guid: e7060170a22fe2e47a44910e51d047c1, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -86,6 +87,9 @@ MonoBehaviour:
   GameplayScene: Assets/Scenes/Level.unity
   _allPlayersReady: 0
   clientIndex: 0
+  networkBehaviour:
+  - {fileID: 4783087809756892643, guid: e7060170a22fe2e47a44910e51d047c1, type: 3}
+  lobby: {fileID: 4783087809756892643, guid: e7060170a22fe2e47a44910e51d047c1, type: 3}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +126,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4563408968703581583}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 

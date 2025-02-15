@@ -7,22 +7,18 @@ public class PlayerListing : MonoBehaviour
 {
     private readonly List<Transform> _ui = new List<Transform>();
 
-    [SerializeField] private Transform parent;
-    [SerializeField] private TextMeshProUGUI prefab;
+    [SerializeField]
+    private Transform parent;
 
-    //[SerializeField] private Lobby lobby;
-    // [Inject]
-    // public void Construct(Lobby lobby)
-    // {
-    //     lobby.OnChange += UpdateUI;
-    // }
-
+    [SerializeField]
+    private TextMeshProUGUI prefab;
+    
     private void Start()
     {
-        //lobby.OnChange += UpdateUI;
+        Debug.Log("PlayerListing created.");
     }
 
-    private void UpdateUI(List<string> players)
+    public void UpdateUI(string[] players)
     {
         Clear();
 

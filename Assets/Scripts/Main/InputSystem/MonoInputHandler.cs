@@ -1,15 +1,24 @@
 using System;
+using Mirror;
 using UnityEngine;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.InputSystem
 {
-    public class MonoInputHandler : MonoBehaviour
+    public class MonoInputHandler : NetworkBehaviour, IInputHandler
     {
         public event Action<InputData> OnInputUpdate;
 
         private InputData _inputData;
 
         private void Update()
+        {
+            if (!isLocalPlayer)
+                return;
+            
+            HandleInput();
+        }
+        
+        public void HandleInput()
         {
             _inputData.HorizontalAxisRaw = Input.GetAxisRaw(VariableNames.HorizontalAxis);
             _inputData.VerticalAxisRaw = Input.GetAxisRaw(VariableNames.VerticalAxis);

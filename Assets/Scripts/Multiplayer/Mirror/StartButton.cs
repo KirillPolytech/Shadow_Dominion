@@ -6,18 +6,18 @@ using Zenject;
 public class StartButton : Button
 {
     private MirrorServer _mirrorServer;
-
-    private UnityAction _action = () => NetworkManager.singleton.ServerChangeScene("Level");
-
     private bool _isInitialized;
+    private UnityAction _action;
 
     [Inject]
-    public void Construct(MirrorServer mirrorServer)
+    public void Construct(MirrorServer mirrorServer, RoomSettings roomSettings)
     {
         _mirrorServer = mirrorServer;
 
         _mirrorServer.ActionOnHostStart += Subscribe;
         _mirrorServer.ActionOnHostStop += Unsubscribe;
+
+        _action = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
         
         _isInitialized = true;
     }
@@ -32,7 +32,7 @@ public class StartButton : Button
         if (!_isInitialized)
             return;
         
-        _mirrorServer.ActionOnHostStart += Subscribe;
-        _mirrorServer.ActionOnHostStop += Unsubscribe;
+        _mirrorServer.ActionOnHostStart -= Subscribe;
+        _mirrorServer.ActionOnHostStop -= Unsubscribe;
     }
 }

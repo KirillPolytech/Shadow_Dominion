@@ -1,46 +1,36 @@
-using System.Linq;
-using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
-namespace Shadow_Dominion.Player
+namespace Shadow_Dominion.AnimStateMachine
 {
-    public class AnimationStateMachine : IStateMachine
+    public class AnimationStateMachine
     {
-        private readonly int IsIdle = Animator.StringToHash("IsIdle");
-        private readonly int IsWalkForward = Animator.StringToHash("IsWalkForward");
-        private readonly int IsWalkBackward = Animator.StringToHash("IsWalkBackward");
-        private readonly int IsWalkLeft = Animator.StringToHash("IsWalkLeft");
-        private readonly int IsWalkRight = Animator.StringToHash("IsWalkRight");
-        private readonly int IsRunForward = Animator.StringToHash("IsRunForward");
-        private readonly int IsRunBackward = Animator.StringToHash("IsRunBackward");
-        private readonly int StandUpHashCode = Animator.StringToHash("StandUp");
-        private readonly int Laying = Animator.StringToHash("Laying");
+        private readonly int VelocityX = Animator.StringToHash("VelocityX");
+        private readonly int VelocityY = Animator.StringToHash("VelocityY");
+        
+        private readonly int StandUp_Face_Up = Animator.StringToHash("StandUp_Face_Up");
+        private readonly int StandUp_Face_Down = Animator.StringToHash("StandUp_Face_Down");
+        
+        private readonly Animator _animator;
 
         public AnimationStateMachine(Animator animator)
         {
-            _states.Add(new AnimationIdleState(animator, IsIdle));
-            _states.Add(new AnimationWalkForwardState(animator, IsWalkForward));
-            _states.Add(new AnimationWalkBackwardState(animator, IsWalkBackward));
-            _states.Add(new AnimationWalkLeftState(animator, IsWalkLeft));
-            _states.Add(new AnimationWalkRightState(animator, IsWalkRight));
-            _states.Add(new AnimationRunForwardState(animator, IsRunForward));
-            _states.Add(new AnimationRunBackwardState(animator, IsRunBackward));
-            _states.Add(new AnimationStandUpState(animator, StandUpHashCode));
-            _states.Add(new AnimationLayingState(animator, Laying));
+            _animator = animator;
         }
 
-        public override void SetState<T>()
+        public void SetXY(float x, float y)
         {
-            IState state = _states.First(x => x.GetType() == typeof(T));
+            _animator.SetFloat(VelocityX, x);
+            _animator.SetFloat(VelocityY, y);
+        }
 
-            if (CurrentState == state)
-                return;
-
-            CurrentState?.Exit();
-            CurrentState = state;
-            CurrentState.Enter();
-
-            Debug.Log($"Current anim state: {CurrentState.GetType()}");
+        public void StandUpFaceUp()
+        {
+            _animator.SetTrigger(StandUp_Face_Up);
+        }
+        
+        public void StandUpFaceDown()
+        {
+            _animator.SetTrigger(StandUp_Face_Down);
         }
     }
 }

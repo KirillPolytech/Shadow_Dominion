@@ -9,7 +9,10 @@ public class HostButton : Button
     private PORTInputFieldProvider _portInputFieldProvider;
 
     [Inject]
-    public void Construct(MirrorServer mirrorServer, IPInputFieldProvider ipInputFieldProvider, PORTInputFieldProvider portInputFieldProvider)
+    public void Construct(
+        MirrorServer mirrorServer, 
+        IPInputFieldProvider ipInputFieldProvider, 
+        PORTInputFieldProvider portInputFieldProvider)
     {
         _mirrorServer = mirrorServer;
 
@@ -20,16 +23,24 @@ public class HostButton : Button
     protected override void Awake()
     {
         base.Awake();
-        onClick.AddListener(() =>
+        onClick.AddListener(StartHost);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();        
+        onClick.RemoveListener(StartHost);
+    }
+
+    private void StartHost()
+    {
+        if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputFields.text))
         {
-            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputFields.text))
-            {
-                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputFields.text}");
-                return;
-            }
+            Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputFields.text}");
+            return;
+        }
             
-            _mirrorServer.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
-            _mirrorServer.StartHost();
-        });
+        _mirrorServer.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
+        _mirrorServer.StartHost();
     }
 }
