@@ -45,7 +45,6 @@ public class MirrorServer : NetworkManager
         ActionOnClientConnect += OnAnyChange;
         ActionOnClientDisconnect += OnAnyChange;
 
-        ActionOnServerConnect += DestroyNetworkBehaviours;
         ActionOnServerConnect += SpawnNetworkBehaviours;
         ActionOnServerConnect += UpdateListing;
     }
@@ -64,7 +63,6 @@ public class MirrorServer : NetworkManager
         ActionOnClientConnect -= OnAnyChange;
         ActionOnClientDisconnect -= OnAnyChange;
 
-        ActionOnServerConnect -= DestroyNetworkBehaviours;
         ActionOnServerConnect -= SpawnNetworkBehaviours;
         ActionOnServerConnect -= UpdateListing;
     }
@@ -99,6 +97,8 @@ public class MirrorServer : NetworkManager
     [Server]
     private void SpawnNetworkBehaviours()
     {
+        DestroyNetworkBehaviours();
+        
         _lobby = Instantiate(lobby);
         NetworkServer.Spawn(_lobby.gameObject);
         

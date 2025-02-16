@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Main;
@@ -27,12 +28,13 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             StandUpFaceUpState standUpFaceUpState =
                 new StandUpFaceUpState(player, ragdollRoot, rootRig, playerAnimation, 
-                    cameraLook, coroutineExecuter, this, standUpFaceUp.length);
+                    cameraLook, coroutineExecuter, this, standUpFaceUp.length, boneController, ExecutingCoroutine);
             StandUpFaceDownState standUpFaceDownState =
                 new StandUpFaceDownState(player, ragdollRoot, rootRig, playerAnimation, 
-                    cameraLook, coroutineExecuter, this, standUpFaceDown.length);
+                    cameraLook, coroutineExecuter, this, standUpFaceDown.length, boneController, ExecutingCoroutine);
             RagdollState ragdollState = 
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneController, inputHandler, ragdollRoot, this);
+            DeathState deathState = new DeathState(playerAnimation, coroutineExecuter);
 
             _states.Add(standUpFaceUpState);
             _states.Add(standUpFaceDownState);
@@ -41,7 +43,14 @@ namespace Shadow_Dominion.Player.StateMachine
             
             SetState<DefaultState>();
         }
+        
+        private IEnumerator ExecutingCoroutine(float waitTime, Action callBack)
+        {
+            yield return new WaitForSeconds(waitTime);
 
+            callBack?.Invoke();
+        }
+        
         public override void SetState<T>()
         {
             var state = _states.First(x => x.GetType() == typeof(T));

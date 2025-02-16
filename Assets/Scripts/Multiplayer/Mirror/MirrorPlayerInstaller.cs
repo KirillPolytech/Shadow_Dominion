@@ -157,7 +157,7 @@ namespace Shadow_Dominion
             {
                 HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
 
-                copyTo[i].Construct(springData, copyFrom[i], pidData, rend, humanBodyBone);
+                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone);
 
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
@@ -181,6 +181,9 @@ namespace Shadow_Dominion
 
         private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
         {
+            if(copyTo[ind].BoneType == HumanBodyBones.Head)
+                playerStateMachine.SetState<DeathState>();
+
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
                 || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
                 || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
@@ -195,11 +198,7 @@ namespace Shadow_Dominion
                 || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)
             {
                 playerStateMachine.SetState<RagdollState>();
-                return;
             }
-
-            copyTo[ind].IsPositionApplying(false);
-            copyTo[ind].IsRotationApplying(false);
         }
 
         [Button("InitializeMotion")]

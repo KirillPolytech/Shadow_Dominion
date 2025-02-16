@@ -20,6 +20,11 @@ namespace Shadow_Dominion.Main
 
             Position = new []{transform};
         }
+
+        public void IsKinematic(bool iskinematic)
+        {
+            _rigidbody.isKinematic = iskinematic;
+        }
         
         public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
         {

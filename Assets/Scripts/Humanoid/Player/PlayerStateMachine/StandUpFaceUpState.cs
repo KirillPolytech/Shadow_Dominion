@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Shadow_Dominion.AnimStateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -14,6 +15,8 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly PlayerStateMachine _playerStateMachine;
         private readonly float _clipLength;
+        private readonly BoneController[] _boneControllers;
+        private readonly Func<float, Action, IEnumerator> _waitingCoroutine;
         
         public StandUpFaceUpState(
             Main.Player player,
@@ -23,7 +26,9 @@ namespace Shadow_Dominion.Player.StateMachine
             CameraLook cameraLook,
             CoroutineExecuter coroutineExecuter,
             PlayerStateMachine playerStateMachine,
-            float clipLength) : base(playerAnimation)
+            float clipLength,
+            BoneController[] boneControllers,
+            Func<float, Action, IEnumerator> waitingCoroutine) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _player = player;
@@ -32,6 +37,8 @@ namespace Shadow_Dominion.Player.StateMachine
             _coroutineExecuter = coroutineExecuter;
             _playerStateMachine = playerStateMachine;
             _clipLength = clipLength;
+            _boneControllers = boneControllers;
+            _waitingCoroutine = waitingCoroutine;
         }
         
         public override void Enter()
@@ -39,21 +46,50 @@ namespace Shadow_Dominion.Player.StateMachine
             _rigBuilder.enabled = false;
             _cameraLook.CanZooming = false;
             
-            Vector3 pos = _ragdollRoot.position;
-            Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
-            Quaternion q = Quaternion.LookRotation(-dirUp);
-            _player.SetPositionAndRotation(pos, q);
+            _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
             
-            _playerAnimation.AnimationStateMachine.StandUpFaceUp();
-
-            _coroutineExecuter.Execute(ExecutingCoroutine(_clipLength, _playerStateMachine.SetState<DefaultState>));
+            foreach (var boneController in _boneControllers)
+            {
+                boneController.IsPositionApplying(false);
+                boneController.IsRotationApplying(false);
+            }
+            
+            _coroutineExecuter.Execute(MoveTo());
         }
         
-        private IEnumerator ExecutingCoroutine(float waitTime, Action callBack)
+        private IEnumerator MoveTo()
         {
-            yield return new WaitForSeconds(waitTime);
+            Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
+            Quaternion q = Quaternion.LookRotation(-dirUp);
+            float y = _player.transform.position.y;
+            
+            _player.IsKinematic( true);
+            
+            float distance = (_ragdollRoot.position - _player.transform.position).magnitude;
+            while (distance > 0.25f)
+            {
+                Vector3 a = _ragdollRoot.position;
+                a.y = y;
+                Vector3 b = _player.transform.position;
+                b.y = y;
+                Vector3 pos = Vector3.Lerp(a, b, Time.fixedDeltaTime * Time.fixedDeltaTime);
+                _player.SetPositionAndRotation(pos, q);
 
-            callBack?.Invoke();
+                distance = (_ragdollRoot.position - _player.transform.position).magnitude;
+                yield return new WaitForFixedUpdate();
+            }
+            
+            _player.IsKinematic( false);
+            
+            foreach (var boneController in _boneControllers)
+            {
+                boneController.IsPositionApplying(true);
+                boneController.IsRotationApplying(true);
+            }
+            
+            _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceUp>();
+
+            _coroutineExecuter.Execute(_waitingCoroutine(_clipLength, _playerStateMachine.SetState<DefaultState>));
         }
 
         public override void Exit()

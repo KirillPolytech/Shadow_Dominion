@@ -27,7 +27,6 @@ namespace Shadow_Dominion
         private ConfigurableJoint _configurableJoint;
         private Rigidbody _rigidbody;
         private PIDData _pidData;
-        private SpringData _springData;
         private Transform _copyTarget;
         private Quaternion _cachedStartRot;
         private float _cachedInitialPositionSpring, _cachedPositionDamper;
@@ -37,13 +36,11 @@ namespace Shadow_Dominion
         private HumanBodyBones _humanBodyBones;
 
         public void Construct(
-            SpringData springData,
             Transform copyTarget,
             PIDData pidData,
             Renderer skinnedMeshRenderer,
             HumanBodyBones humanBodyBones)
         {
-            _springData = springData;
             _copyTarget = copyTarget;
             _pidData = pidData;
             _renderer = skinnedMeshRenderer;
@@ -99,22 +96,19 @@ namespace Shadow_Dominion
         public void HasSpring(bool state)
         {
             _springRate = Mathf.Clamp(_springRate - 1f * (state ? -1 : 1), 0f, 1);
-            
-            UpdatePositionSpring(_cachedInitialPositionSpring * _springRate);
-        }
 
-        private void UpdatePositionSpring(float value)
-        {
+            float value = _cachedInitialPositionSpring * _springRate;
+            
             BoneSettings.SetDrive(
                 _configurableJoint.xDrive.maximumForce,
-                 Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
-                 Mathf.Clamp(value, 0, value / (_cachedInitialPositionSpring - _cachedPositionDamper)),
-                 _configurableJoint.xDrive.useAcceleration,
-                 _configurableJoint.angularXDrive.maximumForce,
-                 value,
-                 value,
-                 _configurableJoint.angularXDrive.useAcceleration
-                );
+                Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
+                Mathf.Clamp(value, 0, value / (_cachedInitialPositionSpring - _cachedPositionDamper)),
+                _configurableJoint.xDrive.useAcceleration,
+                _configurableJoint.angularXDrive.maximumForce,
+                value,
+                value,
+                _configurableJoint.angularXDrive.useAcceleration
+            );
         }
 
         public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);

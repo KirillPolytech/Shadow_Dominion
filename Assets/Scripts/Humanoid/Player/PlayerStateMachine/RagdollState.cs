@@ -1,3 +1,4 @@
+using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -49,6 +50,8 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             _inputHandler.OnInputUpdate += HandleInput;
             
+            _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
+            
             _rigBuilder.enabled = false;
             _cameraLook.CanZooming = false;
             
@@ -57,24 +60,12 @@ namespace Shadow_Dominion.Player.StateMachine
                 _boneControllers[i].IsPositionApplying(false);
                 _boneControllers[i].IsRotationApplying(false);
                 _boneControllers[i].AddForce(_forceDirection);
-                _boneControllers[i].HasSpring(false);
             }
         }
 
         public override void Exit()
         {
             _inputHandler.OnInputUpdate -= HandleInput;
-            
-            _rigBuilder.enabled = true;
-            _cameraLook.CanZooming = true;
-            
-            for (int i = 0; i < _boneControllers.Length; i++)
-            {
-                _boneControllers[i].IsPositionApplying(true);
-                _boneControllers[i].IsRotationApplying(true);
-                _boneControllers[i].AddForce(Vector3.zero);
-                _boneControllers[i].HasSpring(true);
-            }
         }
     }
 }

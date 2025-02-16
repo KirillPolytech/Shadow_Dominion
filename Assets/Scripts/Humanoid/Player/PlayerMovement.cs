@@ -35,6 +35,7 @@ namespace Shadow_Dominion.Main
             HandleAnim(data);
         }
         
+        // todo: refactor
         private void HandleAnim(InputData data)
         {
             int leftShift = data.LeftShift ? 1 : 0;
@@ -52,7 +53,6 @@ namespace Shadow_Dominion.Main
 
             _y = Mathf.Clamp(newYvalue, -0.5f, 0.5f); //+ runY;
             
-            // todo: refactor
             _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
         }
 
@@ -74,6 +74,7 @@ namespace Shadow_Dominion.Main
             Debug.DrawRay(_transform.position, _charRigidbody.linearVelocity * 10, Color.yellow);
         }
 
+        // todo: refactor
         private void Rotate()
         {
             if (!_playerSettings.canRotate)
