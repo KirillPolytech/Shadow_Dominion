@@ -24,19 +24,15 @@ public class PlayerListing : MonoBehaviour
 
         if (players == null)
             return;
-
-        string currentPlayers = "players:\n";
-
+        
         foreach (var VARIABLE in players)
         {
             TextMeshProUGUI playerName = Instantiate(prefab, parent);
             playerName.text = $"{VARIABLE}";
             _ui.Add(playerName.transform);
-
-            currentPlayers += $"{VARIABLE}\n";
         }
 
-        // Debug.Log("Player list updated " + currentPlayers);
+        // Debug.Log("Player list updated ");
     }
 
     private void Clear()

@@ -40,6 +40,9 @@ namespace Shadow_Dominion
         [Header("Limits")]
         [SerializeField]
         private Main.Player player;
+        
+        [SerializeField]
+        private Transform playerTransform;
 
         [SerializeField]
         private CameraLook cameraLook;
@@ -144,7 +147,8 @@ namespace Shadow_Dominion
                 monoInputHandler,
                 standUpFaceUpClip,
                 standUpFaceDownClip);
-
+            
+            player.Construct(playerTransform, playerStateMachine);
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);

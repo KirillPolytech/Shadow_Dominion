@@ -1,3 +1,4 @@
+using Mirror;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
@@ -12,27 +13,36 @@ namespace Shadow_Dominion
         private RoomSettings roomSettings;
         [Space]
         
-        [SerializeField] private MirrorServer server;
-        [Space] [SerializeField] private MirrorPlayerInstaller playerPrefab;
+        [SerializeField] private MirrorServer mirrorServer;
+        [Space] [SerializeField] private Main.Player playerPrefab;
         [Range(0, 4)] [SerializeField] private int count;
-        [Space] [SerializeField] private Bullet bulletPrefab;
-        [Range(0, 600)] [SerializeField] private int poolCount;
+        
+        [Space]
+        [SerializeField] private CoroutineExecuter coroutineExecuter;
+        [SerializeField] private LobbyNamesSyncer lobbyNamesSyncer;
+        [SerializeField] private PositionMessage[] spawnPositions;
+        [SerializeField] private NetworkBehaviour[] networkBehaviours;
+        [SerializeField] private NetworkRoomPlayer networkRoomPlayerPrefab;
         
         public override void InstallBindings()
         {
-            Container.BindInstance(server).AsSingle();
+            Container.BindInstance(mirrorServer).AsSingle();
             Container.BindInstance(roomSettings).AsSingle();
             
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
-
-            Container.Bind<BulletFactory>().AsSingle().WithArguments(bulletPrefab);
-            Container.Bind<BulletPool>().AsSingle().WithArguments(poolCount);
-
+            
             Container.Bind<PlayerFactory>().AsSingle().WithArguments(playerPrefab);
             Container.Bind<PlayerPool>().AsSingle().WithArguments(count);
+
+            Container.BindInstance(coroutineExecuter).AsSingle();
+            Container.BindInstance(lobbyNamesSyncer).AsSingle().NonLazy();
+            Container.Bind<NetworkBehavioursSpawner>()
+                .AsSingle()
+                .WithArguments(coroutineExecuter, new NetworkBehavioursProvider(networkBehaviours), networkRoomPlayerPrefab).NonLazy();
+            Container.Bind<MirrorPlayerSpawner>().AsSingle().WithArguments(spawnPositions).NonLazy();
         }
     }
 }

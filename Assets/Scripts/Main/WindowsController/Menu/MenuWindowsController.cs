@@ -1,33 +1,36 @@
 using WindowsSystem;
 using Zenject;
 
-public class MenuWindowsController : WindowsController
+namespace Shadow_Dominion
 {
-    private MirrorServer _mirrorServer;
-    
-    [Inject]
-    public void Construct(MirrorServer mirrorServer)
+    public class MenuWindowsController : WindowsController
     {
-        _mirrorServer = mirrorServer;
-    }
+        private MirrorServer _mirrorServer;
 
-    public new void Start()
-    {
-        base.Start();
+        [Inject]
+        public void Construct(MirrorServer mirrorServer)
+        {
+            _mirrorServer = mirrorServer;
+        }
 
-        _mirrorServer.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
-        _mirrorServer.ActionOnHostStart += OpenWindow<PlayerListingWindow>;
-        
-        _mirrorServer.ActionOnStopClient += OpenWindow<MainWindow>;
-        _mirrorServer.ActionOnHostStop += OpenWindow<MainWindow>;
-    }
+        public new void Start()
+        {
+            base.Start();
 
-    protected void OnDestroy()
-    {
-        _mirrorServer.ActionOnStartClient -= OpenWindow<PlayerListingWindow>;
-        _mirrorServer.ActionOnHostStart -= OpenWindow<PlayerListingWindow>;
-        
-        _mirrorServer.ActionOnStopClient -= OpenWindow<MainWindow>;
-        _mirrorServer.ActionOnHostStop -= OpenWindow<MainWindow>;
+            _mirrorServer.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
+            _mirrorServer.ActionOnHostStart += OpenWindow<PlayerListingWindow>;
+
+            _mirrorServer.ActionOnStopClient += OpenWindow<MainWindow>;
+            _mirrorServer.ActionOnHostStop += OpenWindow<MainWindow>;
+        }
+
+        protected void OnDestroy()
+        {
+            _mirrorServer.ActionOnStartClient -= OpenWindow<PlayerListingWindow>;
+            _mirrorServer.ActionOnHostStart -= OpenWindow<PlayerListingWindow>;
+
+            _mirrorServer.ActionOnStopClient -= OpenWindow<MainWindow>;
+            _mirrorServer.ActionOnHostStop -= OpenWindow<MainWindow>;
+        }
     }
 }

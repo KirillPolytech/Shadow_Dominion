@@ -29,9 +29,8 @@ namespace Shadow_Dominion.Zombie
             if (_iZombieTarget == null)
                 return;
 
-            var enumerator = _iZombieTarget.Position.GetEnumerator().Current;
-            Vector3 destination = enumerator.position -
-                                  (transform.position - enumerator.position).normalized;
+            var enumerator = _iZombieTarget.Position;
+            Vector3 destination = enumerator.position - (transform.position - enumerator.position).normalized;
             _navMeshAgent.SetDestination(destination);
         }
     }

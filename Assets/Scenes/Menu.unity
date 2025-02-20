@@ -1925,19 +1925,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 669854400}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2107570160}
-        m_TargetAssemblyTypeName: WindowsSystem.WindowsController, Assembly-CSharp
-        m_MethodName: OpenWindow
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1407108558}
-          m_ObjectArgumentAssemblyTypeName: WindowsSystem.Window, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &669854400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9045,7 +9033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5056800, y: 8180000}
+  m_AnchoredPosition: {x: -5460960, y: 8864500}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1931282829039140113

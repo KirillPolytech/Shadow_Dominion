@@ -66,7 +66,7 @@ namespace Shadow_Dominion.Main
             Vector3 dir = (_cameraLook.CameraTransform.forward * y +
                             _cameraLook.CameraTransform.right * x).normalized;
             dir *= _playerSettings.walkSpeed * (1 - isRunInt) + _playerSettings.runSpeed * isRunInt;
-            dir.y = 0;
+            dir.y = Physics.gravity.y;
 
             _charRigidbody.linearVelocity = dir;
 

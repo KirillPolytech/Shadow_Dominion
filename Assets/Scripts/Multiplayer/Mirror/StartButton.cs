@@ -3,36 +3,39 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Zenject;
 
-public class StartButton : Button
+namespace Shadow_Dominion
 {
-    private MirrorServer _mirrorServer;
-    private bool _isInitialized;
-    private UnityAction _action;
-
-    [Inject]
-    public void Construct(MirrorServer mirrorServer, RoomSettings roomSettings)
+    public class StartButton : Button
     {
-        _mirrorServer = mirrorServer;
+        private MirrorServer _mirrorServer;
+        private bool _isInitialized;
+        private UnityAction _action;
 
-        _mirrorServer.ActionOnHostStart += Subscribe;
-        _mirrorServer.ActionOnHostStop += Unsubscribe;
+        [Inject]
+        public void Construct(MirrorServer mirrorServer, RoomSettings roomSettings)
+        {
+            _mirrorServer = mirrorServer;
 
-        _action = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
-        
-        _isInitialized = true;
-    }
-    
-    private void Subscribe() => onClick.AddListener(_action.Invoke);
-    private void Unsubscribe() => onClick.RemoveListener(_action.Invoke);
+            _mirrorServer.ActionOnHostStart += Subscribe;
+            _mirrorServer.ActionOnHostStop += Unsubscribe;
 
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        
-        if (!_isInitialized)
-            return;
-        
-        _mirrorServer.ActionOnHostStart -= Subscribe;
-        _mirrorServer.ActionOnHostStop -= Unsubscribe;
+            _action = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
+
+            _isInitialized = true;
+        }
+
+        private void Subscribe() => onClick.AddListener(_action.Invoke);
+        private void Unsubscribe() => onClick.RemoveListener(_action.Invoke);
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            if (!_isInitialized)
+                return;
+
+            _mirrorServer.ActionOnHostStart -= Subscribe;
+            _mirrorServer.ActionOnHostStop -= Unsubscribe;
+        }
     }
 }

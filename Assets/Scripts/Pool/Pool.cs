@@ -7,9 +7,9 @@ namespace Shadow_Dominion
 {
     public abstract class Pool<T> where T : Object
     {
-        protected readonly Factory<T> _factory;
+        private readonly Factory<T> _factory;
+        private readonly int _count;
         protected readonly List<T> _objects = new List<T>();
-        protected readonly int _count;
 
         public Pool(Factory<T> factory, int count)
         {

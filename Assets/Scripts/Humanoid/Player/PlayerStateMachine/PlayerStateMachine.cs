@@ -28,23 +28,24 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             StandUpFaceUpState standUpFaceUpState =
                 new StandUpFaceUpState(player, ragdollRoot, rootRig, playerAnimation, 
-                    cameraLook, coroutineExecuter, this, standUpFaceUp.length, boneController, ExecutingCoroutine);
+                    cameraLook, coroutineExecuter, this, standUpFaceUp.length, boneController, WaitForSecond);
             StandUpFaceDownState standUpFaceDownState =
                 new StandUpFaceDownState(player, ragdollRoot, rootRig, playerAnimation, 
-                    cameraLook, coroutineExecuter, this, standUpFaceDown.length, boneController, ExecutingCoroutine);
+                    cameraLook, coroutineExecuter, this, standUpFaceDown.length, boneController, WaitForSecond);
             RagdollState ragdollState = 
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneController, inputHandler, ragdollRoot, this);
             DeathState deathState = new DeathState(playerAnimation, coroutineExecuter);
+            DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler);
+            InActiveState inActiveState = new InActiveState();
 
             _states.Add(standUpFaceUpState);
             _states.Add(standUpFaceDownState);
             _states.Add(ragdollState);
-            _states.Add(new DefaultState(playerAnimation, playerMovement, inputHandler));
-            
-            SetState<DefaultState>();
+            _states.Add(defaultState);
+            _states.Add(inActiveState);
         }
         
-        private IEnumerator ExecutingCoroutine(float waitTime, Action callBack)
+        private IEnumerator WaitForSecond(float waitTime, Action callBack)
         {
             yield return new WaitForSeconds(waitTime);
 

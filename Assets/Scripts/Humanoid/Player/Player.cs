@@ -1,24 +1,23 @@
-using System.Collections.Generic;
-using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.Zombie;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Main
 {
     public class Player : Humanoid, IZombieTarget
     {
-        public IEnumerable<Transform> Position { get; set; }
+        public Transform Position { get; set; }
+        
+        public PlayerStateMachine PlayerStateMachine;
         
         private Rigidbody _rigidbody;
 
-        private void Awake()
+        public void Construct(Transform t, PlayerStateMachine playerStateMachine)
         {
-            _rigidbody = GetComponent<Rigidbody>();
-
-            Position = new []{transform};
+            Position = t;
+            _rigidbody = t.GetComponent<Rigidbody>();
+            PlayerStateMachine = playerStateMachine;
         }
 
         public void IsKinematic(bool iskinematic)
