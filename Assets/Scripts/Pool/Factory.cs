@@ -17,7 +17,7 @@ namespace Shadow_Dominion
             _parent = new GameObject($"{typeof(T)} parent").transform;
         }
         
-        public T Create()
+        public virtual T Create()
         {
             T t = _instantiator.InstantiatePrefabForComponent<T>(_prefab);
             t.GameObject().transform.SetParent(_parent);

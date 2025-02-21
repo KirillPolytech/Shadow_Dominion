@@ -13,7 +13,7 @@ namespace WindowsSystem
         {
             Current = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
 
-            OpenWindow(Current);
+            //OpenWindow(Current);
         }
 
         public void OpenWindow(Window window)

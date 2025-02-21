@@ -7,7 +7,7 @@ using UnityEngine;
 using WindowsSystem;
 using Zenject;
 
-public class LevelStateMachine : IStateMachine, IDisposable
+public class LevelStateMachine : IStateMachine, IInitializable, IDisposable
 {
     private readonly InputHandler _inputHandler;
 
@@ -18,18 +18,29 @@ public class LevelStateMachine : IStateMachine, IDisposable
         CursorService cursorService,
         WindowsController windowsController,
         InputHandler inputHandler,
-        PlayerPool playerPool,
-        MirrorServer mirrorServer)
+        MirrorServer mirrorServer,
+        CoroutineExecuter coroutineExecuter,
+        MirrorPlayerSpawner mirrorPlayerSpawner,
+        InitializeStateUI initializeStateUI)
     {
         _inputHandler = inputHandler;
 
         _states.Add(new GameplayState(windowsController, cursorService));
         _states.Add(new PauseState(windowsController, cursorService));
-        _states.Add(new LevelInitializeState(windowsController, cursorService, playerPool));
-
-        SetState<LevelInitializeState>();
-
+        _states.Add(new LevelInitializeState(
+            windowsController, cursorService, mirrorPlayerSpawner, coroutineExecuter, MirrorLevel.Instance, initializeStateUI));
+        
         _inputHandler.OnInputUpdate += HandleInput;
+    }
+    
+    public void Dispose()
+    {
+        _inputHandler.OnInputUpdate -= HandleInput;
+    }
+    
+    public void Initialize()
+    {
+        SetState<LevelInitializeState>();
     }
 
     private void HandleInput(InputData inputData)
@@ -45,11 +56,6 @@ public class LevelStateMachine : IStateMachine, IDisposable
         }
         
         SetState(_lastState);
-    }
-
-    public void Dispose()
-    {
-        _inputHandler.OnInputUpdate -= HandleInput;
     }
 
     public sealed override void SetState<T>()

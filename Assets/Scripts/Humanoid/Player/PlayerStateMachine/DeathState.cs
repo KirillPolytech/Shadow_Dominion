@@ -2,20 +2,22 @@
 {
     public class DeathState : PlayerState
     {
-        private CoroutineExecuter _coroutineExecuter;
+        private readonly BoneController[] _boneControllers;
         
         public DeathState(
             PlayerAnimation playerAnimation,
-            CoroutineExecuter coroutineExecuter) : base(playerAnimation)
+            BoneController[] boneControllers) : base(playerAnimation)
         {
-            _coroutineExecuter = coroutineExecuter;
+            _boneControllers = boneControllers;
         }
         
         public override void Enter()
         {
-            //copyTo[ind].IsPositionApplying(false);
-            //copyTo[ind].IsRotationApplying(false);
-
+            for (int i = 0; i < _boneControllers.Length; i++)
+            {
+                _boneControllers[i].IsPositionApplying(false);
+                _boneControllers[i].IsRotationApplying(false);
+            }
         }
 
         public override void Exit()

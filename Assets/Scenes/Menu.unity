@@ -1188,9 +1188,53 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1525788036}
     - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: content
+      value: 
+      objectReference: {fileID: 1730393408261721892}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: mirrorLevel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: mirrorLobby
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: roomViewPrefab
+      value: 
+      objectReference: {fileID: 2636602503210593802, guid: 4adf6d72eda9a794ca01347dc0be4065, type: 3}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: roomPlayerParent
+      value: 
+      objectReference: {fileID: 1730393408261721892}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: networkRoomPlayers
+      value: 
+      objectReference: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
       propertyPath: menuWindowsController
       value: 
       objectReference: {fileID: 2107570160}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: networkRoomPlayerPrefab
+      value: 
+      objectReference: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: networkRoomPlayers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: 'networkRoomPlayers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: 'networkRoomPlayers.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623376585400100127, guid: aab2684839b65134495bc85e4eee2611, type: 3}
+      propertyPath: 'networkRoomPlayers.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6857960017947924866, guid: aab2684839b65134495bc85e4eee2611, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.20882176
@@ -9033,7 +9077,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5460960, y: 8864500}
+  m_AnchoredPosition: {x: -609760, y: 1041000}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1931282829039140113
@@ -9096,20 +9140,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7586358951340735522}
   m_CullTransparentMesh: 1
---- !u!114 &2070200229152635119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8770505913797935034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3f06915099e9b24690d174814f8875e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parent: {fileID: 1730393408261721892}
-  prefab: {fileID: 2636602503210593802, guid: f3babcc3bf2f1694bb05bd6bebd9a5de, type: 3}
 --- !u!1 &2196883944258308156
 GameObject:
   m_ObjectHideFlags: 0
@@ -10100,7 +10130,7 @@ GameObject:
   - component: {fileID: 8770505913797935036}
   - component: {fileID: 8770505913797935035}
   - component: {fileID: 8770505913797935037}
-  - component: {fileID: 2070200229152635119}
+  - component: {fileID: 8770505913797935038}
   m_Layer: 5
   m_Name: PlayerListingCanvas
   m_TagString: Untagged
@@ -10171,6 +10201,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &8770505913797935038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770505913797935034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e3002afff6dd34a8830f7e5ec8b17e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 1730393408261721892}
+  roomViewPrefab: {fileID: 6163281486972491116, guid: 4adf6d72eda9a794ca01347dc0be4065, type: 3}
 --- !u!224 &8843786774706449224
 RectTransform:
   m_ObjectHideFlags: 0

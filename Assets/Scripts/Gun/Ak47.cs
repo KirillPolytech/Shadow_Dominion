@@ -78,6 +78,9 @@ namespace Shadow_Dominion
             euler.x = euler.x > 180 ? euler.x - 360 : euler.x;
             euler.x = Mathf.Clamp(euler.x, -_weaponSo.Limit, _weaponSo.Limit);
             
+            euler.y = euler.y > 180 ? euler.y - 360 : euler.y;
+            euler.y = Mathf.Clamp(euler.y, -_weaponSo.Limit, _weaponSo.Limit);
+            
             weaponPose.rotation = Quaternion.Euler(euler);
         }
 

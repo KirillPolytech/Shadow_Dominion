@@ -18,8 +18,7 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private TMP_InputField PORT;
-
-
+        
         public override void InstallBindings()
         {
             IP.text = "127.0.0.1";

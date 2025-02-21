@@ -11,38 +11,44 @@ namespace Shadow_Dominion
         [Header("Configs")]
         [SerializeField]
         private RoomSettings roomSettings;
+
         [Space]
-        
-        [SerializeField] private MirrorServer mirrorServer;
-        [Space] [SerializeField] private Main.Player playerPrefab;
-        [Range(0, 4)] [SerializeField] private int count;
-        
+        [SerializeField]
+        private MirrorServer mirrorServer;
+
         [Space]
-        [SerializeField] private CoroutineExecuter coroutineExecuter;
-        [SerializeField] private LobbyNamesSyncer lobbyNamesSyncer;
-        [SerializeField] private PositionMessage[] spawnPositions;
-        [SerializeField] private NetworkBehaviour[] networkBehaviours;
-        [SerializeField] private NetworkRoomPlayer networkRoomPlayerPrefab;
+        [SerializeField]
+        private Main.Player playerPrefab;
+
+        [Space]
+        [SerializeField]
+        private CoroutineExecuter coroutineExecuter;
+
+        [SerializeField]
+        private PositionMessage[] spawnPositions;
+
+        [SerializeField]
+        private NetworkRoomPlayer networkRoomPlayers;
         
         public override void InstallBindings()
         {
             Container.BindInstance(mirrorServer).AsSingle();
             Container.BindInstance(roomSettings).AsSingle();
-            
+
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
-            
+
             Container.Bind<PlayerFactory>().AsSingle().WithArguments(playerPrefab);
-            Container.Bind<PlayerPool>().AsSingle().WithArguments(count);
 
             Container.BindInstance(coroutineExecuter).AsSingle();
-            Container.BindInstance(lobbyNamesSyncer).AsSingle().NonLazy();
-            Container.Bind<NetworkBehavioursSpawner>()
-                .AsSingle()
-                .WithArguments(coroutineExecuter, new NetworkBehavioursProvider(networkBehaviours), networkRoomPlayerPrefab).NonLazy();
-            Container.Bind<MirrorPlayerSpawner>().AsSingle().WithArguments(spawnPositions).NonLazy();
+
+            Container.Bind<MirrorPlayerSpawner>().AsSingle().NonLazy();
+            
+            Container.BindInstance(networkRoomPlayers).AsSingle();
+
+            Container.Bind<PositionMessage[]>().FromInstance(spawnPositions);
         }
     }
 }

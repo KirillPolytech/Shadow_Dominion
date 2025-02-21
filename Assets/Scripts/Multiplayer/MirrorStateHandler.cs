@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.StateMachine;
@@ -24,10 +23,7 @@ namespace Shadow_Dominion
 
         private void Serialize(IState newState)
         {
-            // Сообщаем всем клиентам
             CmdSetState(newState.GetType().ToString());
-
-            Debug.Log($"newState: {newState.GetType()}");
         }
         
         [Command]

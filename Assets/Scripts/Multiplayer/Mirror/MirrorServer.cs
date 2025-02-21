@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -7,14 +6,14 @@ namespace Shadow_Dominion
 {
     public class MirrorServer : NetworkRoomManager
     {
-        private readonly List<NetworkConnection> _players = new List<NetworkConnection>();
+        public static MirrorServer Instance;
 
         public event Action ActionOnHostStart;
         public event Action ActionOnHostStop;
         public event Action ActionOnServerAddPlayer;
-        public event Action<NetworkConnection> ActionOnServerConnectWithArg;
+        public event Action<NetworkConnectionToClient> ActionOnServerConnectWithArg;
         public event Action ActionOnServerConnect;
-        public event Action<NetworkConnection> ActionOnServerDisconnectWithArg;
+        public event Action<NetworkConnectionToClient> ActionOnServerDisconnectWithArg;
         public event Action ActionOnServerDisconnect;
 
         public event Action ActionOnStartClient;
@@ -22,8 +21,12 @@ namespace Shadow_Dominion
         public event Action ActionOnClientConnect;
         public event Action ActionOnClientDisconnect;
         public event Action ActionOnClientChangeScene;
-        
+
         public event Action<NetworkConnectionToClient> ActionOnRoomServerAddedPlayerWithArg;
+        public event Action<NetworkConnectionToClient> ActionOnRoomServerSceneLoadedForPlayerWithArg;
+        public event Action ActionOnRoomServerSceneLoadedForPlayer;
+        
+        public event Action ActionOnServerSceneChanged;
 
         public event Action ActionOnAnyChange;
 
@@ -32,6 +35,12 @@ namespace Shadow_Dominion
         public override void Awake()
         {
             base.Awake();
+
+            if (!Instance)
+                Instance = this;
+            else
+                Destroy(gameObject);
+
 
             DontDestroyOnLoad(gameObject);
 
@@ -45,11 +54,6 @@ namespace Shadow_Dominion
             ActionOnStopClient += OnAnyChange;
             ActionOnClientConnect += OnAnyChange;
             ActionOnClientDisconnect += OnAnyChange;
-            
-            ActionOnServerConnectWithArg += _players.Add;
-
-            _cachedRemove = con => _players.Remove(con);
-            ActionOnServerDisconnectWithArg += _cachedRemove;
         }
 
         public override void OnDestroy()
@@ -65,9 +69,6 @@ namespace Shadow_Dominion
             ActionOnStopClient -= OnAnyChange;
             ActionOnClientConnect -= OnAnyChange;
             ActionOnClientDisconnect -= OnAnyChange;
-
-            ActionOnServerConnectWithArg -= _players.Add;
-            ActionOnServerDisconnectWithArg -= _cachedRemove;
         }
 
         private void OnAnyChange() => ActionOnAnyChange?.Invoke();
@@ -76,6 +77,8 @@ namespace Shadow_Dominion
         public override void OnServerSceneChanged(string sceneName)
         {
             base.OnServerSceneChanged(sceneName);
+            
+            ActionOnServerSceneChanged?.Invoke();
 
             Debug.Log($"OnServerSceneChanged: {sceneName}");
         }
@@ -127,7 +130,7 @@ namespace Shadow_Dominion
 
             ActionOnServerConnect?.Invoke();
             ActionOnServerConnectWithArg?.Invoke(conn);
-            
+
             //Debug.Log($"OnServerConnect. {conn.address}");
         }
 
@@ -210,9 +213,9 @@ namespace Shadow_Dominion
         public override void OnRoomServerAddPlayer(NetworkConnectionToClient conn)
         {
             base.OnRoomServerAddPlayer(conn);
-            
+
             ActionOnRoomServerAddedPlayerWithArg?.Invoke(conn);
-            
+
             Debug.Log($"OnRoomServerAddPlayer. {conn.address}");
         }
 
@@ -220,9 +223,17 @@ namespace Shadow_Dominion
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
             GameObject gamePlayer)
         {
+            ActionOnRoomServerSceneLoadedForPlayerWithArg?.Invoke(conn);
+            ActionOnRoomServerSceneLoadedForPlayer?.Invoke();
+
             Debug.Log($"OnRoomServerSceneLoadedForPlayer {conn.address}");
 
             return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+        }
+
+        public override void OnServerReady(NetworkConnectionToClient conn)
+        {
+            base.OnServerReady(conn);
         }
     }
 

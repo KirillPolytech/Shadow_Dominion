@@ -10,5 +10,6 @@ namespace Shadow_Dominion
         public PlayerPool(PlayerFactory factory, int count) : base(factory, count) { }
 
         public IEnumerable<Main.Player> GetActivePlayers() => _objects.Where(x => x.isActiveAndEnabled);
+        public IEnumerable<Main.Player> GetPlayers() => _objects;
     }
 }

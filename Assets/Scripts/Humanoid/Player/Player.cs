@@ -7,7 +7,7 @@ namespace Shadow_Dominion.Main
 {
     public class Player : Humanoid, IZombieTarget
     {
-        public Transform Position { get; set; }
+        public Transform PlayersTrasform { get; set; }
         
         public PlayerStateMachine PlayerStateMachine;
         
@@ -15,7 +15,7 @@ namespace Shadow_Dominion.Main
 
         public void Construct(Transform t, PlayerStateMachine playerStateMachine)
         {
-            Position = t;
+            PlayersTrasform = t;
             _rigidbody = t.GetComponent<Rigidbody>();
             PlayerStateMachine = playerStateMachine;
         }
