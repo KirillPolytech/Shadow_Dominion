@@ -183,7 +183,7 @@
       <workItem from="1740103475670" duration="7387000" />
       <workItem from="1740110950589" duration="12440000" />
       <workItem from="1740124073959" duration="8070000" />
-      <workItem from="1740141436113" duration="515000" />
+      <workItem from="1740141436113" duration="6020000" />
     </task>
     <servers />
   </component>
@@ -191,24 +191,5 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Mirror/MirrorLevel.cs</url>
-          <line>39</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\Multiplayer\Mirror\MirrorLevel.cs" initialLine="39" containingFunctionPresentation="Method 'WaitForPlayer'">
-            <startOffsets>
-              <option value="1033" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1087" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

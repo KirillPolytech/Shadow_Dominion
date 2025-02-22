@@ -32,12 +32,18 @@ namespace Shadow_Dominion.Main
         {
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
             Rotate();
-            HandleAnim(data);
+            HandleAnim();
         }
         
         // todo: refactor
-        private void HandleAnim(InputData data)
+        private void HandleAnim()
         {
+            _x = _charRigidbody.linearVelocity.x;
+            _y = _charRigidbody.linearVelocity.y;
+            
+            _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
+            
+            /*
             int leftShift = data.LeftShift ? 1 : 0;
 
             float temp = 0.01f;
@@ -54,6 +60,7 @@ namespace Shadow_Dominion.Main
             _y = Mathf.Clamp(newYvalue, -0.5f, 0.5f); //+ runY;
             
             _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
+            */
         }
 
         private void Move(bool isRun, float x, float y)

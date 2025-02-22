@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoom: 1
   zoomDuration: 5
-  clamp: 2
+  zoomInDistance: 0.6
+  maxZoomDistance: 5
   rayCastDistance: 1000
   layerMask:
     serializedVersion: 2

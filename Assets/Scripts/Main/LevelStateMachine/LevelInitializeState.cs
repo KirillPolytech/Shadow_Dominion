@@ -16,7 +16,7 @@ namespace Shadow_Dominion.StateMachine
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly MirrorLevel _mirrorLevel;
         private readonly InitializeStateUI _initializeStateUI;
-        private readonly float _waitTime = 30;
+        private readonly float _waitTime = 2;
 
         public LevelInitializeState(
             WindowsController windowsController, 

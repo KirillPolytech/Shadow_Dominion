@@ -68,12 +68,13 @@ namespace Shadow_Dominion
             float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
             float cameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
                                                rightMouseValue * _cameraSettings.zoomDuration * Time.fixedDeltaTime,
-                0, _cameraSettings.zoom);
+                _cameraSettings.zoomInDistance, _cameraSettings.zoom);
 
             rightMouseValue = _rightMouseValue == 1 ? 0 : 1;
             _currentScrollDistance = Mathf.Clamp( _currentScrollDistance - _mouseWheelValue * Time.fixedDeltaTime, 
                 0, _cameraSettings.maxZoomDistance);
             float scrollDistance = _currentScrollDistance * rightMouseValue;
+            
             _cinemachineThirdPersonFollow.CameraDistance = cameraDistance + scrollDistance;
         }
 
