@@ -25,6 +25,8 @@ namespace Shadow_Dominion.InputSystem
         public bool RightMouseButtonDown;
         public bool RightMouseButtonUp;
         
+        public bool TAB;
+        
         public bool ESC;
     }
 }

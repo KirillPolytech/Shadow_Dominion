@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using Zenject;
@@ -9,40 +8,34 @@ namespace Shadow_Dominion
 {
     public class MirrorLobby : MirrorSingleton<MirrorLobby>
     {
-        private readonly Dictionary<NetworkConnectionToClient, GameObject> _instances =
-            new Dictionary<NetworkConnectionToClient, GameObject>();
-
-        public event Action OnPlayerReady;
         public event Action<string> OnPlayerReadyWithAddress;
-        public event Action<string> OnViewSpawn;
+        public event Action OnPlayerReady;
 
-        private Action<NetworkConnectionToClient> _cached;
+        private Action<NetworkConnectionToClient> _cachedOnServerConnectWithArg;
         private MirrorServer _mirrorServer;
         private CoroutineExecuter _coroutineExecuter;
-        private NetworkRoomPlayer _networkRoomPlayerprefab;
 
         [Inject]
         public void Construct(
             MirrorServer mirrorServer,
-            CoroutineExecuter coroutineExecuter,
-            NetworkRoomPlayer networkRoomPlayerprefab)
+            CoroutineExecuter coroutineExecuter)
         {
             _mirrorServer = mirrorServer;
             _coroutineExecuter = coroutineExecuter;
-            _networkRoomPlayerprefab = networkRoomPlayerprefab;
 
-            _cached = arg => _coroutineExecuter.Execute(WaitForClientReady(arg));
-
-            _mirrorServer.ActionOnServerConnectWithArg += _cached;
-            _mirrorServer.ActionOnServerDisconnectWithArg += DispawnRoomPlayer;
-            OnPlayerReadyWithAddress += RpcSpawnView;
+            _cachedOnServerConnectWithArg = arg => _coroutineExecuter.Execute(WaitForClientReady(arg));
+            
+            _mirrorServer.ActionOnServerConnectWithArg += _cachedOnServerConnectWithArg;
+            
+            Debug.Log("Lobby spawned");
         }
 
         private void OnDestroy()
         {
-            _mirrorServer.ActionOnServerConnectWithArg -= _cached;
-            _mirrorServer.ActionOnServerDisconnectWithArg -= DispawnRoomPlayer;
-            OnPlayerReadyWithAddress -= RpcSpawnView;
+            if (!isServer)
+                return;
+            
+            _mirrorServer.ActionOnServerConnectWithArg -= _cachedOnServerConnectWithArg;
         }
 
         private IEnumerator WaitForClientReady(NetworkConnectionToClient conn)
@@ -51,35 +44,57 @@ namespace Shadow_Dominion
             {
                 yield return new WaitForFixedUpdate();
             }
-
-            SpawnRoomPlayer(conn);
-
-            OnPlayerReady?.Invoke();
+            
             OnPlayerReadyWithAddress?.Invoke(conn.address);
+            OnPlayerReady?.Invoke();
+            
+            Debug.Log(isServer + " " + isOwned + " " + isClient + " " + netId + " " + conn.identity);
         }
 
         [ClientRpc]
-        private void RpcSpawnView(string address)
+        public void RpcSpawnView(string address)
         {
-            OnViewSpawn?.Invoke(address);
-        }
-
-        private void SpawnRoomPlayer(NetworkConnectionToClient conn)
-        {
-            GameObject instance = Instantiate(_networkRoomPlayerprefab).gameObject;
-            _instances.Add(conn, instance);
-            NetworkServer.AddPlayerForConnection(conn, instance.gameObject);
-        }
-
-        private void DispawnRoomPlayer(NetworkConnectionToClient conn)
-        {
-            _instances.TryGetValue(conn, out GameObject value);
-
-            if (!value)
+            if (!CheckPlayerListingInstance())
                 return;
-
-            _instances.Remove(conn);
-            NetworkServer.RemovePlayerForConnection(conn, RemovePlayerOptions.Destroy);
+            
+            PlayerListing.Instance.SpawnView(address);
+        }
+        
+        [ClientRpc]
+        public void RpcDispawnView(string address)
+        {
+            if (!CheckPlayerListingInstance())
+                return;
+            
+            PlayerListing.Instance.Dispawn(address);
+        }
+            
+        private bool CheckPlayerListingInstance()
+        {
+            if (!PlayerListing.Instance)
+                Debug.LogWarning($"PlayerListing.Instance is null");
+            
+            return PlayerListing.Instance;
         }
     }
 }
+
+/*
+private void SpawnRoomPlayer(NetworkConnectionToClient conn)
+{
+//GameObject instance = Instantiate(_networkRoomPlayerprefab).gameObject;
+//_instances.Add(conn, instance);
+// NetworkServer.AddPlayerForConnection(conn, instance.gameObject);
+}
+
+private void DispawnRoomPlayer(NetworkConnectionToClient conn)
+{
+//_instances.TryGetValue(conn, out GameObject value);
+
+//if (!value)
+//return;
+
+//_instances.Remove(conn);
+//NetworkServer.RemovePlayerForConnection(conn, RemovePlayerOptions.Destroy);
+}
+*/

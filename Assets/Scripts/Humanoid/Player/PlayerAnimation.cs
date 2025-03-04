@@ -47,7 +47,7 @@ namespace Shadow_Dominion.Player
 
         private IEnumerator ChangeWeight(Rig rig, float targetValue)
         {
-            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * _playerSettings.aimRigWeightChange;
+            float step = -(rig.weight - targetValue) * Time.fixedDeltaTime * _playerSettings.AimRigWeightChange;
 
             while (Mathf.Abs(rig.weight - targetValue) > _playerSettings.Approximation)
             {

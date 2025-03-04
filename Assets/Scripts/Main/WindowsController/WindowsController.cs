@@ -22,6 +22,7 @@ namespace WindowsSystem
                 m.Close();
 
             window.Open();
+            Current = window;
 
 #if UNITY_EDITOR
             Debug.Log($"Window open: {window.GetType()}");
@@ -36,6 +37,7 @@ namespace WindowsSystem
             Window window = windows.FirstOrDefault(x => x.GetType() == typeof(T));
 
             window.Open();
+            Current = window;
 
 #if UNITY_EDITOR
             Debug.Log($"Window open: {window.GetType()}");

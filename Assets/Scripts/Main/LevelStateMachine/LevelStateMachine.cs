@@ -1,80 +1,85 @@
-using System;
 using System.Linq;
-using Shadow_Dominion;
+using Mirror;
 using Shadow_Dominion.InputSystem;
-using Shadow_Dominion.StateMachine;
 using UnityEngine;
 using WindowsSystem;
 using Zenject;
 
-public class LevelStateMachine : IStateMachine, IInitializable, IDisposable
+namespace Shadow_Dominion.StateMachine
 {
-    private readonly InputHandler _inputHandler;
-
-    private IState _lastState;
-
-    [Inject]
-    public LevelStateMachine(
-        CursorService cursorService,
-        WindowsController windowsController,
-        InputHandler inputHandler,
-        MirrorServer mirrorServer,
-        CoroutineExecuter coroutineExecuter,
-        MirrorPlayerSpawner mirrorPlayerSpawner,
-        InitializeStateUI initializeStateUI)
+    public class LevelStateMachine : IStateMachine, IInitializable
     {
-        _inputHandler = inputHandler;
+        private readonly InputHandler _inputHandler;
+        private readonly MirrorLevelSyncer _mirrorLevelSyncer;
 
-        _states.Add(new GameplayState(windowsController, cursorService));
-        _states.Add(new PauseState(windowsController, cursorService));
-        _states.Add(new LevelInitializeState(
-            windowsController, cursorService, mirrorPlayerSpawner, coroutineExecuter, MirrorLevel.Instance, initializeStateUI));
-        
-        _inputHandler.OnInputUpdate += HandleInput;
-    }
-    
-    public void Dispose()
-    {
-        _inputHandler.OnInputUpdate -= HandleInput;
-    }
-    
-    public void Initialize()
-    {
-        SetState<LevelInitializeState>();
-    }
+        private IState _lastState;
 
-    private void HandleInput(InputData inputData)
-    {
-        if (!inputData.ESC)
-            return;
-
-        if (CurrentState.GetType() != typeof(PauseState))
+        [Inject]
+        public LevelStateMachine(
+            CursorService cursorService,
+            WindowsController windowsController,
+            InputHandler inputHandler,
+            MirrorServer mirrorServer,
+            CoroutineExecuter coroutineExecuter,
+            MirrorPlayerSpawner mirrorPlayerSpawner,
+            InitializeStateUI initializeStateUI,
+            LevelSO levelSo)
         {
-            _lastState = CurrentState;
-            SetState<PauseState>();
-            return;
+            _inputHandler = inputHandler;
+            _mirrorLevelSyncer = new MirrorLevelSyncer(this);
+
+            _states.Add(new GameplayState(windowsController, cursorService));
+            _states.Add(new LevelInitializeState(
+                windowsController,
+                cursorService,
+                mirrorPlayerSpawner,
+                coroutineExecuter,
+                initializeStateUI,
+                this,
+                levelSo));
+        }
+
+        public void Initialize()
+        {
+            SetState<LevelInitializeState>();
+        }
+
+        public sealed override void SetState<T>()
+        {
+            IState state = _states.First(x => x.GetType() == typeof(T));
+
+            CurrentState?.Exit();
+            CurrentState = state;
+            CurrentState.Enter();
+            
+            NetworkClient.Send(new LevelState(state.GetType().ToString()));
+
+            Debug.Log($"Current level state: {CurrentState.GetType()}");
+        }
+
+        public void SetState(IState state)
+        {
+            CurrentState?.Exit();
+            CurrentState = state;
+            CurrentState.Enter();
+            
+            NetworkClient.Send(new LevelState(state.GetType().ToString()));
+
+            Debug.Log($"Current level state: {CurrentState.GetType()}");
         }
         
-        SetState(_lastState);
-    }
+        public void SetState(string stateName)
+        {
+            IState state = _states.First(x => x.GetType().ToString() == stateName);
 
-    public sealed override void SetState<T>()
-    {
-        IState state = _states.First(x => x.GetType() == typeof(T));
+            if (CurrentState == state)
+                return;
 
-        CurrentState?.Exit();
-        CurrentState = state;
-        CurrentState.Enter();
-
-        Debug.Log($"Current level state: {CurrentState.GetType()}");
-    }
-
-    public void SetState(IState state)
-    {
-        CurrentState?.Exit();
-        CurrentState = state;
-        CurrentState.Enter();
-
-        Debug.Log($"Current level state: {CurrentState.GetType()}");
+            CurrentState?.Exit();
+            CurrentState = state;
+            CurrentState.Enter();
+            
+            Debug.Log($"Current player state: {CurrentState.GetType()}");
+        }
     }
 }

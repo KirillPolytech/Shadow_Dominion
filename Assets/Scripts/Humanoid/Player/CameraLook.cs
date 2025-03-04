@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using Shadow_Dominion.InputSystem;
 using Unity.Cinemachine;
@@ -22,6 +23,7 @@ namespace Shadow_Dominion
         private int _rightMouseValue;
         private float _mouseWheelValue;
         private float _currentScrollDistance;
+        private float _aimDistance;
 
         public void Construct(
             CameraSettings camSettings,
@@ -34,11 +36,13 @@ namespace Shadow_Dominion
             _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
 
             _camera = GetComponent<Camera>();
-        }
-
-        private void OnEnable()
-        {
+            
             _monoInputHandler.OnInputUpdate += HandleInput;
+        }
+        
+        private void OnDestroy()
+        {
+            _monoInputHandler.OnInputUpdate -= HandleInput;
         }
 
         private void Start()
@@ -64,18 +68,12 @@ namespace Shadow_Dominion
         {
             if (CanZooming == false)
                 return;
-            
-            float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
-            float cameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance +
-                                               rightMouseValue * _cameraSettings.zoomDuration * Time.fixedDeltaTime,
-                _cameraSettings.zoomInDistance, _cameraSettings.zoom);
 
-            rightMouseValue = _rightMouseValue == 1 ? 0 : 1;
-            _currentScrollDistance = Mathf.Clamp( _currentScrollDistance - _mouseWheelValue * Time.fixedDeltaTime, 
-                0, _cameraSettings.maxZoomDistance);
-            float scrollDistance = _currentScrollDistance * rightMouseValue;
+            float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
             
-            _cinemachineThirdPersonFollow.CameraDistance = cameraDistance + scrollDistance;
+            _cinemachineThirdPersonFollow.CameraDistance += rightMouseValue * _cameraSettings.ZoomSpeed * Time.fixedDeltaTime;
+            _cinemachineThirdPersonFollow.CameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance,
+                _cameraSettings.cameraMinDistance, _cameraSettings.cameraMaxDistance);
         }
 
         private void CastRay()
@@ -95,11 +93,6 @@ namespace Shadow_Dominion
         private void OnDrawGizmos()
         {
             Debug.DrawLine(_ray.origin, _hit.point, Color.red);
-        }
-
-        private void OnDisable()
-        {
-            _monoInputHandler.OnInputUpdate -= HandleInput;
         }
     }
 }

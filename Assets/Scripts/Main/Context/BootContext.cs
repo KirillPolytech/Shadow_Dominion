@@ -1,4 +1,5 @@
 using Mirror;
+using Multiplayer.Structs;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
@@ -11,6 +12,9 @@ namespace Shadow_Dominion
         [Header("Configs")]
         [SerializeField]
         private RoomSettings roomSettings;
+        
+        [SerializeField]
+        private LevelSO levelSO;
 
         [Space]
         [SerializeField]
@@ -19,6 +23,7 @@ namespace Shadow_Dominion
         [Space]
         [SerializeField]
         private Main.Player playerPrefab;
+        private NetworkRoomPlayer networkRoomPlayerPrefab;
 
         [Space]
         [SerializeField]
@@ -26,14 +31,13 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private PositionMessage[] spawnPositions;
-
-        [SerializeField]
-        private NetworkRoomPlayer networkRoomPlayers;
         
         public override void InstallBindings()
         {
-            Container.BindInstance(mirrorServer).AsSingle();
             Container.BindInstance(roomSettings).AsSingle();
+            Container.BindInstance(levelSO).AsSingle();
+            
+            Container.BindInstance(mirrorServer).AsSingle();
 
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
@@ -41,13 +45,12 @@ namespace Shadow_Dominion
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
 
             Container.Bind<PlayerFactory>().AsSingle().WithArguments(playerPrefab);
+            Container.Bind<RoomPlayerFactory>().AsSingle().WithArguments(networkRoomPlayerPrefab);
 
             Container.BindInstance(coroutineExecuter).AsSingle();
 
             Container.Bind<MirrorPlayerSpawner>().AsSingle().NonLazy();
             
-            Container.BindInstance(networkRoomPlayers).AsSingle();
-
             Container.Bind<PositionMessage[]>().FromInstance(spawnPositions);
         }
     }

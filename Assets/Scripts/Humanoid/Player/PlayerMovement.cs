@@ -13,7 +13,6 @@ namespace Shadow_Dominion.Main
 
         private Transform _transform;
         private Quaternion _cachedRot;
-        private float _x, _y;
 
         public void Construct(
             PlayerSettings playerSettings,
@@ -32,50 +31,50 @@ namespace Shadow_Dominion.Main
         {
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
             Rotate();
-            HandleAnim();
+            HandleAnim(data);
         }
-        
+
         // todo: refactor
-        private void HandleAnim()
+        private void HandleAnim(InputData data)
         {
-            _x = _charRigidbody.linearVelocity.x;
-            _y = _charRigidbody.linearVelocity.y;
+            float magnitude = new Vector3 (_charRigidbody.linearVelocity.x, 0 , _charRigidbody.linearVelocity.z).magnitude;
+            Vector2 dir = new Vector2(data.HorizontalAxisRaw, data.VerticalAxisRaw);
             
-            _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
+            float speedDen = data.LeftShift ? _playerSettings.MaxRunSpeed : _playerSettings.MaxWalkSpeed;
+            float x = dir.x * magnitude / speedDen;
+            float y = dir.y * magnitude / speedDen;
+
+            x = Mathf.Clamp(x, -1, 1);
+            y = Mathf.Clamp(y, -1, 1);
+
+            _playerAnimation.AnimationStateMachine.SetXY(x, y);
             
-            /*
-            int leftShift = data.LeftShift ? 1 : 0;
-
-            float temp = 0.01f;
-
-            float newXvalue = _x + data.HorizontalAxisRaw * temp;
-            newXvalue *= data.HorizontalAxisRaw == 0 ? 0 : 1;
-            _x = Mathf.Clamp(newXvalue, -1f,1f);
-            
-            float newYvalue = _y + data.VerticalAxisRaw * temp;
-            newYvalue *= data.VerticalAxisRaw == 0 ? 0 : 1;
-
-            //float runY = Mathf.Clamp(data.VerticalAxisRaw * leftShift * temp, -0.5f, 0.5f);
-
-            _y = Mathf.Clamp(newYvalue, -0.5f, 0.5f); //+ runY;
-            
-            _playerAnimation.AnimationStateMachine.SetXY(_x, _y); //data.VerticalAxisRaw  / 2 + 0.5f * leftShift);
-            */
+            // Debug.Log($"magnitude: {magnitude} " + $"x = {dir.x * magnitude} / {_playerSettings.RunSpeed} " + $"y = {dir.y * magnitude} / {_playerSettings.RunSpeed}");
         }
 
         private void Move(bool isRun, float x, float y)
         {
-            if (!_playerSettings.canMove)
+            if (!_playerSettings.CanMove)
                 return;
 
             int isRunInt = isRun ? 1 : 0;
 
-            Vector3 dir = (_cameraLook.CameraTransform.forward * y +
-                            _cameraLook.CameraTransform.right * x).normalized;
-            dir *= _playerSettings.walkSpeed * (1 - isRunInt) + _playerSettings.runSpeed * isRunInt;
+            Vector3 camForward = new Vector3(_cameraLook.CameraTransform.forward.x, 0,
+                _cameraLook.CameraTransform.forward.z);
+            Vector3 camRight = new Vector3(_cameraLook.CameraTransform.right.x, 0,
+                _cameraLook.CameraTransform.right.z);
+            
+            Vector3 dir = (camForward * y + camRight * x).normalized;
+            
+            dir *= _playerSettings.WalkSpeed * (1 - isRunInt) +
+                   _playerSettings.RunSpeed * isRunInt; //* (dir.y < 0 ? 1 : 0.5f);
             dir.y = Physics.gravity.y;
 
-            _charRigidbody.linearVelocity = dir;
+            _charRigidbody.AddForce(dir);
+            _charRigidbody.linearVelocity = Vector3.ClampMagnitude(_charRigidbody.linearVelocity, 
+                isRun ? _playerSettings.MaxRunSpeed : _playerSettings.MaxWalkSpeed);
+            
+            // Debug.Log($"x:{x} y:{y} dir: {dir} isRunInt: {isRunInt}");
 
             Debug.DrawRay(_transform.position + Vector3.up, dir * 10, Color.red);
             Debug.DrawRay(_transform.position, _charRigidbody.linearVelocity * 10, Color.yellow);
@@ -84,7 +83,7 @@ namespace Shadow_Dominion.Main
         // todo: refactor
         private void Rotate()
         {
-            if (!_playerSettings.canRotate)
+            if (!_playerSettings.CanRotate)
                 return;
 
             Vector3 transformForward =
@@ -94,7 +93,7 @@ namespace Shadow_Dominion.Main
 
             Quaternion rot = Quaternion.Lerp(_charRigidbody.rotation,
                 Quaternion.LookRotation(transformForward),
-                _playerSettings.rotSpeed * Time.fixedDeltaTime);
+                _playerSettings.RotSpeed * Time.fixedDeltaTime);
 
             _charRigidbody.MoveRotation(rot);
         }

@@ -43,6 +43,10 @@ namespace Shadow_Dominion.InputSystem
             _inputData.RightMouseButtonUp = Input.GetMouseButtonUp(VariableNames.RightMouseButton);
             
             _inputData.MouseWheelScroll = Input.mouseScrollDelta.y;
+            
+            _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
+            
+            _inputData.ESC = Input.GetKey(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);
         }

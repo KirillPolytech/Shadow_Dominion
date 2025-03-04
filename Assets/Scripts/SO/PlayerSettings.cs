@@ -3,15 +3,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerSettings", menuName = PathStorage.ScriptableObjectMenu + "/PlayerSettings")]
 public class PlayerSettings : ScriptableObject
 {
-    public float walkSpeed = 9;
-    public float runSpeed = 12;
-    public float rotSpeed = 5;
-    public float aimRigWeightChange = 3.5f;
+    public float WalkSpeed = 6.1f;
+    public float RunSpeed = 7;
+    [Space]
+    public float MaxWalkSpeed;
+    public float MaxRunSpeed;
+    [Space]
+    public float RotSpeed = 5;
+    public float AimRigWeightChange = 3.5f;
 
     [Space]
-    public bool canMove = true;
+    public bool CanMove = true;
 
-    public bool canRotate = true;
+    public bool CanRotate = true;
 
     [Space]
     public float Approximation = 0.01f;

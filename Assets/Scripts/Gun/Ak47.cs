@@ -7,6 +7,8 @@ namespace Shadow_Dominion
     public class Ak47 : MonoBehaviour
     {
         private const int Distance = 1000;
+        private const float FullRotation = 360f;
+        private const float HalfRotation = 180f;
 
         public Action<Vector3, Vector3> OnFired;
 
@@ -18,14 +20,15 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private ParticleSystem fireEffect;
-
+        
         public Vector3 HitPoint => _hit.point;
         public Vector3 BulletStartPosition => bulletStartPosition.position;
 
         private IInputHandler _monoInputHandler;
         private WeaponSO _weaponSo;
-        private RaycastHit _hit;
         private Transform _lookTarget;
+        private Transform _transform;
+        private RaycastHit _hit;
 
         public void Construct(
             IInputHandler monoInputHandler,
@@ -35,6 +38,7 @@ namespace Shadow_Dominion
             _monoInputHandler = monoInputHandler;
             _lookTarget = lookTarget;
             _weaponSo = weaponSo;
+            _transform = transform;
 
             _monoInputHandler.OnInputUpdate += Fire;
         }
@@ -75,18 +79,22 @@ namespace Shadow_Dominion
 
         private void RotateTo()
         {
-            weaponPose.localRotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(_lookTarget.position - transform.position),
+            Quaternion targetLocalRotation = Quaternion.LookRotation(_lookTarget.position - _transform.position);
+
+            weaponPose.rotation = Quaternion.Lerp(_transform.rotation, targetLocalRotation,
                 _weaponSo.RotationSpeed * Time.fixedDeltaTime);
+
+            float lookAxisX = weaponPose.localEulerAngles.x > HalfRotation 
+                ? weaponPose.localEulerAngles.x - FullRotation : weaponPose.localEulerAngles.x;
             
-            Vector3 euler = weaponPose.localRotation.eulerAngles;
-            euler.x = euler.x > 180 ? euler.x - 360 : euler.x;
-            euler.x = Mathf.Clamp(euler.x, -_weaponSo.Limit, _weaponSo.Limit);
+            float lookAxisY = weaponPose.localEulerAngles.y > HalfRotation 
+                ? weaponPose.localEulerAngles.y - FullRotation : weaponPose.localEulerAngles.y;
+            float lookAxisZ = weaponPose.localEulerAngles.z;
+
+            lookAxisX = Mathf.Clamp(lookAxisX, -_weaponSo.Limit, _weaponSo.Limit);
+            lookAxisY = Mathf.Clamp(lookAxisY, -_weaponSo.Limit, _weaponSo.Limit);
             
-            euler.y = euler.y > 180 ? euler.y - 360 : euler.y;
-            euler.y = Mathf.Clamp(euler.y, -_weaponSo.Limit, _weaponSo.Limit);
-            
-            weaponPose.localRotation = Quaternion.Euler(euler);
+            weaponPose.localEulerAngles = new Vector3(lookAxisX, lookAxisY, lookAxisZ);
         }
 
         private void OnDrawGizmos()

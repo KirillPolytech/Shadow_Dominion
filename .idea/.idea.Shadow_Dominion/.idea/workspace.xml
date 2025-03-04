@@ -32,14 +32,12 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Main/WindowsController/Menu/JoinWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Mirror/MirrorSingleton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/MirrorRagdollInitializer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/MirrorStateHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/PlayerListing.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/UI/KillFeed.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PathStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/LevelSO.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/PIDData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/WeaponSO.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/ZombieSettings.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TagStorage.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="Toolset" />
@@ -57,7 +55,7 @@
     &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49422634&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49421296&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.intentionPowerPack&quot;
   },
@@ -71,7 +69,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$USER_HOME$/Downloads/Test\Shadow_Dominion.exe" />
+      <option name="EXE_PATH" value="$USER_HOME$/Downloads/New folder\Shadow Dominion.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Admin\Downloads\Test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -104,10 +102,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="25740">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="4556">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="25740" />
+      <option name="pid" value="4556" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -184,6 +182,22 @@
       <workItem from="1740110950589" duration="12440000" />
       <workItem from="1740124073959" duration="8070000" />
       <workItem from="1740141436113" duration="6020000" />
+      <workItem from="1740178240419" duration="11003000" />
+      <workItem from="1740273511230" duration="2739000" />
+      <workItem from="1740278167161" duration="7596000" />
+      <workItem from="1740363138157" duration="4855000" />
+      <workItem from="1740380386066" duration="6691000" />
+      <workItem from="1740398976551" duration="863000" />
+      <workItem from="1740563567480" duration="2588000" />
+      <workItem from="1740566326552" duration="866000" />
+      <workItem from="1740572193987" duration="2902000" />
+      <workItem from="1740644989301" duration="5929000" />
+      <workItem from="1740651096431" duration="207000" />
+      <workItem from="1740899415629" duration="9026000" />
+      <workItem from="1740986256947" duration="10366000" />
+      <workItem from="1741011760399" duration="3761000" />
+      <workItem from="1741016195618" duration="475000" />
+      <workItem from="1741065599487" duration="395000" />
     </task>
     <servers />
   </component>
@@ -191,5 +205,37 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Humanoid/Player/ActiveRagdollSetUp.cs</url>
+          <line>69</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\Humanoid\Player\ActiveRagdollSetUp.cs" initialLine="69" containingFunctionPresentation="Method 'Start'">
+            <startOffsets>
+              <option value="2529" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2542" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Mirror/MirrorServer.cs</url>
+          <line>281</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\Multiplayer\Mirror\MirrorServer.cs" initialLine="265" containingFunctionPresentation="Method 'OnRoomServerAddPlayer'">
+            <startOffsets>
+              <option value="8670" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8721" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

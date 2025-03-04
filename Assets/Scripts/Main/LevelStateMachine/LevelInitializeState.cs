@@ -14,24 +14,26 @@ namespace Shadow_Dominion.StateMachine
         private readonly WindowsController _windowsController;
         private readonly MirrorPlayerSpawner _mirrorPlayerSpawner;
         private readonly CoroutineExecuter _coroutineExecuter;
-        private readonly MirrorLevel _mirrorLevel;
         private readonly InitializeStateUI _initializeStateUI;
-        private readonly float _waitTime = 2;
-
+        private readonly LevelStateMachine _levelStateMachine;
+        private readonly LevelSO _levelSO;
+        
         public LevelInitializeState(
             WindowsController windowsController, 
             CursorService cursorService,
             MirrorPlayerSpawner mirrorPlayerSpawner,
             CoroutineExecuter coroutineExecuter,
-            MirrorLevel mirrorLevel,
-            InitializeStateUI initializeStateUI)
+            InitializeStateUI initializeStateUI,
+            LevelStateMachine levelStateMachine,
+            LevelSO levelSo)
         {
             _windowsController = windowsController;
             _cursorService = cursorService;
             _mirrorPlayerSpawner = mirrorPlayerSpawner;
             _coroutineExecuter = coroutineExecuter;
-            _mirrorLevel = mirrorLevel;
             _initializeStateUI = initializeStateUI;
+            _levelStateMachine = levelStateMachine;
+            _levelSO = levelSo;
         }
 
         public override void Enter()
@@ -39,37 +41,38 @@ namespace Shadow_Dominion.StateMachine
             _windowsController.OpenWindow<InitializeWindow>();
             _cursorService.SetState(CursorLockMode.Locked);
 
-            _mirrorLevel.OnAllPlayersLoaded += () =>
-            {
-                List<KeyValuePair<NetworkConnectionToClient, Main.Player>> players =
-                    _mirrorPlayerSpawner.playerInstances.ToList();
-                foreach (var player in players)
-                {
-                    player.Value.PlayerStateMachine.SetState<InActiveState>();
-                }
-
-                _coroutineExecuter.Execute(WaitForSeconds(players));
-            };
+            MirrorLevel.Instance.OnAllPlayersLoaded += OnAllPlayersLoaded;
         }
 
-        private IEnumerator WaitForSeconds(List<KeyValuePair<NetworkConnectionToClient, Main.Player>> activePlayers)
+        private void OnAllPlayersLoaded()
+        {
+            List<KeyValuePair<NetworkConnectionToClient, Main.Player>> players =
+                _mirrorPlayerSpawner.playerInstances.ToList();
+            
+            foreach (var player in players)
+            {
+                player.Value.PlayerStateMachine.SetState<InActiveState>();
+            }
+
+            _coroutineExecuter.Execute(WaitForSeconds());
+        }
+
+        private IEnumerator WaitForSeconds()
         {
             float t = 0;
-            while (t < _waitTime)
+            while (t < _levelSO.InitializeWaitTime)
             {
                 t += Time.fixedDeltaTime;
                 _initializeStateUI.SetWaitText($"Match starts in {(int)t}");
                 yield return new WaitForFixedUpdate();
             }
             
-            foreach (var player in activePlayers)
-            {
-                player.Value.PlayerStateMachine.SetState<DefaultState>();
-            }
+            _levelStateMachine.SetState<GameplayState>();
         }
 
         public override void Exit()
         {
+            MirrorLevel.Instance.OnAllPlayersLoaded -= OnAllPlayersLoaded;
         }
     }
 }

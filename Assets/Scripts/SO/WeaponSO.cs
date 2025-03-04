@@ -7,6 +7,6 @@ namespace Shadow_Dominion
     {
         public float Damage = 100;
         public float RotationSpeed = 15;
-        public float Limit = 30;
+        public float Limit = 45;
     }
 }

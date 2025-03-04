@@ -86,9 +86,8 @@ public class BoneSettings
         Vector3 targetVelocity)
     {
         _configurableJoint.targetPosition = targetPosition;
-        
-        _configurableJoint.targetRotation = 
-            targetRotation == new Quaternion(0, 0, 0, 0) ? Quaternion.identity : targetRotation;
+
+        _configurableJoint.targetRotation = targetRotation;
         
         _configurableJoint.targetVelocity = targetVelocity;
     }

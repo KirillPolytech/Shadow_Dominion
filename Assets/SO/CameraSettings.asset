@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68613c8e664abab4a885bc38b3984534, type: 3}
   m_Name: CameraSettings
   m_EditorClassIdentifier: 
-  zoom: 1
-  zoomDuration: 5
-  zoomInDistance: 0.6
-  maxZoomDistance: 5
+  ZoomSpeed: 1
+  ScrollSpeed: 3
+  cameraMinDistance: 0.6
+  cameraMaxDistance: 1
   rayCastDistance: 1000
   layerMask:
     serializedVersion: 2

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace Shadow_Dominion
         private new void Awake()
         {
             base.Awake();
+
+            transform.parent = null;
+            DontDestroyOnLoad(gameObject);
             
             _cachedStartCoroutine = () =>
             {
@@ -38,9 +42,10 @@ namespace Shadow_Dominion
 
         private IEnumerator WaitForPlayer()
         {
-            while (MirrorPlayerSpawner.Instance.LoadedPlayers < 1)
+            List<string> addresses = MirrorPlayersSyncer.Instance.PlayersAddresses;
+            while (MirrorPlayerSpawner.Instance.LoadedPlayers < addresses.Count)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForFixedUpdate();
             }
             
             OnAllPlayersLoaded?.Invoke();

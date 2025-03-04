@@ -41,6 +41,8 @@ namespace Shadow_Dominion.InputSystem
             
             _inputData.MouseWheelScroll = Input.mouseScrollDelta.y;
             
+            _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
+            
             _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);

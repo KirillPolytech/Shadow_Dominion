@@ -11,6 +11,8 @@ using Shadow_Dominion.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using WindowsSystem;
+using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -111,10 +113,7 @@ namespace Shadow_Dominion
         [Header("Network")]
         [SerializeField]
         private MirrorShootHandler mirrorShootHandler;
-
-        [SerializeField]
-        private MirrorStateHandler mirrorStateHandler;
-
+        
         [Space]
         [SerializeField]
         private AnimationClip standUpFaceUpClip;
@@ -130,8 +129,10 @@ namespace Shadow_Dominion
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
 
-        private void Awake()
+        [Inject]
+        public void Construct(CursorService cursorService)
         {
+            WindowsController windowsController = FindAnyObjectByType<WindowsController>();
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
             AnimationStateMachine animationStateMachine = new AnimationStateMachine(animator);
@@ -146,14 +147,15 @@ namespace Shadow_Dominion
                 playerMovement,
                 monoInputHandler,
                 standUpFaceUpClip,
-                standUpFaceDownClip);
+                standUpFaceDownClip,
+                windowsController,
+                cursorService);
             
             player.Construct(playerTransform, playerStateMachine);
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
             playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
-            mirrorStateHandler.Construct(playerStateMachine);
             ak47.Construct(monoInputHandler, aim, weaponSO);
             mirrorShootHandler.Construct(ak47);
 

@@ -1,25 +1,27 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Mirror;
+using Multiplayer.Structs;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Main;
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using WindowsSystem;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
     public class PlayerStateMachine : IStateMachine
     {
-        public Action<IState> OnStateChanged;
-
         private readonly Main.Player _player;
         private readonly Transform _ragdollRoot;
         private readonly PlayerAnimation _playerAnimation;
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly BoneController[] _boneControllerses;
-
+        private readonly IInputHandler _inputHandler;
+        
         public PlayerStateMachine(
             Main.Player player,
             CameraLook cameraLook,
@@ -31,13 +33,16 @@ namespace Shadow_Dominion.Player.StateMachine
             PlayerMovement playerMovement,
             IInputHandler inputHandler,
             AnimationClip standUpFaceUp,
-            AnimationClip standUpFaceDown)
+            AnimationClip standUpFaceDown,
+            WindowsController windowsController,
+            CursorService cursorService)
         {
             _player = player;
             _ragdollRoot = ragdollRoot;
             _playerAnimation = playerAnimation;
             _coroutineExecuter = coroutineExecuter;
             _boneControllerses = boneControllers;
+            _inputHandler = inputHandler;
 
             StandUpFaceUpState standUpFaceUpState =
                 new StandUpFaceUpState(rootRig, playerAnimation,
@@ -48,9 +53,10 @@ namespace Shadow_Dominion.Player.StateMachine
             RagdollState ragdollState =
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneControllers, inputHandler, ragdollRoot,
                     this);
-            DeathState deathState = new DeathState(playerAnimation, boneControllers);
-            DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler);
+            DeathState deathState = new DeathState(playerAnimation, boneControllers, cameraLook);
+            DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler, windowsController);
             InActiveState inActiveState = new InActiveState();
+            PauseMenuState pauseMenuState = new PauseMenuState(windowsController, cursorService);
 
             _states.Add(standUpFaceUpState);
             _states.Add(standUpFaceDownState);
@@ -58,6 +64,28 @@ namespace Shadow_Dominion.Player.StateMachine
             _states.Add(defaultState);
             _states.Add(inActiveState);
             _states.Add(deathState);
+            _states.Add(pauseMenuState);
+
+            _inputHandler.OnInputUpdate += HandleInput;
+        }
+
+        ~PlayerStateMachine()
+        {
+            _inputHandler.OnInputUpdate -= HandleInput;
+        }
+        
+        private void HandleInput(InputData inputData)
+        {
+            if (!inputData.ESC)
+                return;
+
+            if (CurrentState.GetType() != typeof(PauseMenuState))
+            {
+                SetState<PauseMenuState>();
+                return;
+            }
+
+            SetState<DefaultState>();
         }
 
         private IEnumerator WaitForSecond(float waitTime, Action callBack)
@@ -104,7 +132,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
         public override void SetState<T>()
         {
-            var state = _states.First(x => x.GetType() == typeof(T));
+            IState state = _states.First(x => x.GetType() == typeof(T));
 
             if (CurrentState == state)
                 return;
@@ -113,14 +141,14 @@ namespace Shadow_Dominion.Player.StateMachine
             CurrentState = state;
             CurrentState.Enter();
 
-            OnStateChanged?.Invoke(CurrentState);
+            NetworkClient.Send(new PlayerStateMessage(CurrentState.GetType().ToString()));
 
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
 
         public void SetState(string stateName)
         {
-            var state = _states.First(x => x.GetType().ToString() == stateName);
+            IState state = _states.First(x => x.GetType().ToString() == stateName);
 
             if (CurrentState == state)
                 return;
@@ -128,9 +156,7 @@ namespace Shadow_Dominion.Player.StateMachine
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-
-            OnStateChanged?.Invoke(CurrentState);
-
+            
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
     }

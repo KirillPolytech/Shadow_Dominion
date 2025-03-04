@@ -12,10 +12,12 @@ namespace Shadow_Dominion
         {
             _mirrorServer = mirrorServer;
         }
-
+        
         public new void Start()
         {
             base.Start();
+            
+            OpenWindow(Current);
 
             _mirrorServer.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
             _mirrorServer.ActionOnHostStart += OpenWindow<PlayerListingWindow>;

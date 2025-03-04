@@ -6540,7 +6540,6 @@ GameObject:
   - component: {fileID: 2883562924446922007}
   - component: {fileID: 2612903666360058253}
   - component: {fileID: 6562452125269414045}
-  - component: {fileID: 5842439262446657154}
   - component: {fileID: 3110435118676541445}
   m_Layer: 0
   m_Name: Mirror Player
@@ -6548,7 +6547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6692371360007783292
 Transform:
   m_ObjectHideFlags: 0
@@ -6666,7 +6665,6 @@ MonoBehaviour:
   ragdollRoot: {fileID: 4951795622753340675}
   coroutineExecuter: {fileID: 2612903666360058253}
   mirrorShootHandler: {fileID: 6562452125269414045}
-  mirrorStateHandler: {fileID: 5842439262446657154}
   standUpFaceUpClip: {fileID: 7400000, guid: ba0fbf4c311f549458ac3adcb30d06aa, type: 2}
   standUpFaceDownClip: {fileID: 7400000, guid: c1c086eeb41db99468fbfc47e1508308, type: 2}
   debug: 0
@@ -6760,21 +6758,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e27d4b8015698ea4aaf73f1afb20c183, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
---- !u!114 &5842439262446657154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2526803028027871228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 425ada3001afff745bd728dd60ce7d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0

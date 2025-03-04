@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caefa8bd2b97c8a45b11df1ebccf7ca9, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  walkSpeed: 10
-  runSpeed: 15
-  rotSpeed: 5
-  aimRigWeightChange: 3.5
-  canMove: 1
-  canRotate: 1
+  WalkSpeed: 1500
+  RunSpeed: 3000
+  MaxWalkSpeed: 3
+  MaxRunSpeed: 6
+  RotSpeed: 5
+  AimRigWeightChange: 3.5
+  CanMove: 1
+  CanRotate: 1
   Approximation: 0.01
