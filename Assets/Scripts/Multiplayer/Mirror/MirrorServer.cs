@@ -28,7 +28,8 @@ namespace Shadow_Dominion
         public event Action ActionOnStopClient;
         public event Action ActionOnClientConnect;
         public event Action ActionOnClientDisconnect;
-        public event Action ActionOnClientChangeScene;
+        public event Action ActionOnClientChangedScene;
+        public event Action<NetworkConnection> ActionOnClientChangedSceneWithArg;
 
         public event Action<NetworkConnectionToClient> ActionOnRoomServerAddedPlayerWithArg;
         public event Action<NetworkConnectionToClient> ActionOnRoomServerSceneLoadedForPlayerWithArg;
@@ -101,7 +102,7 @@ namespace Shadow_Dominion
             {
                 yield return new WaitForSeconds(2f);
             }
-
+            yield break;
             MirrorSpawner mirrorSpawner = FindAnyObjectByType<MirrorSpawner>();
             
             mirrorSpawner.Dispawn();
@@ -138,7 +139,8 @@ namespace Shadow_Dominion
         {
             base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
-            ActionOnClientChangeScene?.Invoke();
+            ActionOnClientChangedScene?.Invoke();
+            ActionOnClientChangedSceneWithArg?.Invoke(NetworkClient.connection);
 
             Debug.Log($"OnClientChangeScene: {newSceneName}");
         }

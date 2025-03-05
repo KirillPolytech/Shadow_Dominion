@@ -9,12 +9,14 @@ namespace Shadow_Dominion
         {
             NetworkServer.RegisterHandler<PlayerStateMessage>(MirrorPlayerStateSyncer.Instance.CmdSetState);
             NetworkServer.RegisterHandler<PositionMessage>(MirrorPlayerSpawner.Instance.OnCreateCharacter);
+            //NetworkServer.RegisterHandler<RoomPlayerSpawnMessage>(MirrorPlayerSpawner.Instance.OnCreateRoomPlayer);
         }
 
         public void UnRegister()
         {
             NetworkServer.UnregisterHandler<PlayerStateMessage>();
             NetworkServer.UnregisterHandler<PositionMessage>();
+            //NetworkServer.UnregisterHandler<RoomPlayerSpawnMessage>();
         }
     }
 }

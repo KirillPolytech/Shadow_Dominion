@@ -23,6 +23,8 @@ namespace Shadow_Dominion
         [Space]
         [SerializeField]
         private Main.Player playerPrefab;
+        
+        [SerializeField]
         private NetworkRoomPlayer networkRoomPlayerPrefab;
 
         [Space]

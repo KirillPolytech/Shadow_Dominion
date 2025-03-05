@@ -4,11 +4,11 @@ using Mirror;
 namespace Multiplayer.Structs
 {
     [Serializable]
-    public struct PlayerStateMessage : NetworkMessage
+    public struct LevelState : NetworkMessage
     {
         public string StateName;
         
-        public PlayerStateMessage(string stateName)
+        public LevelState(string stateName)
         {
             StateName = stateName;
         }

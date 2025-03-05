@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using NaughtyAttributes;
 using Unity.VisualScripting;
@@ -61,14 +62,20 @@ namespace Shadow_Dominion
 
         private void Start()
         {
-            try
+            StartCoroutine(WaitForBonesInitialized());
+        }
+
+        private IEnumerator WaitForBonesInitialized()
+        {
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
+            BoneController controller = controllers.FirstOrDefault(x => x.name == bones.BoneData[0].Name);
+
+            while (!controller.IsInitialized)
             {
-                UpdateRagdoll();
+                yield return new WaitForFixedUpdate();
             }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
+            
+            UpdateRagdoll();
         }
 
         [Button]

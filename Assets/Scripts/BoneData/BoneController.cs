@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class BoneController : MonoBehaviour
+    public class BoneController : MonoBehaviour, IInitialize
     {
         public event Action<Vector3> OnCollision;
         
@@ -22,6 +22,8 @@ namespace Shadow_Dominion
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
 
+        public bool IsInitialized => IInitialize.IsInitialized;
+        
         public BoneSettings BoneSettings;
 
         private ConfigurableJoint _configurableJoint;
@@ -45,9 +47,13 @@ namespace Shadow_Dominion
             _pidData = pidData;
             _renderer = skinnedMeshRenderer;
             _humanBodyBones = humanBodyBones;
+
+            Initialize();
+            
+            IInitialize.IsInitialized = true;
         }
 
-        private void Awake()
+        private void Initialize()
         {
             _configurableJoint = GetComponent<ConfigurableJoint>();
             _rigidbody = GetComponent<Rigidbody>();
@@ -56,15 +62,15 @@ namespace Shadow_Dominion
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
             _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;
             BoneType = _humanBodyBones;
-        }
-
-        private void Start()
-        {
+            
             _rigidbody.position = _copyTarget.position;
         }
 
         private void FixedUpdate()
         {
+            if (!IInitialize.IsInitialized)
+                return;
+            
             UpdatePosition();
             UpdateConfigurableJoint();
         }

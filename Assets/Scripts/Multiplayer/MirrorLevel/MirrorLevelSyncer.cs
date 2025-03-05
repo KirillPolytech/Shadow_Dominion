@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using Multiplayer.Structs;
 using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
@@ -11,13 +12,30 @@ namespace Shadow_Dominion
         public MirrorLevelSyncer(LevelStateMachine levelStateMachine)
         {
             _levelStateMachine = levelStateMachine;
-            
+
+            _levelStateMachine.OnStateChanged += SendMessage;
             RegisterHandler();
+        }
+
+        ~MirrorLevelSyncer()
+        {
+            _levelStateMachine.OnStateChanged -= SendMessage;
+            UnRegisterHandler();
+        }
+
+        private void SendMessage(IState state)
+        {
+            NetworkClient.Send(new LevelState(state.GetType().ToString()));
         }
 
         private void RegisterHandler()
         {
             NetworkServer.RegisterHandler<LevelState>(CmdSetState);
+        }
+
+        private void UnRegisterHandler()
+        {
+            NetworkServer.UnregisterHandler<LevelState>();
         }
         
         private void CmdSetState(NetworkConnectionToClient conn, LevelState newState)
@@ -33,16 +51,6 @@ namespace Shadow_Dominion
             _levelStateMachine.SetState(newState);
             
             Debug.Log($"[Client] {newState}");
-        }
-    }
-
-    public struct LevelState : NetworkMessage
-    {
-        public string StateName;
-        
-        public LevelState(string stateName)
-        {
-            StateName = stateName;
         }
     }
 }

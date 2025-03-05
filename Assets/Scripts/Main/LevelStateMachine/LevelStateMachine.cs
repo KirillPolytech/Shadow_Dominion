@@ -1,5 +1,5 @@
+using System;
 using System.Linq;
-using Mirror;
 using Shadow_Dominion.InputSystem;
 using UnityEngine;
 using WindowsSystem;
@@ -11,6 +11,8 @@ namespace Shadow_Dominion.StateMachine
     {
         private readonly InputHandler _inputHandler;
         private readonly MirrorLevelSyncer _mirrorLevelSyncer;
+
+        public Action<IState> OnStateChanged;
 
         private IState _lastState;
 
@@ -52,18 +54,7 @@ namespace Shadow_Dominion.StateMachine
             CurrentState = state;
             CurrentState.Enter();
             
-            NetworkClient.Send(new LevelState(state.GetType().ToString()));
-
-            Debug.Log($"Current level state: {CurrentState.GetType()}");
-        }
-
-        public void SetState(IState state)
-        {
-            CurrentState?.Exit();
-            CurrentState = state;
-            CurrentState.Enter();
-            
-            NetworkClient.Send(new LevelState(state.GetType().ToString()));
+            OnStateChanged?.Invoke(state);
 
             Debug.Log($"Current level state: {CurrentState.GetType()}");
         }

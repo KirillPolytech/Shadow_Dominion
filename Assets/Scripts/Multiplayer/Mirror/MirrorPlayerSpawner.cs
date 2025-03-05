@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using Multiplayer.Structs;
@@ -15,6 +16,7 @@ namespace Shadow_Dominion
         private readonly PositionMessage[] _spawnPositions;
         private readonly Action<NetworkConnectionToClient> _cachedOnDisconnect;
         private readonly PositionMessage[] _positionMessages;
+        private readonly CoroutineExecuter _coroutineExecuter;
 
         public readonly Dictionary<NetworkConnectionToClient, Main.Player> playerInstances 
             = new Dictionary<NetworkConnectionToClient, Main.Player>();
@@ -33,30 +35,37 @@ namespace Shadow_Dominion
             MirrorServer mirrorServer, 
             PlayerFactory playerFactory,
             RoomPlayerFactory roomPlayerFactory,
-            PositionMessage[] positionMessages)
+            PositionMessage[] positionMessages,
+            CoroutineExecuter coroutineExecuter)
         {
             _mirrorServer = mirrorServer;
             _playerFactory = playerFactory;
             _roomPlayerFactory = roomPlayerFactory;
             _positionMessages = positionMessages;
+            _coroutineExecuter = coroutineExecuter;
             
             Instance = this;
             
+            NetworkServer.RegisterHandler<RoomPlayerSpawnMessage>(OnCreateRoomPlayer);
+            
             _cachedOnDisconnect = arg => playerInstances.Remove(arg);
 
-            _mirrorServer.ActionOnClientChangeScene += ActivatePlayerSpawn;
-            _mirrorServer.ActionOnServerReady += ActivateRoomPlayerSpawn;
+            _mirrorServer.ActionOnClientChangedSceneWithArg += ActivatePlayerSpawn;
+            _mirrorServer.ActionOnServerConnect += ActivateRoomPlayerSpawn;
             _mirrorServer.ActionOnServerDisconnectWithArg += _cachedOnDisconnect;
         }
 
         ~MirrorPlayerSpawner()
         {
-            _mirrorServer.ActionOnClientChangeScene -= ActivatePlayerSpawn;
+            NetworkServer.UnregisterHandler<RoomPlayerSpawnMessage>();
+            
+            _mirrorServer.ActionOnClientChangedSceneWithArg -= ActivatePlayerSpawn;
+            _mirrorServer.ActionOnServerConnect -= ActivateRoomPlayerSpawn;
             _mirrorServer.ActionOnServerDisconnectWithArg -= _cachedOnDisconnect;
         }
         
         [Client]
-        private void ActivatePlayerSpawn()
+        private void ActivatePlayerSpawn(NetworkConnection conn)
         {
             PositionMessage message = new PositionMessage { pos = _positionMessages[LoadedPlayers].pos };
             //отправка сообщения на сервер с координатами спавна
@@ -66,23 +75,35 @@ namespace Shadow_Dominion
         [Client]
         private void ActivateRoomPlayerSpawn()
         {
+            NetworkClient.Ready();
+            
             RoomPlayerSpawnMessage message = new RoomPlayerSpawnMessage();
-            //отправка сообщения на сервер с координатами спавна
             NetworkClient.Send(message);
-
         }
 
         [Server]
         public void OnCreateCharacter(NetworkConnectionToClient conn, PositionMessage positionMessage)
         {
+            return;
+            
             //локально на сервере создаем gameObject
             Main.Player player = _playerFactory.Create();
             playerInstances.Add(conn, player);
             
             player.transform.SetPositionAndRotation(positionMessage.pos, Quaternion.identity);
+
+            _coroutineExecuter.Execute(WaitForReady(conn, player));
+        }
+        
+        private IEnumerator WaitForReady(NetworkConnectionToClient conn, Main.Player player)
+        {
+            while (!conn.isReady)
+            {
+                yield return new WaitForFixedUpdate();
+            }
             
             //присоеднияем gameObject к пулу сетевых объектов и отправляем информацию об этом остальным игрокам
-            NetworkServer.AddPlayerForConnection(conn, player.gameObject);
+            NetworkServer.ReplacePlayerForConnection(conn, player.gameObject, ReplacePlayerOptions.Destroy);
             
             OnPlayerSpawned?.Invoke();
             
@@ -92,7 +113,7 @@ namespace Shadow_Dominion
         }
         
         [Server]
-        public void OnCreateRoomPlayer(NetworkConnectionToClient conn, RoomPlayerSpawnMessage positionMessage)
+        private void OnCreateRoomPlayer(NetworkConnectionToClient conn, RoomPlayerSpawnMessage positionMessage)
         {
             NetworkRoomPlayer player = _roomPlayerFactory.Create();
             roomPlayerInstances.Add(conn, player);

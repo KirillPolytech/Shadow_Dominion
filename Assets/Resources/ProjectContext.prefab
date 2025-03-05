@@ -172,16 +172,17 @@ MonoBehaviour:
   levelSO: {fileID: 11400000, guid: 66c72da04ed521c4aa4c697a0103a06f, type: 2}
   mirrorServer: {fileID: 8832471704378920471}
   playerPrefab: {fileID: 3110435118676541445, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
+  networkRoomPlayerPrefab: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   coroutineExecuter: {fileID: 259350462139003918}
   spawnPositions:
   - pos: {x: 20, y: 0, z: 0}
-    isFree: 0
+    isFree: 1
   - pos: {x: -20, y: 0, z: 0}
-    isFree: 0
+    isFree: 1
   - pos: {x: 0, y: 20, z: 0}
-    isFree: 0
+    isFree: 1
   - pos: {x: 0, y: -20, z: 0}
-    isFree: 0
+    isFree: 1
 --- !u!1001 &4721384871313830066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -233,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 1611036123034625322, guid: 5d95738db9207fe42830fd2f2ed5dbfc, type: 3}
       propertyPath: m_Name
       value: MirrorSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 1611036123034625322, guid: 5d95738db9207fe42830fd2f2ed5dbfc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4180539754354123513, guid: 5d95738db9207fe42830fd2f2ed5dbfc, type: 3}
       propertyPath: _assetId

@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using Shadow_Dominion.InputSystem;
 using Unity.Cinemachine;
@@ -6,7 +5,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class CameraLook : NetworkBehaviour
+    public class CameraLook : NetworkBehaviour, IInitialize
     {
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
@@ -21,9 +20,9 @@ namespace Shadow_Dominion
         private RaycastHit _hit;
         private Ray _ray;
         private int _rightMouseValue;
-        private float _mouseWheelValue;
         private float _currentScrollDistance;
         private float _aimDistance;
+
 
         public void Construct(
             CameraSettings camSettings,
@@ -36,10 +35,12 @@ namespace Shadow_Dominion
             _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
 
             _camera = GetComponent<Camera>();
-            
+
             _monoInputHandler.OnInputUpdate += HandleInput;
+
+            IInitialize.IsInitialized = true;
         }
-        
+
         private void OnDestroy()
         {
             _monoInputHandler.OnInputUpdate -= HandleInput;
@@ -53,6 +54,9 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
+            if (!IInitialize.IsInitialized)
+                return;
+
             Zooming();
         }
 
@@ -61,17 +65,17 @@ namespace Shadow_Dominion
             CastRay();
 
             _rightMouseValue = inputData.RightMouseButton ? 1 : 0;
-            _mouseWheelValue = inputData.MouseWheelScroll;
         }
 
         private void Zooming()
         {
-            if (CanZooming == false)
+            if (!CanZooming)
                 return;
 
             float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
-            
-            _cinemachineThirdPersonFollow.CameraDistance += rightMouseValue * _cameraSettings.ZoomSpeed * Time.fixedDeltaTime;
+
+            _cinemachineThirdPersonFollow.CameraDistance +=
+                rightMouseValue * _cameraSettings.ZoomSpeed * Time.fixedDeltaTime;
             _cinemachineThirdPersonFollow.CameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance,
                 _cameraSettings.cameraMinDistance, _cameraSettings.cameraMaxDistance);
         }
