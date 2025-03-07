@@ -25,19 +25,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/87/42cb342e/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/91/9b329ab7/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/ed/51030a74/Color.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Humanoid/Zombie/ZombieAnimation.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/LightningChanger.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Main/CoroutineExecuter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Main/WindowsController/Level/LevelWindowController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Main/WindowsController/Menu/JoinWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Mirror/MirrorSingleton.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/MirrorRagdollInitializer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/PlayerListing.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/UI/KillFeed.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/LevelSO.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/PIDData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/WeaponSO.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SO/ZombieSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="Toolset" />
@@ -55,7 +43,7 @@
     &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.66628176&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.49074075&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.intentionPowerPack&quot;
   },
@@ -200,6 +188,16 @@
       <workItem from="1741065599487" duration="395000" />
       <workItem from="1741066122906" duration="6715000" />
       <workItem from="1741073827341" duration="425000" />
+      <workItem from="1741159906659" duration="6051000" />
+      <workItem from="1741166499850" duration="444000" />
+      <workItem from="1741202271620" duration="569000" />
+      <workItem from="1741202892354" duration="2261000" />
+      <workItem from="1741243028945" duration="3443000" />
+      <workItem from="1741246985262" duration="1023000" />
+      <workItem from="1741268091004" duration="537000" />
+      <workItem from="1741273237598" duration="11789000" />
+      <workItem from="1741330125336" duration="4710000" />
+      <workItem from="1741334937800" duration="62000" />
     </task>
     <servers />
   </component>
@@ -212,17 +210,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Humanoid/Player/ActiveRagdollSetUp.cs</url>
-          <line>234</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Scripts\Humanoid\Player\ActiveRagdollSetUp.cs" initialLine="235" containingFunctionPresentation="Method 'UpdateRagdoll'">
+          <url>file://$PROJECT_DIR$/Assets/Mirror/Core/NetworkServer.cs</url>
+          <line>1200</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\Mirror\Core\NetworkServer.cs" initialLine="1200" containingFunctionPresentation="Method 'ReplacePlayerForConnection'">
             <startOffsets>
-              <option value="7948" />
+              <option value="59466" />
             </startOffsets>
             <endOffsets>
-              <option value="8318" />
+              <option value="59501" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="24" />
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
