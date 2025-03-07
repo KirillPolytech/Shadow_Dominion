@@ -10,11 +10,12 @@ namespace Mirror.Examples.NetworkRoom
     [AddComponentMenu("")]
     public class NetworkRoomManagerExt : NetworkRoomManager
     {
+        /*
         [Header("Spawner Setup")]
         [Tooltip("Reward Prefab for the Spawner")]
         public GameObject rewardPrefab;
 
-        public static new NetworkRoomManagerExt singleton => NetworkManager.singleton as NetworkRoomManagerExt;
+        public new static NetworkRoomManagerExt singleton => NetworkManager.singleton as NetworkRoomManagerExt;
 
         /// <summary>
         /// This is called on the server when a networked scene finishes loading.
@@ -42,16 +43,6 @@ namespace Mirror.Examples.NetworkRoom
             return true;
         }
 
-        public override void OnRoomStopClient()
-        {
-            base.OnRoomStopClient();
-        }
-
-        public override void OnRoomStopServer()
-        {
-            base.OnRoomStopServer();
-        }
-
         /*
             This code below is to demonstrate how to do a Start button that only appears for the Host player
             showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
@@ -61,6 +52,7 @@ namespace Mirror.Examples.NetworkRoom
             is set as DontDestroyOnLoad = true.
         */
 
+        /*
         bool showStartButton;
 
         public override void OnRoomServerPlayersReady()
@@ -88,5 +80,6 @@ namespace Mirror.Examples.NetworkRoom
                 ServerChangeScene(GameplayScene);
             }
         }
+        */
     }
 }
