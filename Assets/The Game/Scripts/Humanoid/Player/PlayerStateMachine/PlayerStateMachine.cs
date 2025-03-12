@@ -21,6 +21,8 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly BoneController[] _boneControllerses;
         private readonly IInputHandler _inputHandler;
+
+        public Action<PlayerStateMessage> OnStateChanged;
         
         public PlayerStateMachine(
             Main.Player player,
@@ -141,7 +143,7 @@ namespace Shadow_Dominion.Player.StateMachine
             CurrentState = state;
             CurrentState.Enter();
 
-            NetworkClient.Send(new PlayerStateMessage(CurrentState.GetType().ToString()));
+            OnStateChanged?.Invoke(new PlayerStateMessage(CurrentState.GetType().ToString()));
 
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }

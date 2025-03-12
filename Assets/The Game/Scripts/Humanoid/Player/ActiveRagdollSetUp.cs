@@ -62,7 +62,8 @@ namespace Shadow_Dominion
 
         private void Start()
         {
-            StartCoroutine(WaitForBonesInitialized());
+            UpdateRagdoll();
+            //StartCoroutine(WaitForBonesInitialized());
         }
 
         private IEnumerator WaitForBonesInitialized()

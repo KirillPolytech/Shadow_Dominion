@@ -7,35 +7,26 @@ namespace Shadow_Dominion
 {
     public class StartButton : Button
     {
-        private MirrorServer _mirrorServer;
-        private bool _isInitialized;
-        private UnityAction _action;
+        private UnityAction _onServerChangeScene;
 
         [Inject]
-        public void Construct(MirrorServer mirrorServer, RoomSettings roomSettings)
+        public void Construct(RoomSettings roomSettings)
         {
-            _mirrorServer = mirrorServer;
-
-            _mirrorServer.ActionOnHostStart += Subscribe;
-            _mirrorServer.ActionOnHostStop += Unsubscribe;
-
-            _action = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
-
-            _isInitialized = true;
+            _onServerChangeScene = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
+            
+            MirrorServer.Instance.ActionOnHostStart += Subscribe;
+            MirrorServer.Instance.ActionOnHostStop += Unsubscribe;
         }
 
-        private void Subscribe() => onClick.AddListener(_action.Invoke);
-        private void Unsubscribe() => onClick.RemoveListener(_action.Invoke);
+        private void Subscribe() => onClick.AddListener(_onServerChangeScene.Invoke);
+        private void Unsubscribe() => onClick.RemoveListener(_onServerChangeScene.Invoke);
 
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
-            base.OnDisable();
-
-            if (!_isInitialized)
-                return;
-
-            _mirrorServer.ActionOnHostStart -= Subscribe;
-            _mirrorServer.ActionOnHostStop -= Unsubscribe;
+            base.OnDestroy();
+            
+            MirrorServer.Instance.ActionOnHostStart -= Subscribe;
+            MirrorServer.Instance.ActionOnHostStop -= Unsubscribe;
         }
     }
 }

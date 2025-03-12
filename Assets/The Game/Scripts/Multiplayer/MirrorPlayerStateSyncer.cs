@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Mirror;
 using Multiplayer.Structs;
 using Shadow_Dominion.Player.StateMachine;
@@ -11,46 +10,50 @@ namespace Shadow_Dominion
     {
         public event Action OnPlayerDeath;
 
-        public void RegisterHandler()
+        private Main.Player _player;
+
+        private new void Awake()
         {
-            NetworkServer.RegisterHandler<PlayerStateMessage>(CmdSetState);
-        }
-        
-        private void OnDestroy()
-        {
-            NetworkServer.UnregisterHandler<PlayerStateMessage>();
+            base.Awake();
+
+            _player = GetComponent<Main.Player>();
+            
+            _player.PlayerStateMachine.OnStateChanged += CmdSetState;
         }
 
-        private void CmdSetState(NetworkConnectionToClient conn, PlayerStateMessage newStateMessage)
+        private void OnDestroy()
         {
-            RpcUpdateState(newStateMessage.StateName);
+            _player.PlayerStateMachine.OnStateChanged -= CmdSetState;
+        }
+
+        [Command]
+        private void CmdSetState(PlayerStateMessage newStateMessage)
+        {
+            RpcUpdateState(netId, newStateMessage.StateName);
 
             if (newStateMessage.StateName == typeof(DeathState).ToString())
             {
                 OnPlayerDeath?.Invoke();
             }
-            
+
             Debug.Log($"[Server] {newStateMessage}");
         }
-        
-        [ClientRpc]
-        private void RpcUpdateState(string newState)
-        {
-            Main.Player[] players = MirrorServer
-                .Instance.Connections.Select(x => x.identity.GetComponent<Main.Player>()).ToArray();//FindObjectsByType<Main.Player>(FindObjectsSortMode.None);
 
-            foreach (var player in players)
+        [ClientRpc]
+        public void RpcUpdateState(uint netID, string newState)
+        {
+            if (netID != netId)
+                return;
+
+            try
             {
-                try
-                {
-                    player.PlayerStateMachine.SetState(newState);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
+                _player.PlayerStateMachine.SetState(newState);
             }
-            
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
             Debug.Log($"[Client] {newState}");
         }
     }

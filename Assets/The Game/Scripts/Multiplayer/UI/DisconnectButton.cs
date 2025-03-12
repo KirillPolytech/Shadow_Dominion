@@ -1,20 +1,11 @@
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Shadow_Dominion
 {
     public class DisconnectButton : Button
     {
-        private MirrorServer _mirrorServer;
-
-        [Inject]
-        public void Construct(MirrorServer mirrorServer)
-        {
-            _mirrorServer = mirrorServer;
-        }
-
         protected override void Awake()
         {
             base.Awake();
@@ -22,21 +13,19 @@ namespace Shadow_Dominion
             {
                 if (NetworkServer.active && NetworkClient.isConnected)
                 {
-                    _mirrorServer.StopClient();
-
-                    //_mirrorServer.StopHost();
+                    MirrorServer.Instance.StopHost();
                     
                     Debug.Log("StopHost.");
                 }
                 else if (NetworkServer.active)
                 {
-                    _mirrorServer.StopServer();
+                    MirrorServer.Instance.StopServer();
 
                     Debug.Log("StopServer.");
                 }
                 else if (NetworkClient.isConnected)
                 {
-                    _mirrorServer.StopClient();
+                    MirrorServer.Instance.StopClient();
                     
                     Debug.Log("StopClient.");
                 }

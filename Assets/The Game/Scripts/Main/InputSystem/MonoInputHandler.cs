@@ -46,7 +46,7 @@ namespace Shadow_Dominion.InputSystem
             
             _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
             
-            _inputData.ESC = Input.GetKey(KeyCode.Escape);
+            _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);
         }

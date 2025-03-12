@@ -15,11 +15,7 @@ namespace Shadow_Dominion
         
         [SerializeField]
         private LevelSO levelSO;
-
-        [Space]
-        [SerializeField]
-        private MirrorServer mirrorServer;
-
+        
         [Space]
         [SerializeField]
         private Main.Player playerPrefab;
@@ -39,8 +35,6 @@ namespace Shadow_Dominion
             Container.BindInstance(roomSettings).AsSingle();
             Container.BindInstance(levelSO).AsSingle();
             
-            Container.BindInstance(mirrorServer).AsSingle();
-
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();

@@ -12,6 +12,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/321eb2db7c6d43ea8fc39b54eaca345246ae00/1b/d23738a8/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/321eb2db7c6d43ea8fc39b54eaca345246ae00/79/6427aff3/RuntimeType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/321eb2db7c6d43ea8fc39b54eaca345246ae00/d2/50e53172/RuntimeMethodInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/321eb2db7c6d43ea8fc39b54eaca345246ae00/f6/57e2b77f/RuntimeConstructorInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/378523c1e6ba4db992c5a1e98a5541ae10fc00/85/d3e17c58/Enumerable.cs" root0="SKIP_HIGHLIGHTING" />
@@ -90,10 +91,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2656">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="2656" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -198,6 +199,9 @@
       <workItem from="1741273237598" duration="11789000" />
       <workItem from="1741330125336" duration="4710000" />
       <workItem from="1741334937800" duration="62000" />
+      <workItem from="1741431867065" duration="3268000" />
+      <workItem from="1741459934658" duration="1955000" />
+      <workItem from="1741613272048" duration="1833000" />
     </task>
     <servers />
   </component>
@@ -221,6 +225,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Humanoid/Player/Player.cs</url>
+          <line>67</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Humanoid\Player\Player.cs" initialLine="67" containingFunctionPresentation="Method 'RpcUpdateState'">
+            <startOffsets>
+              <option value="1910" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2091" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="36" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

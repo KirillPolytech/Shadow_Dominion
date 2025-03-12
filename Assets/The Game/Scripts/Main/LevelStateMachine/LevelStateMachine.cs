@@ -9,7 +9,6 @@ namespace Shadow_Dominion.StateMachine
 {
     public class LevelStateMachine : IStateMachine, IInitializable
     {
-        private readonly InputHandler _inputHandler;
         private readonly MirrorLevelSyncer _mirrorLevelSyncer;
 
         public Action<IState> OnStateChanged;
@@ -19,13 +18,10 @@ namespace Shadow_Dominion.StateMachine
         [Inject]
         public LevelStateMachine(
             WindowsController windowsController,
-            InputHandler inputHandler,
-            MirrorServer mirrorServer,
             CoroutineExecuter coroutineExecuter,
             InitializeStateUI initializeStateUI,
             LevelSO levelSo)
         {
-            _inputHandler = inputHandler;
             _mirrorLevelSyncer = new MirrorLevelSyncer(this);
 
             _states.Add(new GameplayState(windowsController));

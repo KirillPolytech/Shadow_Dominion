@@ -6,16 +6,13 @@ namespace Shadow_Dominion
 {
     public class JoinButton : Button
     {
-        private MirrorServer _mirrorServer;
         private IPInputFieldProvider _ipInputFieldProvider;
         private PORTInputFieldProvider _portInputFieldProvider;
 
         [Inject]
-        public void Construct(MirrorServer mirrorServer, IPInputFieldProvider ipInputFieldProvider,
+        public void Construct(IPInputFieldProvider ipInputFieldProvider,
             PORTInputFieldProvider portInputFieldProvider)
         {
-            _mirrorServer = mirrorServer;
-
             _ipInputFieldProvider = ipInputFieldProvider;
             _portInputFieldProvider = portInputFieldProvider;
         }
@@ -31,8 +28,8 @@ namespace Shadow_Dominion
                     return;
                 }
 
-                _mirrorServer.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
-                _mirrorServer.StartClient();
+                MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
+                MirrorServer.Instance.StartClient();
             });
         }
     }

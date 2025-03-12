@@ -18,11 +18,11 @@ namespace Shadow_Dominion
         
         public event Action<HashSet<NetworkRoomPlayer>> OnPlayerReadyChanged;
 
-        [SerializeField]
-        private MirrorPlayersSyncer mirrorPlayerStateSyncer;
-        
-        public event Action OnAllPlayersLoaded;
+        public List<Main.Player> SpawnedPlayerInstances = new List<Main.Player>();
 
+        [SerializeField]
+        private MirrorPlayersSyncer mirrorPlayerStateSyncerPrefab;
+        
         public event Action ActionOnHostStart;
         public event Action ActionOnHostStop;
         public event Action ActionOnServerAddPlayer;
@@ -30,21 +30,11 @@ namespace Shadow_Dominion
         public event Action ActionOnServerConnect;
         public event Action<NetworkConnectionToClient> ActionOnServerDisconnectWithArg;
         public event Action ActionOnServerDisconnect;
-        public event Action ActionOnServerSceneChanged;
-        public event Action ActionOnServerReady;
-        public event Action<NetworkConnectionToClient> ActionOnServerReadyWithArg;
-        public event Action<NetworkConnectionToClient> ActionReadyStatusChangedWithArg;
 
         public event Action ActionOnStartClient;
         public event Action ActionOnStopClient;
         public event Action ActionOnClientConnect;
         public event Action ActionOnClientDisconnect;
-        public event Action ActionOnClientChangedScene;
-        public event Action<NetworkConnection> ActionOnClientChangedSceneWithArg;
-
-        public event Action<NetworkConnectionToClient> ActionOnRoomServerAddedPlayerWithArg;
-        public event Action<NetworkConnectionToClient> ActionOnRoomServerSceneLoadedForPlayerWithArg;
-        public event Action ActionOnRoomServerSceneLoadedForPlayer;
         
         public event Action ActionOnAnyChange;
 
@@ -86,15 +76,13 @@ namespace Shadow_Dominion
 
         private void SpawnBehaviours()
         {
-            NetworkServer.Spawn(Instantiate(mirrorPlayerStateSyncer.gameObject));
+            NetworkServer.Spawn(Instantiate(mirrorPlayerStateSyncerPrefab.gameObject));
         }
         
         private void OnAnyChange() => ActionOnAnyChange?.Invoke();
 
         public override void OnDestroy()
         {
-            base.OnDestroy();
-
             ActionOnHostStart -= SpawnBehaviours;
 
             ActionOnHostStart -= OnAnyChange;
@@ -106,18 +94,11 @@ namespace Shadow_Dominion
             ActionOnStopClient -= OnAnyChange;
             ActionOnClientConnect -= OnAnyChange;
             ActionOnClientDisconnect -= OnAnyChange;
+            
+            DontDestroyOnLoad(gameObject);
         }
 
         #region Server
-        [Server]
-        public override void OnServerSceneChanged(string sceneName)
-        {
-            base.OnServerSceneChanged(sceneName);
-
-            ActionOnServerSceneChanged?.Invoke();
-
-            Debug.Log($"[Server] OnServerSceneChanged: {sceneName}");
-        }
 
         [Server]
         public override void OnStartHost()
@@ -190,22 +171,9 @@ namespace Shadow_Dominion
         }
 
         [Server]
-        public override void OnRoomServerAddPlayer(NetworkConnectionToClient conn)
-        {
-            base.OnRoomServerAddPlayer(conn);
-            
-            ActionOnRoomServerAddedPlayerWithArg?.Invoke(conn);
-
-            Debug.Log($"[Server] OnRoomServerAddPlayer. {conn.address}");
-        }
-
-        [Server]
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, 
             GameObject roomPlayer, GameObject gamePlayer)
         {
-            ActionOnRoomServerSceneLoadedForPlayerWithArg?.Invoke(conn);
-            ActionOnRoomServerSceneLoadedForPlayer?.Invoke();
-
             Main.Player player = gamePlayer.GetComponent<Main.Player>();
             
             StartCoroutine(WaitForInitialization(player));
@@ -217,25 +185,14 @@ namespace Shadow_Dominion
 
         private IEnumerator WaitForInitialization(Main.Player player)
         {
-            while (player.PlayerStateMachine == null || !player.GetComponent<MirrorPlayerStateSyncer>())
+            while (player.PlayerStateMachine == null)
             {
-                yield return new WaitForFixedUpdate();
+                yield return new WaitForSeconds(1);
             }
+            
+            yield return new WaitForSeconds(1);
 
-            MirrorPlayerStateSyncer mirrorPlayerStateSyncer = player.GetComponent<MirrorPlayerStateSyncer>();
-            mirrorPlayerStateSyncer.RegisterHandler();
-            player.PlayerStateMachine.SetState<InActiveState>();
-        }
-        
-        [Server]
-        public override void OnServerReady(NetworkConnectionToClient conn)
-        {
-            base.OnServerReady(conn);
-            
-            ActionOnServerReady?.Invoke();
-            ActionOnServerReadyWithArg?.Invoke(conn);
-            
-            Debug.Log($"[Server] OnServerReady: {conn.address}");
+            player.RpcUpdateState(typeof(InActiveState).ToString());
         }
 
         public override void ReadyStatusChanged()
@@ -303,20 +260,6 @@ namespace Shadow_Dominion
 
             Debug.LogError($"[Client] OnClientTransportException {exception.Message}");
         }
-        
-        /*
-        [Client]
-        public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
-            bool customHandling)
-        {
-            base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
-
-            ActionOnClientChangedScene?.Invoke();
-            ActionOnClientChangedSceneWithArg?.Invoke(NetworkClient.connection);
-
-            Debug.Log($"OnClientChangeScene: {newSceneName}");
-        }
-        */
         
         #endregion
     }

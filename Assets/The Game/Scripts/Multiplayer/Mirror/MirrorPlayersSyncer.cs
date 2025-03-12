@@ -8,6 +8,8 @@ namespace Shadow_Dominion
     {
         private readonly SyncList<PlayerViewData> _players = new SyncList<PlayerViewData>();
 
+        public PlayerViewData[] Players => _players.ToArray();
+
         #region Server
         [Server]
         public override void OnStartServer()
