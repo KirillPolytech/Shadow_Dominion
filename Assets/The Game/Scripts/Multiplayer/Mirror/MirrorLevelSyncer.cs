@@ -38,6 +38,7 @@ namespace Shadow_Dominion
             NetworkServer.UnregisterHandler<LevelState>();
         }
         
+        [Server]
         private void CmdSetState(NetworkConnectionToClient conn, LevelState newState)
         {
             RpcUpdateState(newState.StateName);

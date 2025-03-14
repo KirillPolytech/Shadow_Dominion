@@ -9,12 +9,12 @@ namespace Shadow_Dominion.InputSystem
         public event Action<InputData> OnInputUpdate;
 
         private InputData _inputData;
-
+        
         private void Update()
         {
             if (!isLocalPlayer)
                 return;
-            
+                    
             HandleInput();
         }
         

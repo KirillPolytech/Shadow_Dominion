@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using Mirror;
+using Multiplayer.Structs;
 using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using WindowsSystem;
@@ -10,6 +9,7 @@ namespace Shadow_Dominion.StateMachine
     public class GameplayState : IState
     {
         private readonly WindowsController _windowsController;
+        private int _deadPlayers;
 
         public GameplayState(
             WindowsController windowsController)
@@ -21,17 +21,31 @@ namespace Shadow_Dominion.StateMachine
         {
             _windowsController.OpenWindow<MainWindow>();
             CursorService.SetState(CursorLockMode.Locked);
-
-            var players = Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None);
-
-            foreach (var player in players)
+            
+            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
             {
+                player.OnDead += OnDeath;
+                
                 player.PlayerStateMachine.SetState<DefaultState>();
             }
         }
 
+        private void OnDeath()
+        {
+            if (++_deadPlayers < MirrorServer.Instance.SpawnedPlayerInstances.Count - 1)
+                return;
+            
+            NetworkClient.Send(new LevelState(typeof(LevelInitializeState).ToString()));
+
+            _deadPlayers = 0;
+        }
+
         public override void Exit()
         {
+            foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances)
+            {
+                player.OnDead -= OnDeath;
+            }
         }
     }
 }

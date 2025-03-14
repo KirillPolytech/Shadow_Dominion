@@ -62,21 +62,14 @@ namespace Shadow_Dominion
 
         private void Start()
         {
-            UpdateRagdoll();
-            //StartCoroutine(WaitForBonesInitialized());
-        }
-
-        private IEnumerator WaitForBonesInitialized()
-        {
-            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
-            BoneController controller = controllers.FirstOrDefault(x => x.name == bones.BoneData[0].Name);
-
-            while (!controller.IsInitialized)
+            try
             {
-                yield return new WaitForFixedUpdate();
+                UpdateRagdoll();
             }
-            
-            UpdateRagdoll();
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
         }
 
         [Button]

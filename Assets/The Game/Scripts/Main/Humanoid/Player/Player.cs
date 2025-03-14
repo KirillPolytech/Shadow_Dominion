@@ -10,7 +10,7 @@ namespace Shadow_Dominion.Main
 {
     public class Player : Humanoid, IZombieTarget
     {
-        public event Action OnPlayerDeath;
+        public event Action OnDead;
         
         public Transform PlayersTrasform { get; set; }
         
@@ -18,11 +18,13 @@ namespace Shadow_Dominion.Main
         
         private Rigidbody _rigidbody;
 
-        public void Construct(Transform t, PlayerStateMachine playerStateMachine)
+        public void Construct(Transform playersTransform, PlayerStateMachine playerStateMachine)
         {
-            PlayersTrasform = t;
-            _rigidbody = t.GetComponent<Rigidbody>();
+            PlayersTrasform = playersTransform;
+            _rigidbody = playersTransform.GetComponent<Rigidbody>();
             PlayerStateMachine = playerStateMachine;
+            
+            PlayerStateMachine.Initialize();
             
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }
@@ -56,14 +58,14 @@ namespace Shadow_Dominion.Main
 
             if (newStateMessage.StateName == typeof(DeathState).ToString())
             {
-                OnPlayerDeath?.Invoke();
+                OnDead?.Invoke();
             }
 
             Debug.Log($"[Server] {newStateMessage}");
         }
 
         [ClientRpc]
-        public void RpcUpdateState(string newState)
+        private void RpcUpdateState(string newState)
         {
             try
             {

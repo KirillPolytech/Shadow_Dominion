@@ -9,25 +9,33 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly IInputHandler _inputHandler;
         private readonly PlayerMovement _playerMovement;
         private readonly WindowsController _windowsController;
+        private readonly BoneController[] _boneControllers;
 
         public DefaultState(PlayerAnimation playerAnimation,
             PlayerMovement playerMovement,
             IInputHandler inputHandler,
-            WindowsController windowsController) : base(playerAnimation)
+            WindowsController windowsController,
+            BoneController[] boneControllers) : base(playerAnimation)
         {
             _playerMovement = playerMovement;
             _inputHandler = inputHandler;
             _windowsController = windowsController;
+            _boneControllers = boneControllers;
         }
 
         public override void Enter()
         {
             _windowsController.OpenWindow<MainWindow>();
+
+            foreach (var boneController in _boneControllers)
+            {
+                boneController.IsPositionApplying(true);
+                boneController.IsRotationApplying(true);
+            }
             
             _inputHandler.OnInputUpdate += _playerMovement.HandleInput;
             _inputHandler.OnInputUpdate += _playerAnimation.HandleAimRig;
             _inputHandler.OnInputUpdate += HandleInput;
-
         }
 
         private void HandleInput(InputData inputData)

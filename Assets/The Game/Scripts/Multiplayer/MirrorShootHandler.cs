@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion.Network
 {
-    public class MirrorShootHandler : NetworkBehaviourInitializer
+    public class MirrorShootHandler : NetworkBehaviour
     {
         private const int ShootRange = 500;
 
@@ -14,15 +14,10 @@ namespace Shadow_Dominion.Network
             _ak47 = ak47;
 
             _ak47.OnFired += CmdCastRay;
-
-            IsInitialized = true;
         }
 
         private void OnDestroy()
         {
-            if (!IsInitialized)
-                return;
-            
             _ak47.OnFired -= CmdCastRay;
         }
 

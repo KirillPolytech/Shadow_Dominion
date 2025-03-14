@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class BoneController : MonobehaviourInitializer
+    public class BoneController : MonoBehaviour
     {
         public event Action<Vector3> OnCollision;
         
@@ -47,8 +47,6 @@ namespace Shadow_Dominion
             _humanBodyBones = humanBodyBones;
 
             Initialize();
-            
-            IsInitialized = true;
         }
 
         private void Initialize()
@@ -66,9 +64,6 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
-            if (!IsInitialized)
-                return;
-            
             UpdatePosition();
             UpdateConfigurableJoint();
         }

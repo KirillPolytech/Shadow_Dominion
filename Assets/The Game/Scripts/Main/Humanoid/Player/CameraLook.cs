@@ -1,10 +1,11 @@
+using Mirror;
 using Shadow_Dominion.InputSystem;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class CameraLook : NetworkBehaviourInitializer
+    public class CameraLook : NetworkBehaviour
     {
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
@@ -49,15 +50,10 @@ namespace Shadow_Dominion
         {
             if (!isLocalPlayer)
                 _camera.gameObject.SetActive(false);
-
-            IsInitialized = true;
         }
 
         private void FixedUpdate()
         {
-            if (!IsInitialized)
-                return;
-
             Zooming();
         }
 

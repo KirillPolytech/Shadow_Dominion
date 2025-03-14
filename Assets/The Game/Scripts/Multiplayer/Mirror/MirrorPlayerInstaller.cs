@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Multiplayer.Structs;
 using NaughtyAttributes;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
@@ -13,7 +12,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using WindowsSystem;
-using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -52,7 +50,7 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private AimTarget aimTarget;
-
+        
         [SerializeField]
         private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
 
@@ -130,21 +128,13 @@ namespace Shadow_Dominion
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
         
-        // todo: refactor
         private void Awake()
         {
-            PositionMessage[] positionMessage = new PositionMessage[4]
-            {
-                new PositionMessage(new Vector3(20,0,0), true),
-                new PositionMessage(new Vector3(-20,0,0), true),
-                new PositionMessage(new Vector3(0,0,20), true),
-                new PositionMessage(new Vector3(0,0,-20), true)
-            };
-            
             WindowsController windowsController = FindAnyObjectByType<WindowsController>();
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
             AnimationStateMachine animationStateMachine = new AnimationStateMachine(animator);
+            playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
                 player,
                 cameraLook,
@@ -157,13 +147,11 @@ namespace Shadow_Dominion
                 monoInputHandler,
                 standUpFaceUpClip,
                 standUpFaceDownClip,
-                windowsController,
-                positionMessage );
+                windowsController);
             
             player.Construct(playerTransform, playerStateMachine);
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
             aimTarget.Construct(cameraLook);
-            playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
             ak47.Construct(monoInputHandler, aim, weaponSO);
             mirrorShootHandler.Construct(ak47);
@@ -196,6 +184,8 @@ namespace Shadow_Dominion
 
         private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
         {
+            playerStateMachine.SetState<DeathState>();
+            return;
             if(copyTo[ind].BoneType == HumanBodyBones.Head)
                 playerStateMachine.SetState<DeathState>();
 

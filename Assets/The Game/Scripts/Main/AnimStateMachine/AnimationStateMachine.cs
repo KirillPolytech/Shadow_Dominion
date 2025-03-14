@@ -13,6 +13,8 @@ namespace Shadow_Dominion.AnimStateMachine
         private readonly int StandUp_Face_Down = Animator.StringToHash("StandUp_Face_Down");
 
         private readonly int Laying = Animator.StringToHash("Laying");
+        
+        private readonly int Idle = Animator.StringToHash("Idle");
 
         private readonly Animator _animator;
 
@@ -23,6 +25,7 @@ namespace Shadow_Dominion.AnimStateMachine
             _states.Add(new AnimationStandUpFaceDown(animator, StandUp_Face_Down));
             _states.Add(new AnimationStandUpFaceUp(animator, StandUp_Face_Up));
             _states.Add(new AnimationLay(animator, Laying));
+            _states.Add(new AnimationIdleState(animator, Idle));
         }
 
         public override void SetState<T>()

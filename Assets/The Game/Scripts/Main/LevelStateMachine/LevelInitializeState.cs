@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using WindowsSystem;
 
@@ -31,23 +32,20 @@ namespace Shadow_Dominion.StateMachine
             _windowsController.OpenWindow<InitializeWindow>();
             CursorService.SetState(CursorLockMode.Locked);
 
-            OnAllPlayersLoaded();
-        }
-
-        private void OnAllPlayersLoaded()
-        {
             _coroutineExecuter.Execute(WaitForSeconds());
         }
 
         private IEnumerator WaitForSeconds()
         {
             float t = 0;
-            while (t < _levelSO.InitializeWaitTime)
+            while (t < _levelSO.InitializeWaitTime || MirrorServer.Instance.SpawnedPlayerInstances.Count < MirrorServer.Instance.Connections.Count)
             {
                 t += Time.fixedDeltaTime;
                 _initializeStateUI.SetWaitText($"Match starts in {_levelSO.InitializeWaitTime - (int)t}");
                 yield return new WaitForFixedUpdate();
             }
+            
+            SpawnPointSyncer.Instance.Reset();
             
             _levelStateMachine.SetState<GameplayState>();
         }

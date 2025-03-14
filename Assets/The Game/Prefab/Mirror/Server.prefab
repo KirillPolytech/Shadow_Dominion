@@ -162,6 +162,7 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 877082567820752014, guid: 95f49624fc8387047a832f857fb24c97, type: 3}
+  - {fileID: 3653292593419840786, guid: 1d29f6c8f7ef96e41ae59d67f4e03d4d, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -184,8 +185,9 @@ MonoBehaviour:
   GameplayScene: Assets/The Game/Scenes/Level.unity
   _allPlayersReady: 0
   clientIndex: 0
+  SpawnedPlayerInstances: []
   mirrorPlayerStateSyncerPrefab: {fileID: 1854119950054947312, guid: 95f49624fc8387047a832f857fb24c97, type: 3}
-  mirrorServerPrefab: {fileID: 384223563951349639}
+  spawnPointSyncerPrefab: {fileID: 8076761739462144825, guid: 1d29f6c8f7ef96e41ae59d67f4e03d4d, type: 3}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +203,7 @@ MonoBehaviour:
   port: 7777
   DualMode: 1
   NoDelay: 1
-  Interval: 10
+  Interval: 1
   Timeout: 10000
   RecvBufferSize: 7361536
   SendBufferSize: 7361536

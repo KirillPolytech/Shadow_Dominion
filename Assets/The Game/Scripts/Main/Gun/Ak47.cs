@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class Ak47 : MonobehaviourInitializer
+    public class Ak47 : MonoBehaviour
     {
         private const int Distance = 1000;
         private const float FullRotation = 360f;
@@ -41,8 +41,6 @@ namespace Shadow_Dominion
             _transform = transform;
 
             _monoInputHandler.OnInputUpdate += Fire;
-
-            IsInitialized = true;
         }
 
         private void OnDestroy()
@@ -67,9 +65,6 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
-            if (!IsInitialized)
-                return;
-            
             RotateTo();
             CastRay();
         }
