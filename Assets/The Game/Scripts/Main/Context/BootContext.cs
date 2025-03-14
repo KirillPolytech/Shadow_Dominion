@@ -11,6 +11,9 @@ namespace Shadow_Dominion
     {
         [Header("Configs")]
         [SerializeField]
+        private ApplicationSettingsSO applicationSettingsSo;
+        
+        [SerializeField]
         private RoomSettings roomSettings;
         
         [SerializeField]
@@ -34,15 +37,13 @@ namespace Shadow_Dominion
         {
             Container.BindInstance(roomSettings).AsSingle();
             Container.BindInstance(levelSO).AsSingle();
+            Container.BindInstance(applicationSettingsSo).AsSingle();
             
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
-
-            Container.Bind<PlayerFactory>().AsSingle().WithArguments(playerPrefab);
-            Container.Bind<RoomPlayerFactory>().AsSingle().WithArguments(networkRoomPlayerPrefab);
-
+            
             Container.BindInstance(coroutineExecuter).AsSingle();
             
             Container.Bind<PositionMessage[]>().FromInstance(spawnPositions);

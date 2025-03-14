@@ -29,7 +29,7 @@ namespace Shadow_Dominion.Zombie
             if (_iZombieTarget == null)
                 return;
 
-            var enumerator = _iZombieTarget.PlayersTrasform;
+            var enumerator = _iZombieTarget.AnimTransform;
             Vector3 destination = enumerator.position - (transform.position - enumerator.position).normalized;
             _navMeshAgent.SetDestination(destination);
         }

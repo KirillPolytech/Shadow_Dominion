@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 
@@ -8,9 +9,15 @@ namespace Shadow_Dominion
     {
         private readonly SyncList<PlayerViewData> _players = new SyncList<PlayerViewData>();
 
+        public event Action OnAllPlayersLoadedOnLevel;
+        
         public PlayerViewData[] Players => _players.ToArray();
+        
+        [SyncVar]
+        public int SpawnedPlayersOnLevel;
 
         #region Server
+        
         [Server]
         public override void OnStartServer()
         {
@@ -21,6 +28,7 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerConnectWithArg += AddAddress;
             MirrorServer.Instance.ActionOnServerDisconnectWithArg += RemoveAddress;
             MirrorServer.Instance.OnPlayerReadyChanged += UpdateReadyState;
+            MirrorServer.Instance.OnPlayerLoadedOnLevel += UpdateLoadedPlayersOnLevel;
 
             foreach (var networkConnection in MirrorServer.Instance.Connections)
             {
@@ -36,6 +44,9 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerConnectWithArg -= AddAddress;
             MirrorServer.Instance.ActionOnServerDisconnectWithArg -= RemoveAddress;
             MirrorServer.Instance.OnPlayerReadyChanged -= UpdateReadyState;
+            MirrorServer.Instance.OnPlayerLoadedOnLevel -= UpdateLoadedPlayersOnLevel;
+
+            SpawnedPlayersOnLevel = 0;
         }
 
         [Client]
@@ -71,6 +82,17 @@ namespace Shadow_Dominion
         private void UpdateReadyState(PlayerViewData playerViewData)
         {
             PlayerListing.Instance.IsReady(playerViewData.Address, playerViewData.IsReady);
+        }
+
+        [Server]
+        private void UpdateLoadedPlayersOnLevel()
+        {
+            SpawnedPlayersOnLevel++;
+
+            if (SpawnedPlayersOnLevel == _players.Count)
+            {
+                OnAllPlayersLoadedOnLevel?.Invoke();
+            }
         }
         
         #endregion

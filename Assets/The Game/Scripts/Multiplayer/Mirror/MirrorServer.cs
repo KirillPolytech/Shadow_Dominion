@@ -13,6 +13,7 @@ namespace Shadow_Dominion
         public readonly List<NetworkConnectionToClient> Connections = new List<NetworkConnectionToClient>();
 
         public event Action<HashSet<NetworkRoomPlayer>> OnPlayerReadyChanged;
+        public event Action OnPlayerLoadedOnLevel;
 
         public List<Main.Player> SpawnedPlayerInstances = new List<Main.Player>();
 
@@ -170,6 +171,8 @@ namespace Shadow_Dominion
             SpawnedPlayerInstances.Add(gamePlayer.GetComponent<Main.Player>());
 
             gamePlayer.name = conn.address;
+            
+            OnPlayerLoadedOnLevel?.Invoke();
 
             Debug.Log($"[Server] OnRoomServerSceneLoadedForPlayer {conn.address}");
 

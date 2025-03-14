@@ -11,8 +11,7 @@ namespace Shadow_Dominion.StateMachine
         private readonly WindowsController _windowsController;
         private int _deadPlayers;
 
-        public GameplayState(
-            WindowsController windowsController)
+        public GameplayState(WindowsController windowsController)
         {
             _windowsController = windowsController;
         }
@@ -42,7 +41,7 @@ namespace Shadow_Dominion.StateMachine
 
         public override void Exit()
         {
-            foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances)
+            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
             {
                 player.OnDead -= OnDeath;
             }

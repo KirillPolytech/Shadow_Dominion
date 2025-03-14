@@ -4,6 +4,6 @@ namespace Shadow_Dominion.Zombie
 {
     public interface IZombieTarget
     {
-        public Transform PlayersTrasform { get; set; }
+        public Transform AnimTransform { get; set; }
     }
 }

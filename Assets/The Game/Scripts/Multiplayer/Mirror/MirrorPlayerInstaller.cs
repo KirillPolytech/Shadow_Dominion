@@ -33,7 +33,7 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private PlayerSettings playerSettings;
-        
+
         [SerializeField]
         private WeaponSO weaponSO;
 
@@ -41,18 +41,21 @@ namespace Shadow_Dominion
         [Header("Limits")]
         [SerializeField]
         private Main.Player player;
-        
+
         [SerializeField]
-        private Transform playerTransform;
+        private Transform animTransform;
 
         [SerializeField]
         private CameraLook cameraLook;
 
         [SerializeField]
         private AimTarget aimTarget;
-        
+
         [SerializeField]
         private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+
+        [SerializeField]
+        private CinemachinePanTilt cinemachinePanTilt;
 
         [SerializeField]
         private Renderer rend;
@@ -74,7 +77,7 @@ namespace Shadow_Dominion
         private MonoInputHandler monoInputHandler;
 
         [SerializeField]
-        private Rigidbody charRigidbody;
+        private Rigidbody AnimRigidbody;
 
         [Space]
         [Header("Motion")]
@@ -112,13 +115,14 @@ namespace Shadow_Dominion
         [Header("Network")]
         [SerializeField]
         private MirrorShootHandler mirrorShootHandler;
-        
+
         [Space]
         [SerializeField]
         private AnimationClip standUpFaceUpClip;
+
         [SerializeField]
         private AnimationClip standUpFaceDownClip;
-        
+
         [Space]
         [Header("Debug")]
         [SerializeField]
@@ -127,7 +131,7 @@ namespace Shadow_Dominion
         private Action<Vector3> _cachedOnCollision;
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
-        
+
         private void Awake()
         {
             WindowsController windowsController = FindAnyObjectByType<WindowsController>();
@@ -148,11 +152,11 @@ namespace Shadow_Dominion
                 standUpFaceUpClip,
                 standUpFaceDownClip,
                 windowsController);
-            
-            player.Construct(playerTransform, playerStateMachine);
-            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
+
+            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow, cinemachinePanTilt);
+            player.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
             aimTarget.Construct(cameraLook);
-            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
+            playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
             ak47.Construct(monoInputHandler, aim, weaponSO);
             mirrorShootHandler.Construct(ak47);
 
@@ -186,7 +190,7 @@ namespace Shadow_Dominion
         {
             playerStateMachine.SetState<DeathState>();
             return;
-            if(copyTo[ind].BoneType == HumanBodyBones.Head)
+            if (copyTo[ind].BoneType == HumanBodyBones.Head)
                 playerStateMachine.SetState<DeathState>();
 
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm

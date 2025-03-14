@@ -7,12 +7,15 @@ namespace Shadow_Dominion
 {
     public class CameraLook : NetworkBehaviour
     {
+        private const int HalfCircleAngle = 180;
+        
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
 
         public bool CanZooming { get; set; } = true;
 
         private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
+        private CinemachinePanTilt _cinemachinePanTilt;
         private IInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
@@ -26,12 +29,14 @@ namespace Shadow_Dominion
         public void Construct(
             CameraSettings camSettings,
             IInputHandler monoInputHandler,
-            CinemachineThirdPersonFollow cinemachineThirdPersonFollow)
+            CinemachineThirdPersonFollow cinemachineThirdPersonFollow,
+            CinemachinePanTilt cinemachinePanTilt)
         {
             _cameraSettings = camSettings;
             CameraTransform = transform;
             _monoInputHandler = monoInputHandler;
             _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
+            _cinemachinePanTilt = cinemachinePanTilt;
 
             _camera = GetComponent<Camera>();
 
@@ -89,6 +94,11 @@ namespace Shadow_Dominion
             _hit.point = _ray.GetPoint(_cameraSettings.rayCastDistance);
 
             HitPoint = _hit.point;
+        }
+
+        public void SetRotation(Quaternion rot)
+        {
+            _cinemachinePanTilt.PanAxis.Value = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
         }
 
         private void OnDrawGizmos()

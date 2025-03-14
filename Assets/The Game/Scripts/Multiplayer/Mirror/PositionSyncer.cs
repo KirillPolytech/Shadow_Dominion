@@ -10,6 +10,8 @@ namespace Shadow_Dominion
     {
         private readonly SyncList<PositionMessage> _positionMessages = new SyncList<PositionMessage>();
         private readonly SyncList<bool> _positionFree = new SyncList<bool>();
+        private readonly bool[] frees = {true,true,true,true };
+        private Vector3 Center => Vector3.zero;
 
         private readonly PositionMessage[] positionMessage =
         {
@@ -19,10 +21,6 @@ namespace Shadow_Dominion
             new PositionMessage(new Vector3(0, 0, -20), true)
         };
         
-        private readonly bool[] frees = {true,true,true,true };
-
-        public Vector3 Center => new Vector3(25, 0, 25);
-
         public Quaternion CalculateRotation(Vector3 position)
         {
             Vector3 dir = Center - position;
@@ -36,6 +34,9 @@ namespace Shadow_Dominion
             
             DontDestroyOnLoad(gameObject);
             
+            if (!isServer)
+                return;
+            
             _positionMessages.AddRange(positionMessage);
             
             _positionFree.AddRange(frees);
@@ -43,13 +44,13 @@ namespace Shadow_Dominion
 
         public void Reset()
         {
-            if (!isOwned)
+            if (!isServer)
                 return;
             
             _positionMessages.Clear();
             _positionMessages.AddRange(positionMessage);
         }
-        
+
         public PositionMessage GetFreePosition()
         {
             for (int i = 0; i < _positionFree.Count; i++)
@@ -61,7 +62,7 @@ namespace Shadow_Dominion
 
                 temp.IsFree = false;
 
-                if (!isServer && authority)
+                if (authority)
                     UpdateSyncList(i);
 
                 return temp;
@@ -70,7 +71,7 @@ namespace Shadow_Dominion
             throw new Exception("Cant find free position");
         }
 
-        [Command]
+        [Command(requiresAuthority = false)]
         private void UpdateSyncList(int ind)
         {
             _positionFree[ind] = false;
@@ -81,6 +82,8 @@ namespace Shadow_Dominion
 
             _positionMessages.Remove(temp);
             _positionMessages.Add(temp);
+            
+            Debug.Log("[Server] PositionSyncer updated.");
         }
     }
 }

@@ -5717,7 +5717,7 @@ GameObject:
   - component: {fileID: 5253790638672320161}
   - component: {fileID: 4951795622753340675}
   m_Layer: 6
-  m_Name: Root
+  m_Name: RagdollRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6087,7 +6087,7 @@ Transform:
   m_GameObject: {fileID: 2023024547148383985}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1.65, z: 0.19}
+  m_LocalPosition: {x: 0.5, y: 1.6426973, z: -0.2452459}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6604,16 +6604,17 @@ MonoBehaviour:
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
   weaponSO: {fileID: 11400000, guid: e4f8681f97530264da15e76fbd6c5e63, type: 2}
   player: {fileID: 3110435118676541445}
-  playerTransform: {fileID: 1789759884891076493}
+  animTransform: {fileID: 3986989064418960988}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
   cinemachineThirdPersonFollow: {fileID: 5523933377966461769}
+  cinemachinePanTilt: {fileID: 7514673529673463900}
   rend: {fileID: 4225819761077651980}
   ak47: {fileID: 4374534481158209595}
   aim: {fileID: 4205928794011733951}
   animator: {fileID: 7040407950064811046}
   monoInputHandler: {fileID: 2883562924446922007}
-  charRigidbody: {fileID: 3609581604113678919}
+  AnimRigidbody: {fileID: 3609581604113678919}
   anim: {fileID: 3986989064418960988}
   copyFrom:
   - {fileID: 8864477846496691912}
@@ -9361,7 +9362,7 @@ Transform:
   m_GameObject: {fileID: 5438910018940704158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1.65, z: 0.19}
+  m_LocalPosition: {x: 0.5, y: 1.6426973, z: -0.2452459}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12158,7 +12159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6950389291583681935, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_Name
-      value: Root
+      value: AnimRoot
       objectReference: {fileID: 0}
     - target: {fileID: 6980218851566504274, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: fireEffect

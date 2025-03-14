@@ -3,26 +3,34 @@ using Mirror;
 using Multiplayer.Structs;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
-using Shadow_Dominion.Zombie;
 using UnityEngine;
 
 namespace Shadow_Dominion.Main
 {
-    public class Player : Humanoid, IZombieTarget
+    public class Player : Humanoid
     {
         public event Action OnDead;
         
-        public Transform PlayersTrasform { get; set; }
+        public Transform AnimTransform { get; private set; }
+        public Transform RagdollTransform { get; private set; }
         
         public PlayerStateMachine PlayerStateMachine;
         
         private Rigidbody _rigidbody;
+        private CameraLook _cameraLook;
 
-        public void Construct(Transform playersTransform, PlayerStateMachine playerStateMachine)
+        public void Construct(
+            Transform animTransform, 
+            Rigidbody animRb, 
+            Transform ragdollTransform, 
+            PlayerStateMachine playerStateMachine, 
+            CameraLook cameraLook)
         {
-            PlayersTrasform = playersTransform;
-            _rigidbody = playersTransform.GetComponent<Rigidbody>();
+            AnimTransform = animTransform;
+            RagdollTransform = ragdollTransform;
+            _rigidbody = animRb;
             PlayerStateMachine = playerStateMachine;
+            _cameraLook = cameraLook;
             
             PlayerStateMachine.Initialize();
             
@@ -39,21 +47,19 @@ namespace Shadow_Dominion.Main
             _rigidbody.isKinematic = iskinematic;
         }
         
-        public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
+        public void SetRigidbodyPositionAndRotation(Vector3 pos, Quaternion rot)
         {
+            _cameraLook.SetRotation(rot);
+
             _rigidbody.position = pos;
             _rigidbody.rotation = rot;
+            
+            Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }
         
         [Command]
         private void CmdSetState(PlayerStateMessage newStateMessage)
         {
-            if (!isLocalPlayer) 
-                Debug.LogWarning($"isLocalPlayer: {isLocalPlayer}");  
-            
-            if (!isOwned) 
-                Debug.LogWarning($"isOwned: {isOwned}");           
-            
             RpcUpdateState(newStateMessage.StateName);
 
             if (newStateMessage.StateName == typeof(DeathState).ToString())
