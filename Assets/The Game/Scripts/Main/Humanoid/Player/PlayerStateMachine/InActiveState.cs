@@ -1,26 +1,27 @@
 ﻿using Shadow_Dominion.AnimStateMachine;
-using Shadow_Dominion.StateMachine;
 using UnityEngine;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class InActiveState : IState
+    public class InActiveState : PlayerState
     {
         private readonly Main.Player _player;
-        private readonly PlayerAnimation _playerAnimation;
         
-        public InActiveState(Main.Player player, PlayerAnimation playerAnimation)
+        public InActiveState(Main.Player player, PlayerAnimation playerAnimation) : base(playerAnimation)
         {
             _player = player;
-            _playerAnimation = playerAnimation;
         }
         
         public override void Enter()
         {
+            _player.RagdollTransform.gameObject.SetActive(false);
+            
             _playerAnimation.AnimationStateMachine.SetState<AnimationIdleState>();
 
             Vector3 freePos = SpawnPointSyncer.Instance.GetFreePosition().Position;
             Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(freePos);
+            
+            _player.RagdollTransform.position = freePos;
             
             _player.SetRigidbodyPositionAndRotation(freePos, rot);
         }
@@ -29,5 +30,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             _player.RagdollTransform.gameObject.SetActive(true);
         }
+
+        public override bool CanExit() => true;
     }
 }

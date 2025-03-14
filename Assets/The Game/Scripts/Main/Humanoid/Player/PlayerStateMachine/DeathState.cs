@@ -34,5 +34,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             
         }
+
+        public override bool CanExit() => true;
     }
 }

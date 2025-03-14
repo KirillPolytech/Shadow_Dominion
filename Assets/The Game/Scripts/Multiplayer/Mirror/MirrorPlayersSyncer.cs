@@ -111,5 +111,11 @@ namespace Shadow_Dominion
         }
         
         #endregion
+        
+        [Command(requiresAuthority = false)]
+        public void CmdChangeState(NetworkRoomPlayer networkRoom)
+        {
+            networkRoom.CmdChangeReadyState(!networkRoom.readyToBegin);
+        }
     }
 }

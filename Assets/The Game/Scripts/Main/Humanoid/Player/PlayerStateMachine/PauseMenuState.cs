@@ -1,14 +1,13 @@
-﻿using Shadow_Dominion.StateMachine;
-using UnityEngine;
+﻿using UnityEngine;
 using WindowsSystem;
 
 namespace Shadow_Dominion.Player.StateMachine
 {
-    public class PauseMenuState : IState
+    public class PauseMenuState : PlayerState
     {
         private readonly WindowsController _windowsController;
         
-        public PauseMenuState(WindowsController windowsController)
+        public PauseMenuState(WindowsController windowsController, PlayerAnimation playerAnimation) : base(playerAnimation)
         {
             _windowsController = windowsController;
         }
@@ -23,5 +22,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             CursorService.SetState(CursorLockMode.Locked);
         }
+
+        public override bool CanExit() => true;
     }
 }

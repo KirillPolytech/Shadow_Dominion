@@ -31,14 +31,18 @@ namespace Shadow_Dominion.Player.StateMachine
             _inputHandler = inputHandler;
             _ragdollRoot = ragdollRoot;
             _playerStateMachine = playerStateMachine;
-
-            _inputHandler.OnInputUpdate += HandleInput;
         }
 
         private void HandleInput(InputData inputData)
         {
-            if (!inputData.F_Down)
+            Vector3 upDirection = _ragdollRoot.up;
+            float angle = Vector3.Angle(upDirection, Vector3.up);
+
+            if (angle < 90f)
                 return;
+
+            //if (!inputData.F_Down)
+                //return;
 
             if (Vector3.Dot(_ragdollRoot.forward, Vector3.up) > 0)
                 _playerStateMachine.SetState<StandUpFaceUpState>();
@@ -49,12 +53,12 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Enter()
         {
             _inputHandler.OnInputUpdate += HandleInput;
-            
+
             _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
-            
+
             _rigBuilder.enabled = false;
             _cameraLook.CanZooming = false;
-            
+
             for (int i = 0; i < _boneControllers.Length; i++)
             {
                 _boneControllers[i].IsPositionApplying(false);
@@ -67,5 +71,7 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             _inputHandler.OnInputUpdate -= HandleInput;
         }
+
+        public override bool CanExit() => true;
     }
 }

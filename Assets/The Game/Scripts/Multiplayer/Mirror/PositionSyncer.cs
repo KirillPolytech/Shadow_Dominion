@@ -34,7 +34,7 @@ namespace Shadow_Dominion
             
             DontDestroyOnLoad(gameObject);
             
-            if (!isServer)
+            if (_positionMessages.Count != 0)
                 return;
             
             _positionMessages.AddRange(positionMessage);

@@ -54,7 +54,7 @@ namespace Shadow_Dominion.Main
 
         private void Move(bool isRun, float x, float y)
         {
-            if (!_playerSettings.CanMove)
+            if (!_playerSettings.CanMove || _charRigidbody.isKinematic)
                 return;
 
             int isRunInt = isRun ? 1 : 0;

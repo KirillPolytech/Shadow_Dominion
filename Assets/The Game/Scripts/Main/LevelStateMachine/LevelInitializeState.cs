@@ -27,10 +27,20 @@ namespace Shadow_Dominion.StateMachine
             _levelSO = levelSo;
         }
 
+        ~LevelInitializeState()
+        {
+            _coroutineExecuter.Stop(WaitForSeconds());
+        }
+
         public override void Enter()
         {
             _windowsController.OpenWindow<InitializeWindow>();
             CursorService.SetState(CursorLockMode.Locked);
+            
+            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
+            {
+                player.PlayerStateMachine.SetState<InActiveState>();
+            }
 
             _coroutineExecuter.Execute(WaitForSeconds());
         }

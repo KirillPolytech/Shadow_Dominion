@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Multiplayer.Structs;
 using Shadow_Dominion.AnimStateMachine;
@@ -20,9 +21,13 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly BoneController[] _boneControllerses;
         private readonly IInputHandler _inputHandler;
+        protected new readonly List<PlayerState> _states = new List<PlayerState>();
+        
+        public new PlayerState CurrentState { get; protected set; }
+
 
         public Action<PlayerStateMessage> OnStateChanged;
-        
+
         private string _lastState;
 
         public PlayerStateMachine(
@@ -47,17 +52,17 @@ namespace Shadow_Dominion.Player.StateMachine
             _inputHandler = inputHandler;
 
             DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler,
-                windowsController, boneControllers);
+                windowsController, boneControllers, rootRig, cameraLook);
             InActiveState inActiveState = new InActiveState(player, playerAnimation);
-            PauseMenuState pauseMenuState = new PauseMenuState(windowsController);
+            PauseMenuState pauseMenuState = new PauseMenuState(windowsController, playerAnimation);
             DeathState deathState = new DeathState(playerAnimation, boneControllers, cameraLook);
 
             StandUpFaceUpState standUpFaceUpState =
                 new StandUpFaceUpState(rootRig, playerAnimation,
-                    cameraLook, coroutineExecuter, standUpFaceUp.length, boneControllers, MoveTo);
+                    cameraLook, coroutineExecuter, standUpFaceUp.length, boneControllers, MoveTo, this);
             StandUpFaceDownState standUpFaceDownState =
                 new StandUpFaceDownState(rootRig, playerAnimation,
-                    cameraLook, coroutineExecuter, standUpFaceDown.length, boneControllers, MoveTo);
+                    cameraLook, coroutineExecuter, standUpFaceDown.length, boneControllers, MoveTo, this);
             RagdollState ragdollState =
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneControllers, inputHandler, ragdollRoot,
                     this);
@@ -101,9 +106,9 @@ namespace Shadow_Dominion.Player.StateMachine
 
         public override void SetState<T>()
         {
-            IState state = _states.First(x => x.GetType() == typeof(T));
+            PlayerState state = _states.First(x => x.GetType() == typeof(T));
 
-            if (CurrentState == state)
+            if (CurrentState == state || (CurrentState != null && !CurrentState.CanExit()))
                 return;
 
             CurrentState?.Exit();
@@ -112,12 +117,12 @@ namespace Shadow_Dominion.Player.StateMachine
 
             OnStateChanged?.Invoke(new PlayerStateMessage(CurrentState.GetType().ToString()));
 
-            Debug.Log($"Current player state: {CurrentState.GetType()}");
+            Debug.Log($"Current player state: {CurrentState.GetType()}, Time: {Time.time}");
         }
-        
-        public void SetState(IState state)
+
+        public void SetState(PlayerState state)
         {
-            if (CurrentState == state)
+            if (CurrentState == state || (CurrentState != null && !CurrentState.CanExit()))
                 return;
 
             CurrentState?.Exit();
@@ -126,24 +131,22 @@ namespace Shadow_Dominion.Player.StateMachine
 
             OnStateChanged?.Invoke(new PlayerStateMessage(CurrentState.GetType().ToString()));
 
-            Debug.Log($"Current player state: {CurrentState.GetType()}");
+            Debug.Log($"Current player state: {CurrentState.GetType()}, Time: {Time.time}");
         }
 
         public void SetState(string stateName)
         {
-            IState state = StringToState(stateName);
+            PlayerState state = StringToState(stateName);
 
-            if (CurrentState == state)
+            if (CurrentState == state || (CurrentState != null && !CurrentState.CanExit()))
                 return;
 
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-
-            Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
 
-        private IState StringToState(string state)
+        private PlayerState StringToState(string state)
             => _states.First(x => x.GetType().ToString() == state);
 
 
@@ -151,12 +154,16 @@ namespace Shadow_Dominion.Player.StateMachine
 
         private IEnumerator WaitForSecond(float waitTime, Action callBack)
         {
+            Debug.Log($"WaitForSecond start, Time: {Time.time}");
+
             yield return new WaitForSeconds(waitTime);
 
             callBack?.Invoke();
+            
+            Debug.Log($"WaitForSecond finished, Time: {Time.time}");
         }
 
-        private IEnumerator MoveTo(float clipLength, bool isUp)
+        private IEnumerator MoveTo(float clipLength, bool isUp, Action OnFinish)
         {
             Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
             Quaternion q = Quaternion.LookRotation(dirUp * (isUp ? -1 : 1));
@@ -186,9 +193,14 @@ namespace Shadow_Dominion.Player.StateMachine
                 boneController.IsRotationApplying(true);
             }
 
-            _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceUp>();
+            if (isUp)
+                _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceUp>();
+            else
+                _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceDown>();
 
-            _coroutineExecuter.Execute(WaitForSecond(clipLength, SetState<DefaultState>));
+            _coroutineExecuter.Execute(WaitForSecond(clipLength, OnFinish.Invoke));
+            
+            Debug.Log($"MoveTo finished, Time: {Time.time}");
         }
 
         #endregion

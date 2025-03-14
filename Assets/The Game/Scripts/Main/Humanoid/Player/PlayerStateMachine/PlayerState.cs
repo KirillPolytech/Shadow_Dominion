@@ -1,3 +1,4 @@
+using System;
 using Shadow_Dominion.StateMachine;
 
 namespace Shadow_Dominion.Player.StateMachine
@@ -18,5 +19,7 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Exit()
         {
         }
+
+        public abstract bool CanExit();
     }
 }

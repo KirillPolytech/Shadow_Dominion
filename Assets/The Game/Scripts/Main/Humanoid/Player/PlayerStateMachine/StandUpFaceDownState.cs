@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Shadow_Dominion.AnimStateMachine;
-using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine
@@ -13,7 +12,10 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly float _clipLength;
         private readonly BoneController[] _boneControllers;
-        private readonly Func<float, bool, IEnumerator> _moveToCoroutine;
+        private readonly Func<float, bool, Action, IEnumerator> _moveToCoroutine;
+        private readonly PlayerStateMachine _playerStateMachine;
+
+        private IEnumerator _currentCoroutine;
         
         public StandUpFaceDownState(
             RigBuilder rigBuilder,
@@ -22,7 +24,8 @@ namespace Shadow_Dominion.Player.StateMachine
             CoroutineExecuter coroutineExecuter,
             float clipLength,
             BoneController[] boneControllers,
-            Func<float, bool, IEnumerator> moveToCoroutine) : base(playerAnimation)
+            Func<float, bool, Action, IEnumerator> moveToCoroutine,
+            PlayerStateMachine playerStateMachine) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _cameraLook = cameraLook;
@@ -30,6 +33,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _clipLength = clipLength;
             _boneControllers = boneControllers;
             _moveToCoroutine = moveToCoroutine;
+            _playerStateMachine = playerStateMachine;
         }
         
         public override void Enter()
@@ -44,14 +48,15 @@ namespace Shadow_Dominion.Player.StateMachine
                 boneController.IsPositionApplying(false);
                 boneController.IsRotationApplying(false);
             }
-            
-            _coroutineExecuter.Execute(_moveToCoroutine(_clipLength, true));
+
+            _currentCoroutine = _moveToCoroutine(_clipLength, false, () => 
+            {
+                _currentCoroutine = null;
+                _playerStateMachine.SetState<DefaultState>();
+            });
+            _coroutineExecuter.Execute(_currentCoroutine);
         }
 
-        public override void Exit()
-        {
-            _rigBuilder.enabled = true;
-            _cameraLook.CanZooming = true;
-        }
+        public override bool CanExit() => _currentCoroutine == null;
     }
 }

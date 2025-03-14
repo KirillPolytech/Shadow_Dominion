@@ -1,5 +1,9 @@
+using System.Linq;
+using Mirror;
+using Shadow_Dominion;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class RoomPlayerView : MonoBehaviour
@@ -8,9 +12,27 @@ public class RoomPlayerView : MonoBehaviour
     private TextMeshProUGUI playerName;
     
     [SerializeField]
-    private Image checkmark;
+    private Button button;
+
+    private UnityAction _onButtonPressed;
+    
+    private void Awake()
+    {
+        _onButtonPressed = () =>
+        {
+            NetworkConnectionToClient localPlayer = MirrorServer.Instance.Connections.First(x => x.identity.isClient);
+            MirrorPlayersSyncer.Instance.CmdChangeState(localPlayer.identity.GetComponent<NetworkRoomPlayer>());
+        };
+        
+        button.onClick.AddListener(_onButtonPressed);
+    }
+
+    private void OnDestroy()
+    {
+        button.onClick.RemoveListener(_onButtonPressed);
+    }
 
     public void SetName(string pName) => playerName.text = pName;
     
-    public void SetCheckMarkState(bool state) => checkmark.enabled = state;
+    public void SetButtonState(bool state) => button.GetComponentInChildren<TextMeshProUGUI>().text = state ? "Ready" : "Not ready";
 }

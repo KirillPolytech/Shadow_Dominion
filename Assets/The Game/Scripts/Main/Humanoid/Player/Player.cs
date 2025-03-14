@@ -54,7 +54,7 @@ namespace Shadow_Dominion.Main
             _rigidbody.position = pos;
             _rigidbody.rotation = rot;
             
-            Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
+            // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }
         
         [Command]
@@ -67,7 +67,7 @@ namespace Shadow_Dominion.Main
                 OnDead?.Invoke();
             }
 
-            Debug.Log($"[Server] {newStateMessage}");
+            Debug.Log($"[Server] {newStateMessage}, Time: {Time.time}");
         }
 
         [ClientRpc]
@@ -82,7 +82,7 @@ namespace Shadow_Dominion.Main
                 Debug.LogError(e);
             }
 
-            Debug.Log($"[Client] {newState}");
+            // Debug.Log($"[Client] {newState} + Time: {Time.time}");
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Shadow_Dominion
 
         public void IsReady(string address, bool state)
         {
-            _views[address].SetCheckMarkState(state);
+            _views[address].SetButtonState(state);
         }
     }
 }

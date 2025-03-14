@@ -188,8 +188,6 @@ namespace Shadow_Dominion
 
         private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
         {
-            playerStateMachine.SetState<DeathState>();
-            return;
             if (copyTo[ind].BoneType == HumanBodyBones.Head)
                 playerStateMachine.SetState<DeathState>();
 
