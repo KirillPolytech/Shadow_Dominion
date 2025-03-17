@@ -110,12 +110,13 @@ namespace Shadow_Dominion
             PlayerListing.Instance.SpawnView(_players.ToArray());
         }
         
-        #endregion
-        
+        [Client]
         [Command(requiresAuthority = false)]
         public void CmdChangeState(NetworkRoomPlayer networkRoom)
         {
             networkRoom.CmdChangeReadyState(!networkRoom.readyToBegin);
         }
+        
+        #endregion
     }
 }

@@ -11,12 +11,11 @@ namespace Shadow_Dominion
 
         // Server only
         public readonly List<NetworkConnectionToClient> Connections = new List<NetworkConnectionToClient>();
+        public readonly List<Main.Player> SpawnedPlayerInstances = new List<Main.Player>();
 
         public event Action<HashSet<NetworkRoomPlayer>> OnPlayerReadyChanged;
         public event Action OnPlayerLoadedOnLevel;
-
-        public List<Main.Player> SpawnedPlayerInstances = new List<Main.Player>();
-
+        
         [SerializeField]
         private MirrorPlayersSyncer mirrorPlayerStateSyncerPrefab;
         

@@ -23,50 +23,48 @@ namespace Shadow_Dominion
         
         public Vector3 HitPoint => _hit.point;
         public Vector3 BulletStartPosition => bulletStartPosition.position;
+        public Transform InitialParent { get; private set; }
 
-        private IInputHandler _monoInputHandler;
         private WeaponSO _weaponSo;
         private Transform _lookTarget;
         private Transform _transform;
         private RaycastHit _hit;
+        
+        private Vector3 _initialPos;
+        private Quaternion _initialRot;
+        
+        private Vector3 _ragdollPos;
+        private Quaternion _ragdollRot;
 
         public void Construct(
-            IInputHandler monoInputHandler,
             Transform lookTarget,
             WeaponSO weaponSo)
         {
-            _monoInputHandler = monoInputHandler;
             _lookTarget = lookTarget;
             _weaponSo = weaponSo;
             _transform = transform;
+            InitialParent = transform.parent;
 
-            _monoInputHandler.OnInputUpdate += Fire;
+            _initialPos = transform.position;
+            _initialRot = transform.rotation;
+
+            _ragdollPos = new Vector3(0.298f, -0.185f, 0.12f);
+            _ragdollRot = Quaternion.Euler(new Vector3(329.8f, 247.7f, 207.16f));
         }
 
-        private void OnDestroy()
+        public void HandleInput(InputData inputData)
         {
-            if (_monoInputHandler == null)
-                return;
+            RotateTo();
+            CastRay();
             
-            _monoInputHandler.OnInputUpdate -= Fire;
-        }
-
-        private void Fire(InputData inputData)
-        {
             if (!inputData.LeftMouseButton)
                 return;
-
+            
             OnFired?.Invoke(bulletStartPosition.position, transform.forward * _weaponSo.Damage);
 
             if (fireEffect.isPlaying)
                 fireEffect.Stop();
             fireEffect.Play();
-        }
-
-        private void FixedUpdate()
-        {
-            RotateTo();
-            CastRay();
         }
 
         private void CastRay()
@@ -100,6 +98,23 @@ namespace Shadow_Dominion
             weaponPose.localEulerAngles = new Vector3(lookAxisX, lookAxisY, lookAxisZ);
         }
 
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
+        }
+        
+        public void SetInitialTransform()
+        {
+            transform.localPosition = _initialPos;
+            transform.localRotation = _initialRot;
+        }
+
+        public void SetRagdollTransform()
+        {
+            transform.localPosition = _ragdollPos;
+            transform.localRotation = _ragdollRot;
+        }
+        
         private void OnDrawGizmos()
         {
             Debug.DrawLine(bulletStartPosition.position, _hit.point, Color.red);

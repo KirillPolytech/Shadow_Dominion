@@ -94,10 +94,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8488">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="19864">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="8488" />
+      <option name="pid" value="19864" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -209,6 +209,8 @@
       <workItem from="1741886723004" duration="8939000" />
       <workItem from="1741970554419" duration="7493000" />
       <workItem from="1741978099227" duration="8843000" />
+      <workItem from="1742064267995" duration="3532000" />
+      <workItem from="1742140761561" duration="5276000" />
     </task>
     <servers />
   </component>
@@ -232,19 +234,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorServer.cs</url>
-          <line>183</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Multiplayer\Mirror\MirrorServer.cs" initialLine="183" containingFunctionPresentation="Method 'ReadyStatusChanged'">
-            <startOffsets>
-              <option value="5744" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5770" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="93" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

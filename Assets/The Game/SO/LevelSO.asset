@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106abcf20ba5355499ff6a883c939956, type: 3}
   m_Name: LevelSO
   m_EditorClassIdentifier: 
-  InitializeWaitTime: 5
+  InitializeWaitTime: 0

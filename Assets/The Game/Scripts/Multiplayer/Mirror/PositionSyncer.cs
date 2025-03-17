@@ -13,12 +13,12 @@ namespace Shadow_Dominion
         private readonly bool[] frees = {true,true,true,true };
         private Vector3 Center => Vector3.zero;
 
-        private readonly PositionMessage[] positionMessage =
+        public PositionMessage[] positionMessage =
         {
-            new PositionMessage(new Vector3(20, 0, 0), true),
-            new PositionMessage(new Vector3(-20, 0, 0), true),
-            new PositionMessage(new Vector3(0, 0, 20), true),
-            new PositionMessage(new Vector3(0, 0, -20), true)
+            new PositionMessage(new Vector3(55, 0, 0), true),
+            new PositionMessage(new Vector3(-55, 0, 0), true),
+            new PositionMessage(new Vector3(0, 0, 55), true),
+            new PositionMessage(new Vector3(0, 0, -55), true)
         };
         
         public Quaternion CalculateRotation(Vector3 position)

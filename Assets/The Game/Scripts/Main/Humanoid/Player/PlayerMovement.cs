@@ -6,6 +6,8 @@ namespace Shadow_Dominion.Main
 {
     public class PlayerMovement
     {
+        public bool IsRunning { get; private set; }
+        
         private PlayerSettings _playerSettings;
         private CameraLook _cameraLook;
         private Rigidbody _charRigidbody;
@@ -39,8 +41,8 @@ namespace Shadow_Dominion.Main
         {
             float magnitude = new Vector3 (_charRigidbody.linearVelocity.x, 0 , _charRigidbody.linearVelocity.z).magnitude;
             Vector2 dir = new Vector2(data.HorizontalAxisRaw, data.VerticalAxisRaw);
-            
-            float speedDen = data.LeftShift ? _playerSettings.MaxRunSpeed : _playerSettings.MaxWalkSpeed;
+
+            float speedDen = _playerSettings.MaxRunSpeed; //data.LeftShift ? _playerSettings.MaxRunSpeed : _playerSettings.MaxWalkSpeed;
             float x = dir.x * magnitude / speedDen;
             float y = dir.y * magnitude / speedDen;
 
@@ -56,6 +58,8 @@ namespace Shadow_Dominion.Main
         {
             if (!_playerSettings.CanMove || _charRigidbody.isKinematic)
                 return;
+            
+            IsRunning = isRun;
 
             int isRunInt = isRun ? 1 : 0;
 

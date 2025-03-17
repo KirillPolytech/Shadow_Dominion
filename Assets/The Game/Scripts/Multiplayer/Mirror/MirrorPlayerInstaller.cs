@@ -151,15 +151,17 @@ namespace Shadow_Dominion
                 monoInputHandler,
                 standUpFaceUpClip,
                 standUpFaceDownClip,
-                windowsController);
+                windowsController,
+                AnimRigidbody,
+                ak47);
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow, cinemachinePanTilt);
             player.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
-            ak47.Construct(monoInputHandler, aim, weaponSO);
+            ak47.Construct(aim, weaponSO);
             mirrorShootHandler.Construct(ak47);
-
+            
             for (int i = 0; i < copyFrom.Length; i++)
             {
                 HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
@@ -170,7 +172,7 @@ namespace Shadow_Dominion
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 monoInputHandler.OnInputUpdate += _cachedInputData;
 
-                _cachedOnCollision = deltaDist => OnCollision(deltaDist, ind, playerStateMachine);
+                _cachedOnCollision = deltaDist => OnCollision(ind, playerStateMachine, playerMovement.IsRunning);
                 copyTo[i].OnCollision += _cachedOnCollision;
             }
 
@@ -186,8 +188,11 @@ namespace Shadow_Dominion
             }
         }
 
-        private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
+        private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun)
         {
+            if (!isRun)
+                return;
+            
             if (copyTo[ind].BoneType == HumanBodyBones.Head)
                 playerStateMachine.SetState<DeathState>();
 

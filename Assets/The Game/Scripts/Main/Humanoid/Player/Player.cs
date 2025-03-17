@@ -12,11 +12,11 @@ namespace Shadow_Dominion.Main
         public event Action OnDead;
         
         public Transform AnimTransform { get; private set; }
+        public Rigidbody AnimRb { get; private set; }
         public Transform RagdollTransform { get; private set; }
         
         public PlayerStateMachine PlayerStateMachine;
         
-        private Rigidbody _rigidbody;
         private CameraLook _cameraLook;
 
         public void Construct(
@@ -28,7 +28,7 @@ namespace Shadow_Dominion.Main
         {
             AnimTransform = animTransform;
             RagdollTransform = ragdollTransform;
-            _rigidbody = animRb;
+            AnimRb = animRb;
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             
@@ -44,15 +44,15 @@ namespace Shadow_Dominion.Main
 
         public void IsKinematic(bool iskinematic)
         {
-            _rigidbody.isKinematic = iskinematic;
+            AnimRb.isKinematic = iskinematic;
         }
         
         public void SetRigidbodyPositionAndRotation(Vector3 pos, Quaternion rot)
         {
             _cameraLook.SetRotation(rot);
 
-            _rigidbody.position = pos;
-            _rigidbody.rotation = rot;
+            AnimRb.position = pos;
+            AnimRb.rotation = rot;
             
             // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }

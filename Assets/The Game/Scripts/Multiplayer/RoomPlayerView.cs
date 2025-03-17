@@ -21,6 +21,10 @@ public class RoomPlayerView : MonoBehaviour
         _onButtonPressed = () =>
         {
             NetworkConnectionToClient localPlayer = MirrorServer.Instance.Connections.First(x => x.identity.isClient);
+            
+            if (playerName.text != localPlayer.address)
+                return;
+            
             MirrorPlayersSyncer.Instance.CmdChangeState(localPlayer.identity.GetComponent<NetworkRoomPlayer>());
         };
         

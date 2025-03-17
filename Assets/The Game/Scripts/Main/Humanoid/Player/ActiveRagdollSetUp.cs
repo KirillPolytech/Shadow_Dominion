@@ -68,7 +68,7 @@ namespace Shadow_Dominion
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                Debug.LogWarning(e);
             }
         }
 

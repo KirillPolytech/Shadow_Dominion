@@ -14,6 +14,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly BoneController[] _boneControllers;
         private readonly Func<float, bool, Action, IEnumerator> _moveToCoroutine;
         private readonly PlayerStateMachine _playerStateMachine;
+        private readonly Ak47 _ak47;
 
         private IEnumerator _currentCoroutine;
         
@@ -25,7 +26,8 @@ namespace Shadow_Dominion.Player.StateMachine
             float clipLength,
             BoneController[] boneControllers,
             Func<float, bool, Action, IEnumerator> moveToCoroutine,
-            PlayerStateMachine playerStateMachine) : base(playerAnimation)
+            PlayerStateMachine playerStateMachine,
+            Ak47 ak47) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _cameraLook = cameraLook;
@@ -34,6 +36,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _boneControllers = boneControllers;
             _moveToCoroutine = moveToCoroutine;
             _playerStateMachine = playerStateMachine;
+            _ak47 = ak47;
         }
         
         public override void Enter()
@@ -51,6 +54,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
             _currentCoroutine = _moveToCoroutine(_clipLength, false, () => 
             {
+                _ak47.SetInitialTransform();
                 _currentCoroutine = null;
                 _playerStateMachine.SetState<DefaultState>();
             });
