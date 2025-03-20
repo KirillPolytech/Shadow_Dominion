@@ -21,3 +21,4 @@ MonoBehaviour:
   CanMove: 1
   CanRotate: 1
   Approximation: 0.01
+  RagdollDelay: 1

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
@@ -8,17 +9,20 @@ namespace Shadow_Dominion.Player.StateMachine
 {
     public class RagdollState : PlayerState
     {
+        private readonly IInputHandler _inputHandler;
+        private readonly Rigidbody _animRb;
+
         private readonly PlayerStateMachine _playerStateMachine;
         private readonly RigBuilder _rigBuilder;
-        private readonly IInputHandler _inputHandler;
         private readonly BoneController[] _boneControllers;
         private readonly CameraLook _cameraLook;
         private readonly Transform _ragdollRoot;
         private readonly Vector3 _forceDirection;
         private readonly Main.Player _player;
-        private readonly Rigidbody _animRb;
         private readonly Ak47 _ak47;
-
+        private readonly CoroutineExecuter _coroutineExecuter;
+        private readonly PlayerSettings _playerSettings;
+        
         public RagdollState(
             PlayerAnimation playerAnimation,
             CameraLook cameraLook,
@@ -29,7 +33,9 @@ namespace Shadow_Dominion.Player.StateMachine
             PlayerStateMachine playerStateMachine,
             Main.Player player,
             Rigidbody animRb,
-            Ak47 ak47) : base(playerAnimation)
+            Ak47 ak47,
+            CoroutineExecuter coroutineExecuter,
+            PlayerSettings playerSettings) : base(playerAnimation)
         {
             _rigBuilder = rigBuilder;
             _boneControllers = boneControllers;
@@ -41,6 +47,8 @@ namespace Shadow_Dominion.Player.StateMachine
             _player = player;
             _animRb = animRb;
             _ak47 = ak47;
+            _coroutineExecuter = coroutineExecuter;
+            _playerSettings = playerSettings;
         }
 
         public override void Enter()
@@ -51,8 +59,6 @@ namespace Shadow_Dominion.Player.StateMachine
             _ak47.SetParent(rightHand);
             _ak47.SetRagdollTransform();
             
-            _inputHandler.OnInputUpdate += HandleInput;
-
             _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
 
             _rigBuilder.enabled = false;
@@ -66,18 +72,21 @@ namespace Shadow_Dominion.Player.StateMachine
             }
 
             _player.IsKinematic(true);
+
+            _coroutineExecuter.Execute(WaitForSeconds());
         }
-
-        private void HandleInput(InputData inputData)
+        
+        private IEnumerator WaitForSeconds()
         {
-            Vector3 upDirection = _ragdollRoot.up;
-            float angle = Vector3.Angle(upDirection, Vector3.up);
-
-            MoveAnimPlayerToRagdollPos();
-
-            if (angle < 85f)
-                return;
-
+            float counter = 0;
+            
+            while (counter < _playerSettings.RagdollDelay)
+            {
+                counter += Time.fixedDeltaTime;
+                MoveAnimPlayerToRagdollPos();
+                yield return new WaitForFixedUpdate();
+            }
+            
             if (Vector3.Dot(_ragdollRoot.forward, Vector3.up) > 0)
                 _playerStateMachine.SetState<StandUpFaceUpState>();
             else
@@ -107,8 +116,6 @@ namespace Shadow_Dominion.Player.StateMachine
         public override void Exit()
         {
             _player.IsKinematic(false);
-            
-            _inputHandler.OnInputUpdate -= HandleInput;
         }
 
         public override bool CanExit() => true;

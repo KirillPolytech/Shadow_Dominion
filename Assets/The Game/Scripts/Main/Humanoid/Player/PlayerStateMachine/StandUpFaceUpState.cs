@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Shadow_Dominion.AnimStateMachine;
+using UnityEditor.Animations;
 using UnityEngine.Animations.Rigging;
 
 namespace Shadow_Dominion.Player.StateMachine

@@ -14,8 +14,8 @@ namespace Shadow_Dominion
 
         public bool CanZooming { get; set; } = true;
 
-        private CinemachineThirdPersonFollow _cinemachineThirdPersonFollow;
-        private CinemachinePanTilt _cinemachinePanTilt;
+        private CinemachineOrbitalFollow _cinemachinePositionType;
+        private CinemachineRotationComposer _cinemachineRotationType;
         private IInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
@@ -29,14 +29,14 @@ namespace Shadow_Dominion
         public void Construct(
             CameraSettings camSettings,
             IInputHandler monoInputHandler,
-            CinemachineThirdPersonFollow cinemachineThirdPersonFollow,
-            CinemachinePanTilt cinemachinePanTilt)
+            CinemachineComponentBase cinemachinePositionType,
+            CinemachineComponentBase cinemachineRotationType)
         {
             _cameraSettings = camSettings;
             CameraTransform = transform;
             _monoInputHandler = monoInputHandler;
-            _cinemachineThirdPersonFollow = cinemachineThirdPersonFollow;
-            _cinemachinePanTilt = cinemachinePanTilt;
+            _cinemachinePositionType = cinemachinePositionType as CinemachineOrbitalFollow;
+            _cinemachineRotationType = cinemachineRotationType as CinemachineRotationComposer;
 
             _camera = GetComponent<Camera>();
 
@@ -71,14 +71,14 @@ namespace Shadow_Dominion
 
         private void Zooming()
         {
-            if (!CanZooming || !_cinemachineThirdPersonFollow)
+            if (!CanZooming || !_cinemachinePositionType)
                 return;
 
             float rightMouseValue = _rightMouseValue == 1 ? -1 : 1;
 
-            _cinemachineThirdPersonFollow.CameraDistance +=
+            _cinemachinePositionType.Radius +=
                 rightMouseValue * _cameraSettings.ZoomSpeed * Time.fixedDeltaTime;
-            _cinemachineThirdPersonFollow.CameraDistance = Mathf.Clamp(_cinemachineThirdPersonFollow.CameraDistance,
+            _cinemachinePositionType.Radius = Mathf.Clamp(_cinemachinePositionType.Radius,
                 _cameraSettings.cameraMinDistance, _cameraSettings.cameraMaxDistance);
         }
 
@@ -98,7 +98,7 @@ namespace Shadow_Dominion
 
         public void SetRotation(Quaternion rot)
         {
-            _cinemachinePanTilt.PanAxis.Value = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
+            //_cinemachineRotationComposer. = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
         }
 
         private void OnDrawGizmos()

@@ -19,4 +19,7 @@ public class PlayerSettings : ScriptableObject
 
     [Space]
     public float Approximation = 0.01f;
+    
+    [Space, Range(0,1000)]
+    public int RagdollDelay = 3;
 }

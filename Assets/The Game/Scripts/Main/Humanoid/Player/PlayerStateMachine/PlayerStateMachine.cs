@@ -44,7 +44,8 @@ namespace Shadow_Dominion.Player.StateMachine
             AnimationClip standUpFaceDown,
             WindowsController windowsController,
             Rigidbody animRb,
-            Ak47 ak47)
+            Ak47 ak47,
+            PlayerSettings playerSettings)
         {
             _player = player;
             _ragdollRoot = ragdollRoot;
@@ -61,13 +62,13 @@ namespace Shadow_Dominion.Player.StateMachine
             
             StandUpFaceUpState standUpFaceUpState =
                 new StandUpFaceUpState(rootRig, playerAnimation,
-                    cameraLook, coroutineExecuter, standUpFaceUp.length, boneControllers, MoveTo, this);
+                    cameraLook, coroutineExecuter, standUpFaceUp.length / 2, boneControllers, MoveTo, this);
             StandUpFaceDownState standUpFaceDownState =
                 new StandUpFaceDownState(rootRig, playerAnimation,
-                    cameraLook, coroutineExecuter, standUpFaceDown.length, boneControllers, MoveTo, this, ak47);
+                    cameraLook, coroutineExecuter, standUpFaceDown.length / 2, boneControllers, MoveTo, this, ak47);
             RagdollState ragdollState =
                 new RagdollState(playerAnimation, cameraLook, rootRig, boneControllers, inputHandler, ragdollRoot,
-                    this, player, animRb, ak47);
+                    this, player, animRb, ak47, coroutineExecuter, playerSettings);
 
             _states.Add(standUpFaceUpState);
             _states.Add(standUpFaceDownState);

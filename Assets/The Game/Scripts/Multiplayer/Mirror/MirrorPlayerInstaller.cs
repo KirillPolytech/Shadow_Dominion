@@ -7,11 +7,12 @@ using Shadow_Dominion.Main;
 using Shadow_Dominion.Network;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
-using Shadow_Dominion.StateMachine;
 using Unity.Cinemachine;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using WindowsSystem;
+// ReSharper disable All
 
 namespace Shadow_Dominion
 {
@@ -52,10 +53,10 @@ namespace Shadow_Dominion
         private AimTarget aimTarget;
 
         [SerializeField]
-        private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+        private CinemachineOrbitalFollow cinemachinePosition;
 
         [SerializeField]
-        private CinemachinePanTilt cinemachinePanTilt;
+        private CinemachineRotationComposer cinemachineRotation;
 
         [SerializeField]
         private Renderer rend;
@@ -119,6 +120,10 @@ namespace Shadow_Dominion
         [Space]
         [SerializeField]
         private AnimationClip standUpFaceUpClip;
+        
+        [Space]
+        [SerializeField]
+        private AnimatorState animatorState;
 
         [SerializeField]
         private AnimationClip standUpFaceDownClip;
@@ -153,9 +158,10 @@ namespace Shadow_Dominion
                 standUpFaceDownClip,
                 windowsController,
                 AnimRigidbody,
-                ak47);
+                ak47,
+                playerSettings);
 
-            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow, cinemachinePanTilt);
+            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation);
             player.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
