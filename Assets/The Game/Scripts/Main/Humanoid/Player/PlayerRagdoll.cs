@@ -1,6 +1,7 @@
 using System.Linq;
 using Shadow_Dominion.Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -13,7 +14,7 @@ namespace Shadow_Dominion
 
         [SerializeField] private PhysicsMaterial mat;
         [SerializeField] private Animator animator;
-        [SerializeField] private Shadow_Dominion.Main.Player player;
+        [FormerlySerializedAs("player")] [SerializeField] private Shadow_Dominion.Main.MirrorPlayer mirrorPlayer;
         [SerializeField] private CharacterController characterController;
 
         private CharacterJoint[] _joints;
@@ -105,7 +106,7 @@ namespace Shadow_Dominion
 
             _isStandUp = false;
 
-            player.enabled = true;
+            mirrorPlayer.enabled = true;
             characterController.enabled = true;
         }
 
@@ -121,7 +122,7 @@ namespace Shadow_Dominion
             }
 
             animator.enabled = false;
-            player.enabled = false;
+            mirrorPlayer.enabled = false;
             characterController.enabled = false;
             _delay = 0;
             _value = 0;

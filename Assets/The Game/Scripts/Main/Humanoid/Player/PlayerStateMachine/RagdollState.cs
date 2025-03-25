@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Linq;
 using Shadow_Dominion.AnimStateMachine;
-using Shadow_Dominion.InputSystem;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -9,16 +8,13 @@ namespace Shadow_Dominion.Player.StateMachine
 {
     public class RagdollState : PlayerState
     {
-        private readonly IInputHandler _inputHandler;
-        private readonly Rigidbody _animRb;
-
         private readonly PlayerStateMachine _playerStateMachine;
         private readonly RigBuilder _rigBuilder;
         private readonly BoneController[] _boneControllers;
         private readonly CameraLook _cameraLook;
         private readonly Transform _ragdollRoot;
         private readonly Vector3 _forceDirection;
-        private readonly Main.Player _player;
+        private readonly Main.MirrorPlayer _mirrorPlayer;
         private readonly Ak47 _ak47;
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly PlayerSettings _playerSettings;
@@ -28,11 +24,9 @@ namespace Shadow_Dominion.Player.StateMachine
             CameraLook cameraLook,
             RigBuilder rigBuilder,
             BoneController[] boneControllers,
-            IInputHandler inputHandler,
             Transform ragdollRoot,
             PlayerStateMachine playerStateMachine,
-            Main.Player player,
-            Rigidbody animRb,
+            Main.MirrorPlayer mirrorPlayer,
             Ak47 ak47,
             CoroutineExecuter coroutineExecuter,
             PlayerSettings playerSettings) : base(playerAnimation)
@@ -41,11 +35,9 @@ namespace Shadow_Dominion.Player.StateMachine
             _boneControllers = boneControllers;
             _cameraLook = cameraLook;
             _forceDirection = Vector3.zero;
-            _inputHandler = inputHandler;
             _ragdollRoot = ragdollRoot;
             _playerStateMachine = playerStateMachine;
-            _player = player;
-            _animRb = animRb;
+            _mirrorPlayer = mirrorPlayer;
             _ak47 = ak47;
             _coroutineExecuter = coroutineExecuter;
             _playerSettings = playerSettings;
@@ -71,7 +63,7 @@ namespace Shadow_Dominion.Player.StateMachine
                 _boneControllers[i].AddForce(_forceDirection);
             }
 
-            _player.IsKinematic(true);
+            _mirrorPlayer.IsKinematic(true);
 
             _coroutineExecuter.Execute(WaitForSeconds());
         }
@@ -99,23 +91,23 @@ namespace Shadow_Dominion.Player.StateMachine
 
             Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
             Quaternion rot = Quaternion.LookRotation(dirUp * (isUp ? -1 : 1));
-            float y = _player.AnimTransform.position.y;
+            float y = _mirrorPlayer.AnimTransform.position.y;
 
-            _player.IsKinematic(true);
+            _mirrorPlayer.IsKinematic(true);
 
             Vector3 a = _ragdollRoot.position;
             a.y = y;
-            Vector3 b = _player.AnimTransform.position;
+            Vector3 b = _mirrorPlayer.AnimTransform.position;
             b.y = y;
 
             Vector3 pos = Vector3.Lerp(a, b, Time.fixedDeltaTime * Time.fixedDeltaTime);
             rot = Quaternion.Lerp(rot, _ragdollRoot.rotation, Time.fixedDeltaTime * Time.fixedDeltaTime);
-            _player.SetRigidbodyPositionAndRotation(pos, rot);
+            _mirrorPlayer.SetRigidbodyPositionAndRotation(pos, rot);
         }
 
         public override void Exit()
         {
-            _player.IsKinematic(false);
+            _mirrorPlayer.IsKinematic(false);
         }
 
         public override bool CanExit() => true;

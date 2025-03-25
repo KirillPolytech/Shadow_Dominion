@@ -1,18 +1,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Shadow_Dominion
 {
     public class PlayerListing : Singleton<PlayerListing>
     {
-        private readonly Dictionary<string, RoomPlayerView> _views = new Dictionary<string, RoomPlayerView>();
+        private readonly Dictionary<string, RoomPlayerView> _views = new();
 
         [SerializeField]
         private RectTransform content;
 
         [SerializeField]
         private RoomPlayerView roomViewPrefab;
+
+        private IInstantiator _instantiator;
+
+        [Inject]
+        public void Construct(IInstantiator instantiator)
+        {
+            _instantiator = instantiator;
+        }
 
         public void SpawnView(string address)
         {
@@ -21,7 +30,12 @@ namespace Shadow_Dominion
             if (keyValuePairs.Equals(null))
                 return;
 
-            RoomPlayerView instance = Instantiate(roomViewPrefab, content);
+            RoomPlayerView instance = _instantiator.InstantiatePrefab(roomViewPrefab).GetComponent<RoomPlayerView>();
+            instance.gameObject.transform.SetParent(content);
+            ((RectTransform) instance.transform).localScale = Vector3.one;
+            ((RectTransform) instance.transform).anchoredPosition3D = Vector3.zero;
+            ((RectTransform) instance.transform).position = Vector3.zero;
+            ((RectTransform) instance.transform).localPosition = Vector3.zero;
 
             instance.SetName(address);
 

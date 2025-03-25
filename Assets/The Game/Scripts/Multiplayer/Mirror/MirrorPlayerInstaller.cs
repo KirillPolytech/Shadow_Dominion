@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Mirror;
 using NaughtyAttributes;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
@@ -11,6 +12,7 @@ using Unity.Cinemachine;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Serialization;
 using WindowsSystem;
 // ReSharper disable All
 
@@ -38,10 +40,11 @@ namespace Shadow_Dominion
         [SerializeField]
         private WeaponSO weaponSO;
 
+        [FormerlySerializedAs("player")]
         [Space]
         [Header("Limits")]
         [SerializeField]
-        private Main.Player player;
+        private Main.MirrorPlayer mirrorPlayer;
 
         [SerializeField]
         private Transform animTransform;
@@ -133,7 +136,7 @@ namespace Shadow_Dominion
         [SerializeField]
         private bool debug;
 
-        private Action<Vector3> _cachedOnCollision;
+        private Action<Vector3, string> _cachedOnCollision;
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
 
@@ -145,7 +148,7 @@ namespace Shadow_Dominion
             AnimationStateMachine animationStateMachine = new AnimationStateMachine(animator);
             playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
-                player,
+                mirrorPlayer,
                 cameraLook,
                 ragdollRoot.transform,
                 playerAnimation,
@@ -162,7 +165,7 @@ namespace Shadow_Dominion
                 playerSettings);
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation);
-            player.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
+            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
             ak47.Construct(aim, weaponSO);
@@ -178,7 +181,14 @@ namespace Shadow_Dominion
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 monoInputHandler.OnInputUpdate += _cachedInputData;
 
-                _cachedOnCollision = deltaDist => OnCollision(ind, playerStateMachine, playerMovement.IsRunning);
+                _cachedOnCollision = (deltaDist, killerName) 
+                    => OnCollision(
+                        ind, 
+                        playerStateMachine, 
+                        playerMovement.IsRunning, 
+                        killerName, 
+                        NetworkClient.connection.identity.connectionToClient.address);
+                
                 copyTo[i].OnCollision += _cachedOnCollision;
             }
 
@@ -194,13 +204,16 @@ namespace Shadow_Dominion
             }
         }
 
-        private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun)
+        private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {
             if (!isRun)
                 return;
             
             if (copyTo[ind].BoneType == HumanBodyBones.Head)
+            {
                 playerStateMachine.SetState<DeathState>();
+                KillFeed.Instance.AddFeed(killerName == null ? victimName : killerName, victimName);
+            }
 
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
                 || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm

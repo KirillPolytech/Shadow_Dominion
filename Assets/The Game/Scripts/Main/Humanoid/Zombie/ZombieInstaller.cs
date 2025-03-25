@@ -37,7 +37,7 @@ namespace Shadow_Dominion.Zombie
             {
                 copyTo[i].Construct( copyFrom[i], pidData, rend, boneDataSo.BoneData[i].humanBodyBone);
 
-                copyTo[i].OnCollision += dir => zombie.Disable(copyTo, dir);
+                copyTo[i].OnCollision += (dir, killer) => zombie.Disable(copyTo, dir);
             }
         }
 

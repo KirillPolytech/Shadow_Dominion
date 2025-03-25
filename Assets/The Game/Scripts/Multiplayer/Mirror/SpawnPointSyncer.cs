@@ -8,17 +8,17 @@ namespace Shadow_Dominion
 {
     public class SpawnPointSyncer : MirrorSingleton<SpawnPointSyncer>
     {
-        private readonly SyncList<PositionMessage> _positionMessages = new SyncList<PositionMessage>();
-        private readonly SyncList<bool> _positionFree = new SyncList<bool>();
-        private readonly bool[] frees = {true,true,true,true };
+        private readonly SyncList<PositionMessage> _positionMessages = new();
+        private readonly SyncList<bool> _positionFree = new();
+        private readonly bool[] _frees = {true,true,true,true };
         private Vector3 Center => Vector3.zero;
 
         public PositionMessage[] positionMessage =
         {
-            new PositionMessage(new Vector3(55, 0, 0), true),
-            new PositionMessage(new Vector3(-55, 0, 0), true),
-            new PositionMessage(new Vector3(0, 0, 55), true),
-            new PositionMessage(new Vector3(0, 0, -55), true)
+            new(new Vector3(55, 0, 0), true),
+            new(new Vector3(-55, 0, 0), true),
+            new(new Vector3(0, 0, 55), true),
+            new(new Vector3(0, 0, -55), true)
         };
         
         public Quaternion CalculateRotation(Vector3 position)
@@ -39,7 +39,7 @@ namespace Shadow_Dominion
             
             _positionMessages.AddRange(positionMessage);
             
-            _positionFree.AddRange(frees);
+            _positionFree.AddRange(_frees);
         }
 
         public void Reset()
@@ -62,13 +62,12 @@ namespace Shadow_Dominion
 
                 temp.IsFree = false;
 
-                if (authority)
-                    UpdateSyncList(i);
+                UpdateSyncList(i);
 
                 return temp;
             }
 
-            throw new Exception("Cant find free position");
+            throw new Exception("Can't find free position.");
         }
 
         [Command(requiresAuthority = false)]

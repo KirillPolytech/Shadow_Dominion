@@ -6629,7 +6629,7 @@ MonoBehaviour:
   cameraSettings: {fileID: 11400000, guid: 327ad2879cf30d0479600b8a80891c39, type: 2}
   playerSettings: {fileID: 11400000, guid: b997f8ea56814714e842870411ed06c0, type: 2}
   weaponSO: {fileID: 11400000, guid: e4f8681f97530264da15e76fbd6c5e63, type: 2}
-  player: {fileID: 3110435118676541445}
+  mirrorPlayer: {fileID: 3110435118676541445}
   animTransform: {fileID: 3986989064418960988}
   cameraLook: {fileID: 4988144798733643355}
   aimTarget: {fileID: 815287047837274058}
@@ -6693,6 +6693,7 @@ MonoBehaviour:
   coroutineExecuter: {fileID: 2612903666360058253}
   mirrorShootHandler: {fileID: 6562452125269414045}
   standUpFaceUpClip: {fileID: 7400000, guid: ba0fbf4c311f549458ac3adcb30d06aa, type: 2}
+  animatorState: {fileID: 0}
   standUpFaceDownClip: {fileID: 7400000, guid: c1c086eeb41db99468fbfc47e1508308, type: 2}
   debug: 0
 --- !u!114 &8961616338611320610
@@ -12119,6 +12120,14 @@ PrefabInstance:
     - target: {fileID: 4607302412166420443, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657199400875997631, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
+      propertyPath: m_Data.m_MaxLimit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657199400875997631, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
+      propertyPath: m_Data.m_MinLimit
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 5657199400875997631, guid: 3bf137bfbdc4e4645b68ece6622a0f0a, type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform

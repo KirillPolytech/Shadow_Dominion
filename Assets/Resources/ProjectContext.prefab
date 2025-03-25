@@ -170,6 +170,7 @@ MonoBehaviour:
   applicationSettingsSo: {fileID: 11400000, guid: ff5abf205652fbf479dc687e66b251bf, type: 2}
   roomSettings: {fileID: 11400000, guid: 29fdb405c980cd444ba8d840d9775754, type: 2}
   levelSO: {fileID: 11400000, guid: 66c72da04ed521c4aa4c697a0103a06f, type: 2}
+  textSo: {fileID: 11400000, guid: 59f45cb292a632c4596eef899d67183f, type: 2}
   playerPrefab: {fileID: 3110435118676541445, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
   networkRoomPlayerPrefab: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   coroutineExecuter: {fileID: 259350462139003918}

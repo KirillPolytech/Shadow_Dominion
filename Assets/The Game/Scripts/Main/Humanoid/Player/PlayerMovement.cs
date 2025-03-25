@@ -32,22 +32,21 @@ namespace Shadow_Dominion.Main
         public void HandleInput(InputData data)
         {
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
-            Rotate();
+            Rotate(data);
             HandleAnim(data);
         }
 
-        // todo: refactor
         private void HandleAnim(InputData data)
         {
             float magnitude = new Vector3 (_charRigidbody.linearVelocity.x, 0 , _charRigidbody.linearVelocity.z).magnitude;
             Vector2 dir = new Vector2(data.HorizontalAxisRaw, data.VerticalAxisRaw);
 
-            float speedDen = _playerSettings.MaxRunSpeed; //data.LeftShift ? _playerSettings.MaxRunSpeed : _playerSettings.MaxWalkSpeed;
+            float speedDen = _playerSettings.MaxWalkSpeed;
             float x = dir.x * magnitude / speedDen;
             float y = dir.y * magnitude / speedDen;
 
-            x = Mathf.Clamp(x, -1, 1);
-            y = Mathf.Clamp(y, -1, 1);
+            x = Mathf.Clamp(x, -2, 2);
+            y = Mathf.Clamp(y, -2, 2);
 
             _playerAnimation.AnimationStateMachine.SetXY(x, y);
             
@@ -70,8 +69,7 @@ namespace Shadow_Dominion.Main
             
             Vector3 dir = (camForward * y + camRight * x).normalized;
             
-            dir *= _playerSettings.WalkSpeed * (1 - isRunInt) +
-                   _playerSettings.RunSpeed * isRunInt; //* (dir.y < 0 ? 1 : 0.5f);
+            dir *= _playerSettings.WalkSpeed * (1 - isRunInt) + _playerSettings.RunSpeed * isRunInt;
             dir.y = Physics.gravity.y;
 
             _charRigidbody.AddForce(dir);
@@ -85,9 +83,9 @@ namespace Shadow_Dominion.Main
         }
 
         // todo: refactor
-        private void Rotate()
+        private void Rotate(InputData data)
         {
-            if (!_playerSettings.CanRotate)
+            if (!_playerSettings.CanRotate || data.LeftAlt)
                 return;
 
             Vector3 transformForward =

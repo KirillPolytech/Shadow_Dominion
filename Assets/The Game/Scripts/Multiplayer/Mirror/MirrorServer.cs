@@ -10,8 +10,8 @@ namespace Shadow_Dominion
         public static MirrorServer Instance { get; private set; }
 
         // Server only
-        public readonly List<NetworkConnectionToClient> Connections = new List<NetworkConnectionToClient>();
-        public readonly List<Main.Player> SpawnedPlayerInstances = new List<Main.Player>();
+        public readonly List<NetworkConnectionToClient> Connections = new();
+        public readonly List<Main.MirrorPlayer> SpawnedPlayerInstances = new();
 
         public event Action<HashSet<NetworkRoomPlayer>> OnPlayerReadyChanged;
         public event Action OnPlayerLoadedOnLevel;
@@ -21,6 +21,9 @@ namespace Shadow_Dominion
         
         [SerializeField]
         private SpawnPointSyncer spawnPointSyncerPrefab;
+        
+        [SerializeField]
+        private GameStateManager gameStateManager;
         
         public event Action ActionOnHostStart;
         public event Action ActionOnHostStop;
@@ -70,6 +73,7 @@ namespace Shadow_Dominion
         {
             NetworkServer.Spawn(Instantiate(mirrorPlayerStateSyncerPrefab.gameObject));
             NetworkServer.Spawn(Instantiate(spawnPointSyncerPrefab.gameObject));
+            NetworkServer.Spawn(Instantiate(gameStateManager.gameObject));
         }
 
         private void OnAnyChange() => ActionOnAnyChange?.Invoke();
@@ -167,7 +171,7 @@ namespace Shadow_Dominion
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer, GameObject gamePlayer)
         {
-            SpawnedPlayerInstances.Add(gamePlayer.GetComponent<Main.Player>());
+            SpawnedPlayerInstances.Add(gamePlayer.GetComponent<Main.MirrorPlayer>());
 
             gamePlayer.name = conn.address;
             

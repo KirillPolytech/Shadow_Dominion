@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion.Main
 {
-    public class Player : Humanoid
+    public class MirrorPlayer : Humanoid
     {
         public event Action OnDead;
         
@@ -42,9 +42,9 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine.OnStateChanged -= CmdSetState;
         }
 
-        public void IsKinematic(bool iskinematic)
+        public void IsKinematic(bool isKinematic)
         {
-            AnimRb.isKinematic = iskinematic;
+            AnimRb.isKinematic = isKinematic;
         }
         
         public void SetRigidbodyPositionAndRotation(Vector3 pos, Quaternion rot)

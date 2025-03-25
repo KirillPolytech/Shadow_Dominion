@@ -7,11 +7,13 @@ namespace Shadow_Dominion
     {
         public string Address;
         public bool IsReady;
+        public ushort Kills;
 
-        public PlayerViewData(string address, bool isReady)
+        public PlayerViewData(string address, bool isReady, ushort kills)
         {
             Address = address;
             IsReady = isReady;
+            Kills = kills;
         }
     }
 }

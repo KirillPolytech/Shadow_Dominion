@@ -21,7 +21,7 @@ namespace Shadow_Dominion.StateMachine
             _windowsController.OpenWindow<MainWindow>();
             CursorService.SetState(CursorLockMode.Locked);
             
-            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
             {
                 player.OnDead += OnDeath;
                 
@@ -41,7 +41,7 @@ namespace Shadow_Dominion.StateMachine
 
         public override void Exit()
         {
-            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
             {
                 player.OnDead -= OnDeath;
             }

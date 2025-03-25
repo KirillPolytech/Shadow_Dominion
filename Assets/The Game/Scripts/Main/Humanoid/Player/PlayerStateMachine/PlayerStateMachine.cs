@@ -15,13 +15,13 @@ namespace Shadow_Dominion.Player.StateMachine
 {
     public class PlayerStateMachine : IStateMachine
     {
-        private readonly Main.Player _player;
+        private readonly MirrorPlayer _mirrorPlayer;
         private readonly Transform _ragdollRoot;
         private readonly PlayerAnimation _playerAnimation;
         private readonly CoroutineExecuter _coroutineExecuter;
         private readonly BoneController[] _boneControllerses;
         private readonly IInputHandler _inputHandler;
-        protected new readonly List<PlayerState> _states = new List<PlayerState>();
+        protected new readonly List<PlayerState> _states = new();
 
         public new PlayerState CurrentState { get; protected set; }
 
@@ -31,7 +31,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private string _lastState;
 
         public PlayerStateMachine(
-            Main.Player player,
+            MirrorPlayer mirrorPlayer,
             CameraLook cameraLook,
             Transform ragdollRoot,
             PlayerAnimation playerAnimation,
@@ -47,7 +47,7 @@ namespace Shadow_Dominion.Player.StateMachine
             Ak47 ak47,
             PlayerSettings playerSettings)
         {
-            _player = player;
+            _mirrorPlayer = mirrorPlayer;
             _ragdollRoot = ragdollRoot;
             _playerAnimation = playerAnimation;
             _coroutineExecuter = coroutineExecuter;
@@ -56,7 +56,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
             DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler,
                 windowsController, boneControllers, rootRig, cameraLook, ak47);
-            InActiveState inActiveState = new InActiveState(player, playerAnimation);
+            InActiveState inActiveState = new InActiveState(mirrorPlayer, playerAnimation);
             PauseMenuState pauseMenuState = new PauseMenuState(windowsController, playerAnimation);
             DeathState deathState = new DeathState(playerAnimation, boneControllers, cameraLook);
             
@@ -67,8 +67,8 @@ namespace Shadow_Dominion.Player.StateMachine
                 new StandUpFaceDownState(rootRig, playerAnimation,
                     cameraLook, coroutineExecuter, standUpFaceDown.length / 2, boneControllers, MoveTo, this, ak47);
             RagdollState ragdollState =
-                new RagdollState(playerAnimation, cameraLook, rootRig, boneControllers, inputHandler, ragdollRoot,
-                    this, player, animRb, ak47, coroutineExecuter, playerSettings);
+                new RagdollState(playerAnimation, cameraLook, rootRig, boneControllers, ragdollRoot,
+                    this, mirrorPlayer, ak47, coroutineExecuter, playerSettings);
 
             _states.Add(standUpFaceUpState);
             _states.Add(standUpFaceDownState);
@@ -175,30 +175,30 @@ namespace Shadow_Dominion.Player.StateMachine
         {
             Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
             Quaternion rot = Quaternion.LookRotation(dirUp * (isUp ? -1 : 1));
-            float y = _player.AnimTransform.position.y;
+            float y = _mirrorPlayer.AnimTransform.position.y;
 
-            _player.IsKinematic(true);
+            _mirrorPlayer.IsKinematic(true);
 
             const float stopDistance = 0.25f;
 
-            float distance = (_ragdollRoot.position - _player.AnimTransform.position).magnitude;
+            float distance = (_ragdollRoot.position - _mirrorPlayer.AnimTransform.position).magnitude;
             while (distance > stopDistance)
             {
                 Vector3 a = _ragdollRoot.position;
                 a.y = y;
-                Vector3 b = _player.AnimTransform.position;
+                Vector3 b = _mirrorPlayer.AnimTransform.position;
                 b.y = y;
                 Vector3 pos = Vector3.Lerp(a, b, Time.fixedDeltaTime * Time.fixedDeltaTime);
                 //
                 rot = Quaternion.Lerp(rot, _ragdollRoot.rotation, Time.fixedDeltaTime * Time.fixedDeltaTime);
                 //
-                _player.SetRigidbodyPositionAndRotation(pos, rot);
+                _mirrorPlayer.SetRigidbodyPositionAndRotation(pos, rot);
 
-                distance = (_ragdollRoot.position - _player.AnimTransform.position).magnitude;
+                distance = (_ragdollRoot.position - _mirrorPlayer.AnimTransform.position).magnitude;
                 yield return new WaitForFixedUpdate();
             }
 
-            _player.IsKinematic(false);
+            _mirrorPlayer.IsKinematic(false);
 
             foreach (var boneController in _boneControllerses)
             {

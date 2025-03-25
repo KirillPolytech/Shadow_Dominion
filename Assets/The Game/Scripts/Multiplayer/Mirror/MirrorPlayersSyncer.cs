@@ -7,14 +7,22 @@ namespace Shadow_Dominion
 {
     public class MirrorPlayersSyncer : MirrorSingleton<MirrorPlayersSyncer>
     {
-        private readonly SyncList<PlayerViewData> _players = new SyncList<PlayerViewData>();
+        private readonly SyncList<PlayerViewData> _players = new();
+        
+        public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
         
         public PlayerViewData[] Players => _players.ToArray();
+
+        [SyncVar] public int SpawnedPlayersOnLevel;
         
-        [SyncVar]
-        public int SpawnedPlayersOnLevel;
+        private new void Awake()
+        {
+            base.Awake();
+            
+            DontDestroyOnLoad(gameObject);
+        }
 
         #region Server
         
@@ -25,6 +33,8 @@ namespace Shadow_Dominion
 
             _players.OnChange += OnSyncListChanged;
 
+            MirrorServer.Instance.ActionOnServerConnect += UpdateConnections;
+            MirrorServer.Instance.ActionOnServerDisconnect += UpdateConnections;
             MirrorServer.Instance.ActionOnServerConnectWithArg += AddAddress;
             MirrorServer.Instance.ActionOnServerDisconnectWithArg += RemoveAddress;
             MirrorServer.Instance.OnPlayerReadyChanged += UpdateReadyState;
@@ -32,8 +42,14 @@ namespace Shadow_Dominion
 
             foreach (var networkConnection in MirrorServer.Instance.Connections)
             {
-                _players.Add(new PlayerViewData(networkConnection.address, false));
+                _players.Add(new PlayerViewData(networkConnection.address, false, 0));
             }
+        }
+
+        private void UpdateConnections()
+        {
+            Connections.Clear();
+            Connections.AddRange( MirrorServer.Instance.Connections);
         }
         
         [Server]
@@ -41,24 +57,18 @@ namespace Shadow_Dominion
         {
             _players.OnChange -= OnSyncListChanged;
 
+            MirrorServer.Instance.ActionOnServerConnect -= UpdateConnections;
+            MirrorServer.Instance.ActionOnServerDisconnect -= UpdateConnections;
             MirrorServer.Instance.ActionOnServerConnectWithArg -= AddAddress;
             MirrorServer.Instance.ActionOnServerDisconnectWithArg -= RemoveAddress;
             MirrorServer.Instance.OnPlayerReadyChanged -= UpdateReadyState;
             MirrorServer.Instance.OnPlayerLoadedOnLevel -= UpdateLoadedPlayersOnLevel;
-
-            SpawnedPlayersOnLevel = 0;
-        }
-
-        [Client]
-        public override void OnStartClient()
-        {
-            UpdateViews();
         }
 
         [Server]
         private void AddAddress(NetworkConnectionToClient networkConnectionToClient)
         {
-            _players.Add(new PlayerViewData(networkConnectionToClient.address, false));
+            _players.Add(new PlayerViewData(networkConnectionToClient.address, false, 0));
         }
 
         [Server]
@@ -73,7 +83,7 @@ namespace Shadow_Dominion
         {
             foreach (var networkRoomPlayer in networkConnectionToClient)
             {
-                UpdateReadyState(new PlayerViewData(networkRoomPlayer.connectionToClient.address, networkRoomPlayer.readyToBegin));
+                UpdateReadyState(new PlayerViewData(networkRoomPlayer.connectionToClient.address, networkRoomPlayer.readyToBegin, 0));
             }
         }
         
@@ -98,6 +108,13 @@ namespace Shadow_Dominion
         #endregion
 
         #region Client
+        
+        [Client]
+        public override void OnStartClient()
+        {
+            UpdateViews();
+        }
+        
         [Client]
         private void OnSyncListChanged(SyncList<PlayerViewData>.Operation operation, int value, PlayerViewData str)
         {

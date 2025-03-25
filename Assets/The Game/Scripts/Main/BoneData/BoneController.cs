@@ -5,8 +5,8 @@ namespace Shadow_Dominion
 {
     public class BoneController : MonoBehaviour
     {
-        public event Action<Vector3> OnCollision;
-        
+        public event Action<Vector3, string> OnCollision;
+
         public HumanBodyBones BoneType { get; private set; }
 
         public Vector3 CurrentPosition => _rigidbody.position;
@@ -21,7 +21,7 @@ namespace Shadow_Dominion
         public void IsSpringApplying(bool isSpringApplying) => CurrentSpringState = isSpringApplying;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
-        
+
         public BoneSettings BoneSettings;
 
         private ConfigurableJoint _configurableJoint;
@@ -58,7 +58,7 @@ namespace Shadow_Dominion
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
             _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;
             BoneType = _humanBodyBones;
-            
+
             _rigidbody.position = _copyTarget.position;
         }
 
@@ -91,13 +91,13 @@ namespace Shadow_Dominion
             Quaternion newRot = _configurableJoint.SetTargetRotationLocal(_copyTarget.localRotation, _cachedStartRot);
             _configurableJoint.targetRotation = newRot;
         }
-        
+
         public void HasSpring(bool state)
         {
             _springRate = Mathf.Clamp(_springRate - 1f * (state ? -1 : 1), 0f, 1);
 
             float value = _cachedInitialPositionSpring * _springRate;
-            
+
             BoneSettings.SetDrive(
                 _configurableJoint.xDrive.maximumForce,
                 Mathf.Clamp(value, 0, _cachedInitialPositionSpring),
@@ -112,12 +112,8 @@ namespace Shadow_Dominion
 
         public void AddForce(Vector3 dir) => _rigidbody.AddForce(dir);
         public void ReceiveHitDirection(Vector3 dir) => BodyInjuryService.DrawHole(_renderer, dir);
+        public void ReceiveDamage(Vector3 dir, string nick) => OnCollision?.Invoke(dir, nick);
 
-        public void ReceiveDamage(Vector3 dir)
-        {
-            OnCollision?.Invoke(dir);
-        }
-        
         private void OnCollisionStay(Collision other)
         {
             if (!CurrentPosState)
@@ -127,7 +123,7 @@ namespace Shadow_Dominion
                 return;
 
             Vector3 dir = other.transform.position - transform.position;
-            OnCollision?.Invoke(dir);
+            OnCollision?.Invoke(dir, null);
         }
     }
 }

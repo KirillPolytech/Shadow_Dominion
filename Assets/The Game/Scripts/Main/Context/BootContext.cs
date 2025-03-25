@@ -3,6 +3,7 @@ using Multiplayer.Structs;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Shadow_Dominion
@@ -19,9 +20,13 @@ namespace Shadow_Dominion
         [SerializeField]
         private LevelSO levelSO;
         
+        [SerializeField]
+        private TextSO textSo;
+        
+        [FormerlySerializedAs("playerPrefab")]
         [Space]
         [SerializeField]
-        private Main.Player playerPrefab;
+        private Main.MirrorPlayer mirrorPlayerPrefab;
         
         [SerializeField]
         private NetworkRoomPlayer networkRoomPlayerPrefab;
@@ -38,6 +43,7 @@ namespace Shadow_Dominion
             Container.BindInstance(roomSettings).AsSingle();
             Container.BindInstance(levelSO).AsSingle();
             Container.BindInstance(applicationSettingsSo).AsSingle();
+            Container.BindInstance(textSo).AsSingle();
             
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 

@@ -37,7 +37,7 @@ namespace Shadow_Dominion.StateMachine
             _windowsController.OpenWindow<InitializeWindow>();
             CursorService.SetState(CursorLockMode.Locked);
             
-            foreach (var player in Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None))
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
             {
                 player.PlayerStateMachine.SetState<InActiveState>();
             }
@@ -48,7 +48,8 @@ namespace Shadow_Dominion.StateMachine
         private IEnumerator WaitForSeconds()
         {
             float t = 0;
-            while (t < _levelSO.InitializeWaitTime || MirrorServer.Instance.SpawnedPlayerInstances.Count < MirrorServer.Instance.Connections.Count)
+            while (t < _levelSO.InitializeWaitTime || 
+                   MirrorServer.Instance.SpawnedPlayerInstances.Count < MirrorPlayersSyncer.Instance.Connections.Count)
             {
                 t += Time.fixedDeltaTime;
                 _initializeStateUI.SetWaitText($"Match starts in {_levelSO.InitializeWaitTime - (int)t}");
