@@ -15,6 +15,8 @@ namespace Shadow_Dominion.AnimStateMachine
         private readonly int Laying = Animator.StringToHash("Laying");
         
         private readonly int Idle = Animator.StringToHash("Idle");
+        
+        private readonly int IsCrouch = Animator.StringToHash("IsCrouch");
 
         private readonly Animator _animator;
 
@@ -41,6 +43,11 @@ namespace Shadow_Dominion.AnimStateMachine
         {
             _animator.SetFloat(VelocityX, x);
             _animator.SetFloat(VelocityY, y);
+        }
+        
+        public void IsCrouching(bool state)
+        {
+            _animator.SetBool(IsCrouch, state);
         }
     }
 }

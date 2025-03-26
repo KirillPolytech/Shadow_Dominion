@@ -59,6 +59,11 @@ namespace Shadow_Dominion.StateMachine
             SpawnPointSyncer.Instance.Reset();
             
             _levelStateMachine.SetState<GameplayState>();
+            
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
+            {
+                player.PlayerStateMachine.SetState<DefaultState>();
+            }
         }
 
         public override void Exit()

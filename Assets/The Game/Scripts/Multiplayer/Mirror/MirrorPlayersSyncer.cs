@@ -1,31 +1,34 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class MirrorPlayersSyncer : MirrorSingleton<MirrorPlayersSyncer>
     {
         private readonly SyncList<PlayerViewData> _players = new();
-        
+
         public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
-        
+
         public PlayerViewData[] Players => _players.ToArray();
+        public PlayerViewData LocalPlayer => _players.First(x => x.IsLocalPlayer);
 
         [SyncVar] public int SpawnedPlayersOnLevel;
-        
+
         private new void Awake()
         {
             base.Awake();
-            
+
             DontDestroyOnLoad(gameObject);
         }
 
         #region Server
-        
+
         [Server]
         public override void OnStartServer()
         {
@@ -41,17 +44,24 @@ namespace Shadow_Dominion
             MirrorServer.Instance.OnPlayerLoadedOnLevel += UpdateLoadedPlayersOnLevel;
 
             foreach (var networkConnection in MirrorServer.Instance.Connections)
+                _players.Add(new PlayerViewData(
+                        networkConnection.address, 
+                        false, 
+                        0, 
+                        networkConnection.identity.isLocalPlayer));
+
+            if (!_players.FirstOrDefault(x => x.Address == "localhost").Equals(default))
             {
-                _players.Add(new PlayerViewData(networkConnection.address, false, 0));
+                
             }
         }
 
         private void UpdateConnections()
         {
             Connections.Clear();
-            Connections.AddRange( MirrorServer.Instance.Connections);
+            Connections.AddRange(MirrorServer.Instance.Connections);
         }
-        
+
         [Server]
         public override void OnStopServer()
         {
@@ -68,7 +78,22 @@ namespace Shadow_Dominion
         [Server]
         private void AddAddress(NetworkConnectionToClient networkConnectionToClient)
         {
-            _players.Add(new PlayerViewData(networkConnectionToClient.address, false, 0));
+            StartCoroutine(WaitForSpawn(networkConnectionToClient));
+        }
+
+        private IEnumerator WaitForSpawn(NetworkConnectionToClient networkConnectionToClient)
+        {
+            while (!networkConnectionToClient.identity)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            
+            _players.Add(
+                new PlayerViewData(
+                    networkConnectionToClient.address, 
+                    false, 
+                    0, 
+                    networkConnectionToClient.identity.isLocalPlayer)); 
         }
 
         [Server]
@@ -77,16 +102,19 @@ namespace Shadow_Dominion
             int ind = _players.IndexOf(_players.FirstOrDefault(x => x.Address == networkConnectionToClient.address));
             _players.RemoveAt(ind);
         }
-        
+
         [Server]
         private void UpdateReadyState(HashSet<NetworkRoomPlayer> networkConnectionToClient)
         {
             foreach (var networkRoomPlayer in networkConnectionToClient)
-            {
-                UpdateReadyState(new PlayerViewData(networkRoomPlayer.connectionToClient.address, networkRoomPlayer.readyToBegin, 0));
-            }
+                UpdateReadyState(
+                    new PlayerViewData(
+                        networkRoomPlayer.connectionToClient.address, 
+                        networkRoomPlayer.readyToBegin, 
+                        0,
+                        networkRoomPlayer.isLocalPlayer));
         }
-        
+
         [Server]
         [ClientRpc]
         private void UpdateReadyState(PlayerViewData playerViewData)
@@ -104,17 +132,19 @@ namespace Shadow_Dominion
                 OnAllPlayersLoadedOnLevel?.Invoke();
             }
         }
-        
+
         #endregion
 
         #region Client
-        
+
         [Client]
         public override void OnStartClient()
         {
+            _players.OnChange += OnSyncListChanged;
+
             UpdateViews();
         }
-        
+
         [Client]
         private void OnSyncListChanged(SyncList<PlayerViewData>.Operation operation, int value, PlayerViewData str)
         {
@@ -126,14 +156,7 @@ namespace Shadow_Dominion
         {
             PlayerListing.Instance.SpawnView(_players.ToArray());
         }
-        
-        [Client]
-        [Command(requiresAuthority = false)]
-        public void CmdChangeState(NetworkRoomPlayer networkRoom)
-        {
-            networkRoom.CmdChangeReadyState(!networkRoom.readyToBegin);
-        }
-        
+
         #endregion
     }
 }

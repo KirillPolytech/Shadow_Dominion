@@ -27,7 +27,9 @@ namespace Shadow_Dominion.InputSystem
         
         public bool TAB;
         
-        public bool LeftAlt;
+        public bool LeftALT;
+        
+        public bool LeftCTRL;
         
         public bool ESC;
     }

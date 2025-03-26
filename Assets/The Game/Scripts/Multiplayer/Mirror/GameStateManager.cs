@@ -1,31 +1,41 @@
 using Mirror;
+using Multiplayer.Structs;
+using Shadow_Dominion.Player.StateMachine;
+using Shadow_Dominion.StateMachine;
 
 namespace Shadow_Dominion
 {
     public class GameStateManager : MirrorSingleton<GameStateManager>
     {
         private int _deadPlayers = 0;
-        
+
         private new void Awake()
         {
             base.Awake();
-            
+
             DontDestroyOnLoad(gameObject);
-            
+
+            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += InitializeLevel;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += Subscribe;
-            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UnSubscribe;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
-            
+            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
+
             MirrorServer.Instance.ActionOnClientDisconnect += UpdateLevelListing;
         }
 
         private void OnDestroy()
         {
+            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= InitializeLevel;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= Subscribe;
-            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= UnSubscribe;
+            UnSubscribe();
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= UpdateLevelListing;
-            
+
             MirrorServer.Instance.ActionOnClientDisconnect -= UpdateLevelListing;
+        }
+
+        private void InitializeLevel()
+        {
+            UpdateLevelState();
         }
 
         private void Subscribe()
@@ -46,12 +56,15 @@ namespace Shadow_Dominion
 
         private void CheckWin()
         {
-            if (++_deadPlayers >= MirrorPlayersSyncer.Instance.SpawnedPlayersOnLevel)
-            {
-                SpawnPointSyncer.Instance.Reset();
-            }
+            if (++_deadPlayers < MirrorPlayersSyncer.Instance.SpawnedPlayersOnLevel)
+                return;
+
+            SpawnPointSyncer.Instance.Reset();
+            UpdateLevelState();
         }
-        
+
+        #region Server
+
         [Server]
         private void UpdateLevelListing()
         {
@@ -63,5 +76,17 @@ namespace Shadow_Dominion
         {
             LevelPlayerListing.Instance.AddView(players);
         }
+
+        #endregion
+
+        #region Client
+
+        [ClientRpc]
+        private void UpdateLevelState()
+        {
+            MirrorLevelSyncer.Instance.CmdSetState(new LevelState(typeof(LevelInitializeState).ToString()));
+        }
+
+        #endregion
     }
 }

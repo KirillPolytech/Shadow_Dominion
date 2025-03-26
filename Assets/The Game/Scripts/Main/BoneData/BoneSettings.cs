@@ -3,12 +3,13 @@ using UnityEngine;
 public class BoneSettings
 {
     private readonly ConfigurableJoint _configurableJoint;
-    private readonly Rigidbody _rigidbody;
+
+    public readonly Rigidbody Rigidbody;
 
     public BoneSettings(ConfigurableJoint configurableJoint, Rigidbody rigidbody)
     {
         _configurableJoint = configurableJoint;
-        _rigidbody = rigidbody;
+        Rigidbody = rigidbody;
     }
 
     public void SetJointLimits(
@@ -20,13 +21,13 @@ public class BoneSettings
         float linearLimitSpring,
         float linearLimitSpringDamper)
     {
-        _configurableJoint.angularYLimit = new SoftJointLimit { limit = angularYLimit };
-        _configurableJoint.angularZLimit = new SoftJointLimit { limit = angularZLimit };
-        _configurableJoint.highAngularXLimit = new SoftJointLimit { limit = highAngularXLimit };
-        _configurableJoint.lowAngularXLimit = new SoftJointLimit { limit = lowAngularXLimit };
-        _configurableJoint.linearLimit = new SoftJointLimit { limit = linearLimit };
+        _configurableJoint.angularYLimit = new SoftJointLimit {limit = angularYLimit};
+        _configurableJoint.angularZLimit = new SoftJointLimit {limit = angularZLimit};
+        _configurableJoint.highAngularXLimit = new SoftJointLimit {limit = highAngularXLimit};
+        _configurableJoint.lowAngularXLimit = new SoftJointLimit {limit = lowAngularXLimit};
+        _configurableJoint.linearLimit = new SoftJointLimit {limit = linearLimit};
         _configurableJoint.linearLimitSpring = new SoftJointLimitSpring
-            { spring = linearLimitSpring, damper = linearLimitSpringDamper };
+            {spring = linearLimitSpring, damper = linearLimitSpringDamper};
     }
 
     public void SetDrive(
@@ -87,8 +88,8 @@ public class BoneSettings
     {
         _configurableJoint.targetPosition = targetPosition;
 
-        _configurableJoint.targetRotation = targetRotation;
-        
+        _configurableJoint.targetRotation = Quaternion.Normalize(targetRotation);
+
         _configurableJoint.targetVelocity = targetVelocity;
     }
 
@@ -110,11 +111,11 @@ public class BoneSettings
         RigidbodyConstraints rigidbodyConstraints,
         bool isKinematic)
     {
-        _rigidbody.mass = mass;
-        _rigidbody.linearDamping = drag;
-        _rigidbody.angularDamping = angularDrag;
-        _rigidbody.collisionDetectionMode = collisionDetectionMode;
-        _rigidbody.constraints = rigidbodyConstraints;
-        _rigidbody.isKinematic = isKinematic;
+        Rigidbody.mass = mass;
+        Rigidbody.linearDamping = drag;
+        Rigidbody.angularDamping = angularDrag;
+        Rigidbody.collisionDetectionMode = collisionDetectionMode;
+        Rigidbody.constraints = rigidbodyConstraints;
+        Rigidbody.isKinematic = isKinematic;
     }
 }

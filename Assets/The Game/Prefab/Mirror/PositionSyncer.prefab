@@ -66,11 +66,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   positionMessage:
-  - Position: {x: 15, y: 0, z: 0}
+  - Position: {x: 22, y: 0, z: 0}
     IsFree: 1
-  - Position: {x: -15, y: 0, z: 0}
+  - Position: {x: -22, y: 0, z: 0}
     IsFree: 1
-  - Position: {x: 0, y: 0, z: 15}
+  - Position: {x: 0, y: 0, z: 22}
     IsFree: 1
-  - Position: {x: 0, y: 0, z: -15}
+  - Position: {x: 0, y: 0, z: -22}
     IsFree: 1

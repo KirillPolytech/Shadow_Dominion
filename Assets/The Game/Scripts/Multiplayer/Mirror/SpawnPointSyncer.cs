@@ -15,10 +15,10 @@ namespace Shadow_Dominion
 
         public PositionMessage[] positionMessage =
         {
-            new(new Vector3(55, 0, 0), true),
-            new(new Vector3(-55, 0, 0), true),
-            new(new Vector3(0, 0, 55), true),
-            new(new Vector3(0, 0, -55), true)
+            new(new Vector3(25, 0, 0), true),
+            new(new Vector3(-25, 0, 0), true),
+            new(new Vector3(0, 0, 25), true),
+            new(new Vector3(0, 0, -25), true)
         };
         
         public Quaternion CalculateRotation(Vector3 position)

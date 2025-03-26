@@ -9,12 +9,10 @@ using Shadow_Dominion.Network;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
 using Unity.Cinemachine;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Serialization;
 using WindowsSystem;
-// ReSharper disable All
 
 namespace Shadow_Dominion
 {
@@ -124,10 +122,6 @@ namespace Shadow_Dominion
         [SerializeField]
         private AnimationClip standUpFaceUpClip;
         
-        [Space]
-        [SerializeField]
-        private AnimatorState animatorState;
-
         [SerializeField]
         private AnimationClip standUpFaceDownClip;
 
@@ -142,6 +136,18 @@ namespace Shadow_Dominion
 
         private void Awake()
         {
+            BoneSettings[] boneSettings = new BoneSettings[copyTo.Length];
+
+            for (int i = 0; i < copyTo.Length; i++)
+            {
+                boneSettings[i] = new BoneSettings(copyTo[i].GetComponent<ConfigurableJoint>(), 
+                    copyTo[i].GetComponent<Rigidbody>());
+                
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+
+                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone, boneSettings[i]);
+            }
+            
             WindowsController windowsController = FindAnyObjectByType<WindowsController>();
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
@@ -160,7 +166,6 @@ namespace Shadow_Dominion
                 standUpFaceUpClip,
                 standUpFaceDownClip,
                 windowsController,
-                AnimRigidbody,
                 ak47,
                 playerSettings);
 
@@ -173,10 +178,6 @@ namespace Shadow_Dominion
             
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
-
-                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone);
-
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 monoInputHandler.OnInputUpdate += _cachedInputData;
@@ -187,7 +188,7 @@ namespace Shadow_Dominion
                         playerStateMachine, 
                         playerMovement.IsRunning, 
                         killerName, 
-                        NetworkClient.connection.identity.connectionToClient.address);
+                        MirrorPlayersSyncer.Instance.LocalPlayer.Address);
                 
                 copyTo[i].OnCollision += _cachedOnCollision;
             }
@@ -206,7 +207,7 @@ namespace Shadow_Dominion
 
         private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {
-            if (!isRun)
+            if (killerName == null && !isRun)
                 return;
             
             if (copyTo[ind].BoneType == HumanBodyBones.Head)

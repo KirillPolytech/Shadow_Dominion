@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Shadow_Dominion
 {
-    public class PlayerListing : Singleton<PlayerListing>
+    public class PlayerListing : MonoSingleton<PlayerListing>
     {
         private readonly Dictionary<string, RoomPlayerView> _views = new();
 
@@ -32,10 +32,12 @@ namespace Shadow_Dominion
 
             RoomPlayerView instance = _instantiator.InstantiatePrefab(roomViewPrefab).GetComponent<RoomPlayerView>();
             instance.gameObject.transform.SetParent(content);
-            ((RectTransform) instance.transform).localScale = Vector3.one;
-            ((RectTransform) instance.transform).anchoredPosition3D = Vector3.zero;
-            ((RectTransform) instance.transform).position = Vector3.zero;
-            ((RectTransform) instance.transform).localPosition = Vector3.zero;
+
+            RectTransform rectTransform = (RectTransform) instance.transform;
+            rectTransform.localScale = Vector3.one;
+            rectTransform.anchoredPosition3D = Vector3.zero;
+            rectTransform.position = Vector3.zero;
+            rectTransform.localPosition = Vector3.zero;
 
             instance.SetName(address);
 
@@ -49,7 +51,8 @@ namespace Shadow_Dominion
         {
             for (int i = 0; i < _views.Count; i++)
             {
-                Destroy(_views.ElementAt(i).Value.gameObject);
+                if (_views.ElementAt(i).Value)
+                    Destroy(_views.ElementAt(i).Value.gameObject);
             }
             
             _views.Clear();

@@ -14,21 +14,17 @@ namespace Shadow_Dominion.Player.StateMachine
         
         public override void Enter()
         {
-            _mirrorPlayer.RagdollTransform.gameObject.SetActive(false);
-            
             _playerAnimation.AnimationStateMachine.SetState<AnimationIdleState>();
 
             Vector3 freePos = SpawnPointSyncer.Instance.GetFreePosition().Position;
             Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(freePos);
             
-            _mirrorPlayer.RagdollTransform.position = freePos;
-            
             _mirrorPlayer.SetRigidbodyPositionAndRotation(freePos, rot);
+            _mirrorPlayer.SetRagdollPositionAndRotation(freePos, rot);
         }
 
         public override void Exit()
         {
-            _mirrorPlayer.RagdollTransform.gameObject.SetActive(true);
         }
 
         public override bool CanExit() => true;

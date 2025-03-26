@@ -49,6 +49,7 @@ namespace Shadow_Dominion.Main
             y = Mathf.Clamp(y, -2, 2);
 
             _playerAnimation.AnimationStateMachine.SetXY(x, y);
+            _playerAnimation.AnimationStateMachine.IsCrouching(data.LeftCTRL);
             
             // Debug.Log($"magnitude: {magnitude} " + $"x = {dir.x * magnitude} / {_playerSettings.RunSpeed} " + $"y = {dir.y * magnitude} / {_playerSettings.RunSpeed}");
         }
@@ -85,7 +86,7 @@ namespace Shadow_Dominion.Main
         // todo: refactor
         private void Rotate(InputData data)
         {
-            if (!_playerSettings.CanRotate || data.LeftAlt)
+            if (!_playerSettings.CanRotate || data.LeftALT)
                 return;
 
             Vector3 transformForward =

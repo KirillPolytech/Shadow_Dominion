@@ -10,16 +10,20 @@ namespace Shadow_Dominion
         public new void Start()
         {
             base.Start();
-            
+
             OpenWindow(Current);
 
-            MirrorServer.Instance.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
-            MirrorServer.Instance.ActionOnHostStart += OpenWindow<PlayerListingWindow>;
+            if (SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
+            {
+                MirrorServer.Instance.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
+                MirrorServer.Instance.ActionOnHostStart += OpenWindow<PlayerListingWindow>;
+            }
 
             MirrorServer.Instance.ActionOnStopClient += OpenWindow<MainWindow>;
             MirrorServer.Instance.ActionOnHostStop += OpenWindow<MainWindow>;
-            
-            if (!NetworkServer.active && NetworkClient.isConnected && SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
+
+            if (!NetworkServer.active && NetworkClient.isConnected &&
+                SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
             {
                 OpenWindow<PlayerListingWindow>();
             }
@@ -27,8 +31,11 @@ namespace Shadow_Dominion
 
         protected void OnDestroy()
         {
-            MirrorServer.Instance.ActionOnStartClient -= OpenWindow<PlayerListingWindow>;
-            MirrorServer.Instance.ActionOnHostStart -= OpenWindow<PlayerListingWindow>;
+            if (SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
+            {
+                MirrorServer.Instance.ActionOnStartClient -= OpenWindow<PlayerListingWindow>;
+                MirrorServer.Instance.ActionOnHostStart -= OpenWindow<PlayerListingWindow>;
+            }
 
             MirrorServer.Instance.ActionOnStopClient -= OpenWindow<MainWindow>;
             MirrorServer.Instance.ActionOnHostStop -= OpenWindow<MainWindow>;

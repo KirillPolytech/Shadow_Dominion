@@ -3,7 +3,7 @@ using Shadow_Dominion;
 using TMPro;
 using UnityEngine;
 
-public class LevelPlayerListing : Singleton<LevelPlayerListing>
+public class LevelPlayerListing : MonoSingleton<LevelPlayerListing>
 {
     private readonly List<TextMeshProUGUI> _instances = new();
         

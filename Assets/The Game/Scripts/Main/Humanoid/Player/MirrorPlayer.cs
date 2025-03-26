@@ -10,30 +10,30 @@ namespace Shadow_Dominion.Main
     public class MirrorPlayer : Humanoid
     {
         public event Action OnDead;
-        
-        public Transform AnimTransform { get; private set; }
-        public Rigidbody AnimRb { get; private set; }
-        public Transform RagdollTransform { get; private set; }
-        
         public PlayerStateMachine PlayerStateMachine;
-        
+
+        public Transform AnimTransform { get; private set; }
+        private Rigidbody _animRb;
+        private Transform _ragdollTransform;
+        private Rigidbody _ragdollRb;
         private CameraLook _cameraLook;
 
         public void Construct(
-            Transform animTransform, 
-            Rigidbody animRb, 
-            Transform ragdollTransform, 
-            PlayerStateMachine playerStateMachine, 
+            Transform animTransform,
+            Rigidbody animRb,
+            Transform ragdollTransform,
+            PlayerStateMachine playerStateMachine,
             CameraLook cameraLook)
         {
             AnimTransform = animTransform;
-            RagdollTransform = ragdollTransform;
-            AnimRb = animRb;
+            _ragdollTransform = ragdollTransform;
+            _animRb = animRb;
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
-            
+            _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
+
             PlayerStateMachine.Initialize();
-            
+
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }
 
@@ -44,19 +44,27 @@ namespace Shadow_Dominion.Main
 
         public void IsKinematic(bool isKinematic)
         {
-            AnimRb.isKinematic = isKinematic;
+            _animRb.isKinematic = isKinematic;
         }
-        
+
         public void SetRigidbodyPositionAndRotation(Vector3 pos, Quaternion rot)
         {
             _cameraLook.SetRotation(rot);
 
-            AnimRb.position = pos;
-            AnimRb.rotation = rot;
-            
+            _animRb.position = pos;
+            _animRb.rotation = rot;
+
             // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }
-        
+
+        public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
+        {
+            _ragdollRb.gameObject.SetActive(false);
+            _ragdollRb.transform.position = pos;
+            _ragdollRb.transform.rotation = rot;
+            _ragdollRb.gameObject.SetActive(true);
+        }
+
         [Command]
         private void CmdSetState(PlayerStateMessage newStateMessage)
         {

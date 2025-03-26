@@ -1,17 +1,7 @@
-﻿using UnityEngine;
-
-namespace Shadow_Dominion
+﻿namespace Shadow_Dominion.Main
 {
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class Singleton<T>
     {
-        public static T Instance { get; private set; }
-
-        protected void Awake()
-        {
-            if (Instance == null)
-                Instance = this as T;
-            else
-                Destroy(gameObject);
-        }
+        public static T Instance { get; protected set; }
     }
 }

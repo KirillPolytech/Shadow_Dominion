@@ -19,12 +19,11 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly Transform _ragdollRoot;
         private readonly PlayerAnimation _playerAnimation;
         private readonly CoroutineExecuter _coroutineExecuter;
-        private readonly BoneController[] _boneControllerses;
+        private readonly BoneController[] _boneControllers;
         private readonly IInputHandler _inputHandler;
         protected new readonly List<PlayerState> _states = new();
 
         public new PlayerState CurrentState { get; protected set; }
-
 
         public Action<PlayerStateMessage> OnStateChanged;
 
@@ -43,7 +42,6 @@ namespace Shadow_Dominion.Player.StateMachine
             AnimationClip standUpFaceUp,
             AnimationClip standUpFaceDown,
             WindowsController windowsController,
-            Rigidbody animRb,
             Ak47 ak47,
             PlayerSettings playerSettings)
         {
@@ -51,7 +49,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _ragdollRoot = ragdollRoot;
             _playerAnimation = playerAnimation;
             _coroutineExecuter = coroutineExecuter;
-            _boneControllerses = boneControllers;
+            _boneControllers = boneControllers;
             _inputHandler = inputHandler;
 
             DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler,
@@ -200,7 +198,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
             _mirrorPlayer.IsKinematic(false);
 
-            foreach (var boneController in _boneControllerses)
+            foreach (var boneController in _boneControllers)
             {
                 boneController.IsPositionApplying(true);
                 boneController.IsRotationApplying(true);

@@ -39,12 +39,14 @@ namespace Shadow_Dominion
             Transform copyTarget,
             PIDData pidData,
             Renderer skinnedMeshRenderer,
-            HumanBodyBones humanBodyBones)
+            HumanBodyBones humanBodyBones,
+            BoneSettings boneSettings)
         {
             _copyTarget = copyTarget;
             _pidData = pidData;
             _renderer = skinnedMeshRenderer;
             _humanBodyBones = humanBodyBones;
+            BoneSettings = boneSettings;
 
             Initialize();
         }
@@ -53,7 +55,6 @@ namespace Shadow_Dominion
         {
             _configurableJoint = GetComponent<ConfigurableJoint>();
             _rigidbody = GetComponent<Rigidbody>();
-            BoneSettings = new BoneSettings(_configurableJoint, _rigidbody);
             _cachedStartRot = transform.localRotation;
             _cachedInitialPositionSpring = _configurableJoint.xDrive.positionSpring;
             _cachedPositionDamper = _configurableJoint.xDrive.positionDamper;

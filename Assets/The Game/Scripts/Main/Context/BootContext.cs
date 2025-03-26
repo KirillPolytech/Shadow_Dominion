@@ -1,5 +1,4 @@
 using Mirror;
-using Multiplayer.Structs;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
@@ -34,9 +33,6 @@ namespace Shadow_Dominion
         [Space]
         [SerializeField]
         private CoroutineExecuter coroutineExecuter;
-
-        [SerializeField]
-        private PositionMessage[] spawnPositions;
         
         public override void InstallBindings()
         {
@@ -51,8 +47,6 @@ namespace Shadow_Dominion
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
             
             Container.BindInstance(coroutineExecuter).AsSingle();
-            
-            Container.Bind<PositionMessage[]>().FromInstance(spawnPositions);
         }
     }
 }

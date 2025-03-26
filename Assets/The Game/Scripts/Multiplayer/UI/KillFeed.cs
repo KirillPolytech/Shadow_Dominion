@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Shadow_Dominion
 {
-    public class KillFeed : Singleton<KillFeed>
+    public class KillFeed : MonoSingleton<KillFeed>
     {
         private readonly List<TextMeshProUGUI> _instances = new();
         

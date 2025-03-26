@@ -62,7 +62,7 @@ namespace Shadow_Dominion.Player.StateMachine
                 _boneControllers[i].IsRotationApplying(false);
                 _boneControllers[i].AddForce(_forceDirection);
             }
-
+           
             _mirrorPlayer.IsKinematic(true);
 
             _coroutineExecuter.Execute(WaitForSeconds());
