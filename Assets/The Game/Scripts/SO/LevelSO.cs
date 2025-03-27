@@ -4,4 +4,5 @@ using UnityEngine;
 public class LevelSO : ScriptableObject
 {
     public uint InitializeWaitTime = 30;
+    public uint Rounds = 5;
 }

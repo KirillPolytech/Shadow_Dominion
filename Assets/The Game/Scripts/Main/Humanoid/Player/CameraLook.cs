@@ -98,7 +98,7 @@ namespace Shadow_Dominion
 
         public void SetRotation(Quaternion rot)
         {
-            //_cinemachineRotationComposer. = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
+            _cinemachinePositionType.HorizontalAxis.Value = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
         }
 
         private void OnDrawGizmos()

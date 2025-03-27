@@ -2,7 +2,7 @@ using TMPro;
 
 public class IPInputFieldProvider : InputFieldsProvider
 {
-    public IPInputFieldProvider(TMP_InputField tmpInputFields) : base(tmpInputFields)
+    public IPInputFieldProvider(TMP_InputField tmpInputField) : base(tmpInputField)
     {
     }
 }

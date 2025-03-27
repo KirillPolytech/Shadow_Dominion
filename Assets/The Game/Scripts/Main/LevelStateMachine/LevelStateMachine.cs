@@ -24,6 +24,7 @@ namespace Shadow_Dominion.StateMachine
             _mirrorLevelSyncer = new MirrorLevelSyncer(this);
 
             _states.Add(new GameplayState(windowsController));
+            _states.Add(new FinishState(windowsController));
             _states.Add(new LevelInitializeState(
                 windowsController,
                 coroutineExecuter,
@@ -44,12 +45,12 @@ namespace Shadow_Dominion.StateMachine
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-            
+
             OnStateChanged?.Invoke(state);
 
             Debug.Log($"Current level state: {CurrentState.GetType()}");
         }
-        
+
         public void SetState(string stateName)
         {
             IState state = _states.First(x => x.GetType().ToString() == stateName);
@@ -60,7 +61,7 @@ namespace Shadow_Dominion.StateMachine
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-            
+
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
     }

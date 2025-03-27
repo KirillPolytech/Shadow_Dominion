@@ -96,8 +96,8 @@ namespace Shadow_Dominion.Player.StateMachine
 
             if (CurrentState.GetType() != typeof(PauseMenuState))
             {
-                SetState<PauseMenuState>();
                 _lastState = CurrentState.GetType().ToString();
+                SetState<PauseMenuState>();
                 return;
             }
 

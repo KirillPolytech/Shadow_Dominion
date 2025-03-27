@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Shadow_Dominion
+namespace Shadow_Dominion.UI
 {
     public class JoinButton : Button
     {
@@ -20,17 +20,25 @@ namespace Shadow_Dominion
         protected override void Awake()
         {
             base.Awake();
-            onClick.AddListener(() =>
-            {
-                if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputFields.text))
-                {
-                    Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputFields.text}");
-                    return;
-                }
+            onClick.AddListener(StartClient);
+        }
 
-                MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
-                MirrorServer.Instance.StartClient();
-            });
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            onClick.RemoveListener(StartClient);
+        }
+
+        private void StartClient()
+        {
+            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputField.text))
+            {
+                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputField.text}");
+                return;
+            }
+
+            MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputField.text;
+            MirrorServer.Instance.StartClient();
         }
     }
 }

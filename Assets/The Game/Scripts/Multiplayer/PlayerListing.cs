@@ -22,10 +22,20 @@ namespace Shadow_Dominion
         {
             _instantiator = instantiator;
         }
-
-        public void SpawnView(string address)
+        
+        public void SpawnView(PlayerViewData[] playerViewData)
         {
-            var keyValuePairs = _views.FirstOrDefault(x => x.Key == address);
+            DispawnView();
+            
+            foreach (var viewData in playerViewData)
+            {
+                SpawnView(viewData.Nick);
+            }
+        }
+
+        private void SpawnView(string nick)
+        {
+            var keyValuePairs = _views.FirstOrDefault(x => x.Key == nick);
 
             if (keyValuePairs.Equals(null))
                 return;
@@ -39,15 +49,15 @@ namespace Shadow_Dominion
             rectTransform.position = Vector3.zero;
             rectTransform.localPosition = Vector3.zero;
 
-            instance.SetName(address);
+            instance.SetName(nick);
 
-            bool isAdded = _views.TryAdd(address, instance);
+            bool isAdded = _views.TryAdd(nick, instance);
 
             if (!isAdded)
-                Debug.LogWarning($"Cant add value by key: {address}");
+                Debug.LogWarning($"Cant add value by key: {nick}");
         }
-        
-        public void SpawnView(PlayerViewData[] addresses)
+
+        private void DispawnView()
         {
             for (int i = 0; i < _views.Count; i++)
             {
@@ -56,23 +66,13 @@ namespace Shadow_Dominion
             }
             
             _views.Clear();
+        }
+
+        public void IsReady(string nick, bool state)
+        {   
+            _views[nick].SetButtonState(state);
             
-            foreach (var address in addresses)
-            {
-                SpawnView(address.Address);
-            }
-        }
-
-        public void DispawView(string address)
-        {
-            RoomPlayerView instance = _views[address];
-            _views.Remove(address);
-            Destroy(instance.gameObject);
-        }
-
-        public void IsReady(string address, bool state)
-        {
-            _views[address].SetButtonState(state);
+            Debug.Log($"{nick} IsReady: {state}");
         }
     }
 }

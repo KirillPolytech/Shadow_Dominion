@@ -17,7 +17,7 @@ public class LevelPlayerListing : MonoSingleton<LevelPlayerListing>
         foreach (var view in views)
         {
             TextMeshProUGUI text = Instantiate(viewPrefab, content);
-            text.text = $"<color=green>{view.Address}</color> {view.Kills}";
+            text.text = $"<color=green>{view.Nick}</color> {view.Kills}";
             _instances.Add(text);
         }
     }

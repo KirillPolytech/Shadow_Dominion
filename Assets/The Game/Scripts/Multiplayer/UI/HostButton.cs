@@ -33,13 +33,13 @@ namespace Shadow_Dominion
 
         private void StartHost()
         {
-            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputFields.text))
+            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputField.text))
             {
-                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputFields.text}");
+                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputField.text}");
                 return;
             }
 
-            MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
+            MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputField.text;
             
             if (!NetworkServer.active)
                 MirrorServer.Instance.StartHost();

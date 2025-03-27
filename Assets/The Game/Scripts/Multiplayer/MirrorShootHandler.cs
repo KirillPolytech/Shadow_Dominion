@@ -27,7 +27,7 @@ namespace Shadow_Dominion.Network
             if (!Physics.Raycast(origin, direction, out RaycastHit hit, ShootRange))
                 return;
 
-            Debug.Log($"[Server] Hit {hit.collider.name}");
+            //Debug.Log($"[Server] Hit {hit.collider.name}");
 
             if (!hit.collider.TryGetComponent(out BoneController boneController)) 
                 return;

@@ -147,7 +147,7 @@ MonoBehaviour:
   runInBackground: 1
   headlessStartMode: 0
   editorAutoStart: 0
-  sendRate: 60
+  sendRate: 100
   offlineScene: Assets/The Game/Scenes/Menu Offline.unity
   onlineScene: Assets/The Game/Scenes/Menu Online.unity
   offlineSceneLoadDelay: 0
@@ -181,14 +181,14 @@ MonoBehaviour:
   timeInterpolationGui: 0
   showRoomGUI: 1
   minPlayers: 4
-  roomPlayerPrefab: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
+  roomPlayerPrefab: {fileID: 9159404568432101215, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   RoomScene: Assets/The Game/Scenes/Menu Online.unity
   GameplayScene: Assets/The Game/Scenes/Level.unity
   _allPlayersReady: 0
   clientIndex: 0
   mirrorPlayerStateSyncerPrefab: {fileID: 1854119950054947312, guid: 95f49624fc8387047a832f857fb24c97, type: 3}
   spawnPointSyncerPrefab: {fileID: 8076761739462144825, guid: 1d29f6c8f7ef96e41ae59d67f4e03d4d, type: 3}
-  gameStateManager: {fileID: 7723140383660258017, guid: 59e0204823655994393955836f1a5aed, type: 3}
+  gameStateManagerPrefab: {fileID: 7723140383660258017, guid: 59e0204823655994393955836f1a5aed, type: 3}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   DualMode: 1
   NoDelay: 1
   Interval: 1
-  Timeout: 10000
+  Timeout: 2147483647
   RecvBufferSize: 7361536
   SendBufferSize: 7361536
   FastResend: 2
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4563408968703581583}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 

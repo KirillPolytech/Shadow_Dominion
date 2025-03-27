@@ -9,31 +9,39 @@ namespace Shadow_Dominion
         protected override void Awake()
         {
             base.Awake();
-            onClick.AddListener(() =>
-            {
-                if (NetworkServer.active && NetworkClient.isConnected)
-                {
-                    MirrorServer.Instance.StopHost();
-                    
-                    Debug.Log("StopHost.");
-                }
-                else if (NetworkServer.active)
-                {
-                    MirrorServer.Instance.StopServer();
+            onClick.AddListener(Disconnect);
+        }
 
-                    Debug.Log("StopServer.");
-                }
-                else if (NetworkClient.isConnected)
-                {
-                    MirrorServer.Instance.StopClient();
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            onClick.RemoveListener(Disconnect);
+        }
+
+        private void Disconnect()
+        {
+            if (NetworkServer.active && NetworkClient.isConnected)
+            {
+                MirrorServer.Instance.StopHost();
                     
-                    Debug.Log("StopClient.");
-                }
-                else
-                {
-                    Debug.Log("Not connected.");
-                }
-            });
+                Debug.Log("StopHost.");
+            }
+            else if (NetworkServer.active)
+            {
+                MirrorServer.Instance.StopServer();
+
+                Debug.Log("StopServer.");
+            }
+            else if (NetworkClient.isConnected)
+            {
+                MirrorServer.Instance.StopClient();
+                    
+                Debug.Log("StopClient.");
+            }
+            else
+            {
+                Debug.Log("Not connected.");
+            }
         }
     }
 }

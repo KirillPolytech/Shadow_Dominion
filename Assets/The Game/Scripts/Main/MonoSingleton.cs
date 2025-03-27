@@ -6,7 +6,7 @@ namespace Shadow_Dominion
     {
         public static T Instance { get; private set; }
 
-        protected void Awake()
+        protected void OnEnable()
         {
             if (Instance == null)
                 Instance = this as T;

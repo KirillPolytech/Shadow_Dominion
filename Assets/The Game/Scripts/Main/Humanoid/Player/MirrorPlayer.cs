@@ -65,7 +65,9 @@ namespace Shadow_Dominion.Main
             _ragdollRb.gameObject.SetActive(true);
         }
 
-        [Command]
+        #region Server
+
+        [Command(requiresAuthority = false)]
         private void CmdSetState(PlayerStateMessage newStateMessage)
         {
             RpcUpdateState(newStateMessage.StateName);
@@ -77,6 +79,10 @@ namespace Shadow_Dominion.Main
 
             Debug.Log($"[Server] {newStateMessage}, Time: {Time.time}");
         }
+
+        #endregion
+
+        #region Client
 
         [ClientRpc]
         private void RpcUpdateState(string newState)
@@ -92,5 +98,7 @@ namespace Shadow_Dominion.Main
 
             // Debug.Log($"[Client] {newState} + Time: {Time.time}");
         }
+
+        #endregion
     }
 }

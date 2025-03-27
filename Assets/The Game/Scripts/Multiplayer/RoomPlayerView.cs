@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Mirror;
 using Shadow_Dominion;
@@ -17,7 +18,8 @@ public class RoomPlayerView : MonoBehaviour
     private UnityAction _onButtonPressed;
     private TextMeshProUGUI _stateText;
     private TextSO _textSo;
-
+    private Action _cachedRemove;
+    
     [Inject]
     public void Construct(TextSO textSo)
     {
@@ -33,26 +35,50 @@ public class RoomPlayerView : MonoBehaviour
             NetworkRoomPlayer roomPlayer =
                 FindObjectsByType<NetworkRoomPlayer>(FindObjectsSortMode.None).First(x => x.isLocalPlayer);
 
-            if (playerName.text != MirrorPlayersSyncer.Instance.LocalPlayer.Address)
+            if (playerName.text != MirrorPlayersSyncer.Instance.LocalPlayer.Nick)
             {
-                Debug.LogWarning($"playerName.text {playerName.text} " +
-                                 $"MirrorPlayersSyncer.Instance.LocalPlayer.Address " +
-                                 $"{MirrorPlayersSyncer.Instance.LocalPlayer.Address}");
+                Debug.LogWarning($"playerName.text {playerName.text}");
                 return;
             }
-
+            
             roomPlayer.CmdChangeReadyState(!roomPlayer.readyToBegin);
+            
+            //Debug.Log("[Client] ButtonPressed");
         };
 
         readyButton.onClick.AddListener(_onButtonPressed);
         
-        //removeButton.gameObject.SetActive();
-        //removeButton.onClick.AddListener(() => );
+        if (!NetworkClient.activeHost)
+        {
+            removeButton.gameObject.SetActive(false);
+            return;
+        }
+
+        _cachedRemove = () =>
+        {
+            NetworkRoomPlayer roomPlayer =
+                FindObjectsByType<NetworkRoomPlayer>(FindObjectsSortMode.None).First(x => x.isLocalPlayer);
+
+            Remove(roomPlayer);
+        };
+        
+        removeButton.onClick.AddListener(_cachedRemove.Invoke);
     }
 
     private void OnDestroy()
     {
         readyButton.onClick.RemoveListener(_onButtonPressed);
+        
+        if (!NetworkClient.activeHost)
+            return;
+        
+        removeButton.onClick.RemoveListener(_cachedRemove.Invoke);
+    }
+
+    private void Remove(NetworkRoomPlayer roomPlayer)
+    {
+        NetworkIdentity networkIdentity = roomPlayer.GetComponent<NetworkIdentity>();
+        MirrorPlayersSyncer.Instance.DisconnectPlayer(networkIdentity.connectionToServer.connectionId);
     }
 
     public void SetName(string pName) => playerName.text = pName;
@@ -64,10 +90,10 @@ public class RoomPlayerView : MonoBehaviour
         Color color = state ? Color.green : Color.red;
 
         ColorBlock colors = readyButton.colors;
-        colors.normalColor = color; // Цвет кнопки в обычном состоянии
-        colors.highlightedColor = color; // Цвет при наведении
-        colors.pressedColor = color; // Цвет при нажатии
-        colors.selectedColor = color; // Цвет при выборе
+        colors.normalColor = color;
+        colors.highlightedColor = color;
+        colors.pressedColor = color; 
+        colors.selectedColor = color;
         readyButton.colors = colors;
     }
 }

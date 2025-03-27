@@ -13,18 +13,37 @@ public class MirrorRagdollInitializer : MonoBehaviour
 
     [SerializeField]
     private GameObject animRoot;
-
+    
     [Button]
-    public void Initialize()
+    public void InitializeRagdoll()
     {
         BoneController[] bones = ragdollRoot.GetComponentsInChildren<BoneController>();
 
         foreach (var bone in bones)
         {
-            NetworkRigidbodyReliable networkRigidbodyReliable = bone.GetComponent<NetworkRigidbodyReliable>();
+            NetworkRigidbodyUnreliable networkRigidbodyReliable = bone.GetComponent<NetworkRigidbodyUnreliable>();
             if (!networkRigidbodyReliable)
-                bone.AddComponent<NetworkRigidbodyReliable>();
+                bone.AddComponent<NetworkRigidbodyUnreliable>();
         }
+    }
+    
+    [Button]
+    public void DeleteRagdoll()
+    {
+        BoneController[] bones = ragdollRoot.GetComponentsInChildren<BoneController>();
+
+        foreach (var bone in bones)
+        {
+            NetworkRigidbodyUnreliable networkRigidbodyReliable = bone.GetComponent<NetworkRigidbodyUnreliable>();
+            if (networkRigidbodyReliable)
+                DestroyImmediate(bone.GetComponent<NetworkRigidbodyUnreliable>());
+        }
+    }
+
+    [Button]
+    public void Initialize()
+    {
+        BoneController[] bones = ragdollRoot.GetComponentsInChildren<BoneController>();
 
         Transform[] childs = animRoot.transform.GetComponentsInChildren<Transform>();
         

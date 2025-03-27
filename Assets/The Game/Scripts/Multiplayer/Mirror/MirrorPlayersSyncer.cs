@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
@@ -9,17 +8,17 @@ namespace Shadow_Dominion
 {
     public class MirrorPlayersSyncer : MirrorSingleton<MirrorPlayersSyncer>
     {
-        private readonly SyncList<PlayerViewData> _players = new();
+        private readonly SyncList<PlayerViewData> _playersViewData = new();
 
         public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
 
-        public PlayerViewData[] Players => _players.ToArray();
-        public PlayerViewData LocalPlayer => _players.First(x => x.IsLocalPlayer);
+        public PlayerViewData[] Players => _playersViewData.ToArray();
+        public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
 
         [SyncVar] public int SpawnedPlayersOnLevel;
-
+        
         private new void Awake()
         {
             base.Awake();
@@ -34,28 +33,16 @@ namespace Shadow_Dominion
         {
             base.OnStartServer();
 
-            _players.OnChange += OnSyncListChanged;
+            _playersViewData.OnChange += OnSyncListChanged;
 
             MirrorServer.Instance.ActionOnServerConnect += UpdateConnections;
             MirrorServer.Instance.ActionOnServerDisconnect += UpdateConnections;
-            MirrorServer.Instance.ActionOnServerConnectWithArg += AddAddress;
-            MirrorServer.Instance.ActionOnServerDisconnectWithArg += RemoveAddress;
-            MirrorServer.Instance.OnPlayerReadyChanged += UpdateReadyState;
+            MirrorServer.Instance.ActionOnServerConnect += UpdateViews;
+            MirrorServer.Instance.ActionOnServerDisconnect += UpdateViews;
             MirrorServer.Instance.OnPlayerLoadedOnLevel += UpdateLoadedPlayersOnLevel;
-
-            foreach (var networkConnection in MirrorServer.Instance.Connections)
-                _players.Add(new PlayerViewData(
-                        networkConnection.address, 
-                        false, 
-                        0, 
-                        networkConnection.identity.isLocalPlayer));
-
-            if (!_players.FirstOrDefault(x => x.Address == "localhost").Equals(default))
-            {
-                
-            }
         }
 
+        [Server]
         private void UpdateConnections()
         {
             Connections.Clear();
@@ -65,61 +52,29 @@ namespace Shadow_Dominion
         [Server]
         public override void OnStopServer()
         {
-            _players.OnChange -= OnSyncListChanged;
+            _playersViewData.OnChange -= OnSyncListChanged;
 
             MirrorServer.Instance.ActionOnServerConnect -= UpdateConnections;
             MirrorServer.Instance.ActionOnServerDisconnect -= UpdateConnections;
-            MirrorServer.Instance.ActionOnServerConnectWithArg -= AddAddress;
-            MirrorServer.Instance.ActionOnServerDisconnectWithArg -= RemoveAddress;
-            MirrorServer.Instance.OnPlayerReadyChanged -= UpdateReadyState;
+            MirrorServer.Instance.ActionOnServerConnect -= UpdateViews;
+            MirrorServer.Instance.ActionOnServerDisconnect -= UpdateViews;
             MirrorServer.Instance.OnPlayerLoadedOnLevel -= UpdateLoadedPlayersOnLevel;
         }
 
-        [Server]
-        private void AddAddress(NetworkConnectionToClient networkConnectionToClient)
+        [Command(requiresAuthority = false)]
+        public void UpdateReadyState(bool isReady, string nick)
         {
-            StartCoroutine(WaitForSpawn(networkConnectionToClient));
-        }
+            PlayerViewData playerViewData = _playersViewData.First(x => x.Nick == nick);
 
-        private IEnumerator WaitForSpawn(NetworkConnectionToClient networkConnectionToClient)
-        {
-            while (!networkConnectionToClient.identity)
-            {
-                yield return new WaitForFixedUpdate();
-            }
+            _playersViewData.Remove(playerViewData);
+
+            playerViewData.IsReady = isReady;
+
+            _playersViewData.Add(playerViewData);
+
+            RpcUpdateReadyState(_playersViewData.ToArray());
             
-            _players.Add(
-                new PlayerViewData(
-                    networkConnectionToClient.address, 
-                    false, 
-                    0, 
-                    networkConnectionToClient.identity.isLocalPlayer)); 
-        }
-
-        [Server]
-        private void RemoveAddress(NetworkConnectionToClient networkConnectionToClient)
-        {
-            int ind = _players.IndexOf(_players.FirstOrDefault(x => x.Address == networkConnectionToClient.address));
-            _players.RemoveAt(ind);
-        }
-
-        [Server]
-        private void UpdateReadyState(HashSet<NetworkRoomPlayer> networkConnectionToClient)
-        {
-            foreach (var networkRoomPlayer in networkConnectionToClient)
-                UpdateReadyState(
-                    new PlayerViewData(
-                        networkRoomPlayer.connectionToClient.address, 
-                        networkRoomPlayer.readyToBegin, 
-                        0,
-                        networkRoomPlayer.isLocalPlayer));
-        }
-
-        [Server]
-        [ClientRpc]
-        private void UpdateReadyState(PlayerViewData playerViewData)
-        {
-            PlayerListing.Instance.IsReady(playerViewData.Address, playerViewData.IsReady);
+            Debug.Log($"[Server] Player {nick} has been requested ready.");
         }
 
         [Server]
@@ -127,22 +82,58 @@ namespace Shadow_Dominion
         {
             SpawnedPlayersOnLevel++;
 
-            if (SpawnedPlayersOnLevel == _players.Count)
+            if (SpawnedPlayersOnLevel == _playersViewData.Count)
             {
                 OnAllPlayersLoadedOnLevel?.Invoke();
             }
         }
 
+        [Command(requiresAuthority = false)]
+        private void AddToSyncList(PlayerViewData playerViewData)
+        {
+            _playersViewData.Add(playerViewData);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void RemoveFromSyncList(string nick)
+        {
+            PlayerViewData playerViewData = _playersViewData.FirstOrDefault(x => x.Nick == nick);
+
+            if (playerViewData.Equals(default))
+            {
+                Debug.LogWarning($"Can't remove {nick}");
+                return;
+            }
+
+            int ind = _playersViewData.IndexOf(playerViewData);
+            _playersViewData.RemoveAt(ind);
+        }
+
+        public void DisconnectPlayer(int id)
+        {
+            NetworkConnectionToClient networkConnectionToClient =
+                MirrorServer.Instance.Connections.FirstOrDefault(x => x.connectionId == id);
+
+            networkConnectionToClient.Disconnect();
+        }
+
         #endregion
 
         #region Client
-
-        [Client]
+        
         public override void OnStartClient()
         {
-            _players.OnChange += OnSyncListChanged;
+            _playersViewData.OnChange += OnSyncListChanged;
+
+            AddToSyncList(
+                new PlayerViewData(UserData.Instance.Nickname, false, 0));
 
             UpdateViews();
+        }
+
+        public override void OnStopClient()
+        {
+            _playersViewData.OnChange -= OnSyncListChanged;
         }
 
         [Client]
@@ -154,7 +145,17 @@ namespace Shadow_Dominion
         [Client]
         private void UpdateViews()
         {
-            PlayerListing.Instance.SpawnView(_players.ToArray());
+            PlayerListing.Instance.SpawnView(_playersViewData.ToArray());
+        }
+
+        [Client]
+        [ClientRpc]
+        private void RpcUpdateReadyState(PlayerViewData[] playerViewData)
+        {
+            foreach (var viewData in playerViewData)
+            {
+                PlayerListing.Instance.IsReady(viewData.Nick, viewData.IsReady);
+            }
         }
 
         #endregion

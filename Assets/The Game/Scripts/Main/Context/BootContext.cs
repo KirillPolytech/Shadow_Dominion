@@ -34,8 +34,12 @@ namespace Shadow_Dominion
         [SerializeField]
         private CoroutineExecuter coroutineExecuter;
         
+        private UserData _userData;
+        
         public override void InstallBindings()
         {
+            _userData = new UserData();
+            
             Container.BindInstance(roomSettings).AsSingle();
             Container.BindInstance(levelSO).AsSingle();
             Container.BindInstance(applicationSettingsSo).AsSingle();
@@ -47,6 +51,8 @@ namespace Shadow_Dominion
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
             
             Container.BindInstance(coroutineExecuter).AsSingle();
+            
+            
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Shadow_Dominion
         [Space]
         [Header("Limits")]
         [SerializeField]
-        private Main.MirrorPlayer mirrorPlayer;
+        private MirrorPlayer mirrorPlayer;
 
         [SerializeField]
         private Transform animTransform;
@@ -188,7 +188,7 @@ namespace Shadow_Dominion
                         playerStateMachine, 
                         playerMovement.IsRunning, 
                         killerName, 
-                        MirrorPlayersSyncer.Instance.LocalPlayer.Address);
+                        MirrorPlayersSyncer.Instance.LocalPlayer.Nick);
                 
                 copyTo[i].OnCollision += _cachedOnCollision;
             }
@@ -207,13 +207,16 @@ namespace Shadow_Dominion
 
         private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {
+            if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
+                return;
+            
             if (killerName == null && !isRun)
                 return;
             
             if (copyTo[ind].BoneType == HumanBodyBones.Head)
             {
                 playerStateMachine.SetState<DeathState>();
-                KillFeed.Instance.AddFeed(killerName == null ? victimName : killerName, victimName);
+                KillFeed.Instance.AddFeed(killerName ?? victimName, victimName);
             }
 
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm

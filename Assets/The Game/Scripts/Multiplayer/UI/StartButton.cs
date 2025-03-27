@@ -10,6 +10,7 @@ namespace Shadow_Dominion
     {
         private UnityAction _onServerChangeScene;
         private Action _setState;
+        private bool _isInitialized;
 
         [Inject]
         public void Construct(RoomSettings roomSettings)
@@ -23,6 +24,8 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnHostStop += Unsubscribe;
 
             gameObject.SetActive(false);
+            
+            _isInitialized = true;
         }
 
         private void Subscribe() => onClick.AddListener(_onServerChangeScene.Invoke);
@@ -31,6 +34,9 @@ namespace Shadow_Dominion
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            
+            if (!_isInitialized)
+                return;
             
             MirrorServer.Instance.ActionOnHostStart -= _setState.Invoke;
             MirrorServer.Instance.ActionOnHostStart -= Subscribe;

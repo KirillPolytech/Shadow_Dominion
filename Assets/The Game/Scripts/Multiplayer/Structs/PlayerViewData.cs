@@ -5,22 +5,20 @@ namespace Shadow_Dominion
     [Serializable]
     public struct PlayerViewData : IEquatable<PlayerViewData>
     {
-        public string Address;
+        public string Nick;
         public bool IsReady;
         public ushort Kills;
-        public bool IsLocalPlayer;
 
-        public PlayerViewData(string address, bool isReady, ushort kills, bool isLocalPlayer)
+        public PlayerViewData(string nick, bool isReady, ushort kills)
         {
-            Address = address;
+            Nick = nick;
             IsReady = isReady;
             Kills = kills;
-            IsLocalPlayer = isLocalPlayer;
         }
 
         public bool Equals(PlayerViewData other)
         {
-            return Address == other.Address && IsReady == other.IsReady && Kills == other.Kills && IsLocalPlayer == other.IsLocalPlayer;
+            return Nick == other.Nick && IsReady == other.IsReady && Kills == other.Kills;
         }
 
         public override bool Equals(object obj)
@@ -30,7 +28,7 @@ namespace Shadow_Dominion
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Address, IsReady, Kills, IsLocalPlayer);
+            return HashCode.Combine(Nick, IsReady, Kills);
         }
     }
 }

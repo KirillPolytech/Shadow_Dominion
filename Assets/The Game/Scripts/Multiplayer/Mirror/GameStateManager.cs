@@ -1,13 +1,16 @@
 using Mirror;
 using Multiplayer.Structs;
-using Shadow_Dominion.Player.StateMachine;
 using Shadow_Dominion.StateMachine;
+using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class GameStateManager : MirrorSingleton<GameStateManager>
     {
-        private int _deadPlayers = 0;
+        [SerializeField] private LevelSO levelSo;
+        
+        private int _deadPlayers;
+        private int _currentRound;
 
         private new void Awake()
         {
@@ -19,8 +22,6 @@ namespace Shadow_Dominion
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += Subscribe;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
-
-            MirrorServer.Instance.ActionOnClientDisconnect += UpdateLevelListing;
         }
 
         private void OnDestroy()
@@ -29,13 +30,11 @@ namespace Shadow_Dominion
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= Subscribe;
             UnSubscribe();
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= UpdateLevelListing;
-
-            MirrorServer.Instance.ActionOnClientDisconnect -= UpdateLevelListing;
         }
 
         private void InitializeLevel()
         {
-            UpdateLevelState();
+            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
         }
 
         private void Subscribe()
@@ -56,11 +55,17 @@ namespace Shadow_Dominion
 
         private void CheckWin()
         {
+            if (++_currentRound >= levelSo.Rounds)
+            {
+                MirrorLevelSyncer.Instance.CmdSetState(new LevelState(typeof(FinishState).ToString()));
+                return;
+            }
+            
             if (++_deadPlayers < MirrorPlayersSyncer.Instance.SpawnedPlayersOnLevel)
                 return;
 
             SpawnPointSyncer.Instance.Reset();
-            UpdateLevelState();
+            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
         }
 
         #region Server
@@ -82,9 +87,9 @@ namespace Shadow_Dominion
         #region Client
 
         [ClientRpc]
-        private void UpdateLevelState()
+        private void UpdateLevelState(LevelState levelState)
         {
-            MirrorLevelSyncer.Instance.CmdSetState(new LevelState(typeof(LevelInitializeState).ToString()));
+            MirrorLevelSyncer.Instance.CmdSetState(levelState);
         }
 
         #endregion
