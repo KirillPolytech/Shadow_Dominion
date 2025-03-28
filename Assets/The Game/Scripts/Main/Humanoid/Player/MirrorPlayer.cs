@@ -11,7 +11,7 @@ namespace Shadow_Dominion.Main
     {
         public event Action OnDead;
         public PlayerStateMachine PlayerStateMachine;
-
+        
         public Transform AnimTransform { get; private set; }
         private Rigidbody _animRb;
         private Transform _ragdollTransform;
@@ -31,9 +31,7 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
-
-            PlayerStateMachine.Initialize();
-
+            
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }
 
@@ -49,12 +47,15 @@ namespace Shadow_Dominion.Main
 
         public void SetRigidbodyPositionAndRotation(Vector3 pos, Quaternion rot)
         {
-            _cameraLook.SetRotation(rot);
-
             _animRb.position = pos;
             _animRb.rotation = rot;
 
             // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
+        }
+
+        public void SetCameraRotation(Quaternion rot)
+        {
+            _cameraLook.SetRotation(rot);
         }
 
         public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
@@ -63,6 +64,13 @@ namespace Shadow_Dominion.Main
             _ragdollRb.transform.position = pos;
             _ragdollRb.transform.rotation = rot;
             _ragdollRb.gameObject.SetActive(true);
+            
+            Debug.Log($"Ragdoll new pos: {_ragdollRb.transform.position}");
+        }
+
+        public void SetRagdollVisibility(bool isVisible)
+        {
+            _ragdollRb.gameObject.SetActive(isVisible);
         }
 
         #region Server
@@ -77,7 +85,7 @@ namespace Shadow_Dominion.Main
                 OnDead?.Invoke();
             }
 
-            Debug.Log($"[Server] {newStateMessage}, Time: {Time.time}");
+            // Debug.Log($"[Server] {newStateMessage.StateName}, Time: {Time.time}");
         }
 
         #endregion

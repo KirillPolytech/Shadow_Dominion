@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: LevelSO
   m_EditorClassIdentifier: 
   InitializeWaitTime: 1
+  Rounds: 5

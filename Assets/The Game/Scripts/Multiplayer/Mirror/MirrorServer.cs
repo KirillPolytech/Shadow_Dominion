@@ -18,6 +18,7 @@ namespace Shadow_Dominion
         //
         public event Action<List<NetworkConnectionToClient>> OnPlayerReadyChanged;
         public event Action OnPlayerLoadedOnLevel;
+        public event Action<NetworkConnectionToClient> OnPlayerLoadedOnLevelWithArg;
         
         [SerializeField]
         private MirrorPlayersSyncer mirrorPlayerStateSyncerPrefab;
@@ -180,9 +181,10 @@ namespace Shadow_Dominion
         {
             SpawnedPlayerInstances.Add(gamePlayer.GetComponent<MirrorPlayer>());
 
-            gamePlayer.name = conn.address;
+            gamePlayer.name = conn.connectionId.ToString();
             
             OnPlayerLoadedOnLevel?.Invoke();
+            OnPlayerLoadedOnLevelWithArg?.Invoke(conn);
 
             Debug.Log($"[Server] OnRoomServerSceneLoadedForPlayer {conn.address}");
 

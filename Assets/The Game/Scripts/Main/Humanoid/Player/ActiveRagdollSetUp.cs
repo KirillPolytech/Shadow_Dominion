@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using NaughtyAttributes;
 using Unity.VisualScripting;
@@ -137,23 +136,73 @@ namespace Shadow_Dominion
                 configurableJoints[i].connectedBody = temp;
             }
         }
-
+        
         [Button]
-        public void EnableBoneControlles()
+        public void Enable()
         {
             BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
 
             foreach (var controller in controllers)
                 controller.enabled = true;
-        }
+            
+            positionMaxForce = 1500000000;
+            positionSpringDrive = 1500;
+            positionDamper = 25;
 
+            angularMaxForce = 1500000000;
+            angularPositionSpring = 1500;
+            angularPositionDamper = 25;
+            
+            ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
+
+            foreach (var joint in joints)
+            {
+                joint.autoConfigureConnectedAnchor = true;
+            }
+        }
+        
         [Button]
-        public void DisableBoneControlles()
+        public void Disable()
         {
             BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
 
             foreach (var controller in controllers)
                 controller.enabled = false;
+
+            /*
+            positionMaxForce = 0;
+            positionSpringDrive = 0;
+            positionDamper = 0;
+
+            angularMaxForce = 0;
+            angularPositionSpring = 0;
+            angularPositionDamper = 0;
+            */
+            
+            ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
+            Rigidbody[] rigidbodies = root.GetComponentsInChildren<Rigidbody>();
+
+            foreach (var joint in joints)
+            {
+                Rigidbody rb = joint.connectedBody;
+                joint.connectedBody = null;
+                joint.connectedBody = rb;
+                joint.targetPosition = Vector3.zero;
+                joint.targetRotation = Quaternion.identity;
+                joint.autoConfigureConnectedAnchor = false;
+            }
+
+            foreach (var rigidbody in rigidbodies)
+            {
+                rigidbody.linearVelocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3.zero;
+            }
+            
+            UpdateRagdoll();
+
+            MirrorPlayerInstaller mirrorPlayerInstaller = GetComponent<MirrorPlayerInstaller>();
+            mirrorPlayerInstaller.UpdateBoneSettings();
+            mirrorPlayerInstaller.UpdateRig();
         }
 
         [Button]

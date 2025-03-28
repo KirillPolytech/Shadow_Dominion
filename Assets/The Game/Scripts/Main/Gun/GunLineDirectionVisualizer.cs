@@ -9,6 +9,7 @@ namespace Shadow_Dominion
 
         private Ak47 _ak47;
         private LineRenderer _lineRend;
+        private Vector3 _lastHitPos;
 
         private void Start()
         {
@@ -22,8 +23,21 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
+            DrawLine();
+        }
+
+        private void DrawLine()
+        {
+            if (_ak47.HitPoint == _lastHitPos)
+            {
+                _lineRend.SetPosition(0, _ak47.BulletStartPosition);
+                _lineRend.SetPosition(1, _ak47.BulletStartPosition);
+                return;
+            }            
             _lineRend.SetPosition(0, _ak47.BulletStartPosition);
             _lineRend.SetPosition(1, _ak47.HitPoint);
+
+            _lastHitPos = _ak47.HitPoint;
         }
     }
 }

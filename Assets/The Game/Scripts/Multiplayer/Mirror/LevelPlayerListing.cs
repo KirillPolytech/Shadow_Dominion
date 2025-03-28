@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using Shadow_Dominion;
-using TMPro;
 using UnityEngine;
 
 public class LevelPlayerListing : MonoSingleton<LevelPlayerListing>
 {
-    private readonly List<TextMeshProUGUI> _instances = new();
+    private readonly List<LevelPlayerView> _instances = new();
         
     [SerializeField] private Transform content;
-    [SerializeField] private TextMeshProUGUI viewPrefab;
+    [SerializeField] private LevelPlayerView viewPrefab;
 
     public void AddView(PlayerViewData[] views)
     {
@@ -16,9 +15,9 @@ public class LevelPlayerListing : MonoSingleton<LevelPlayerListing>
         
         foreach (var view in views)
         {
-            TextMeshProUGUI text = Instantiate(viewPrefab, content);
-            text.text = $"<color=green>{view.Nick}</color> {view.Kills}";
-            _instances.Add(text);
+            LevelPlayerView levelPlayerView = Instantiate(viewPrefab, content);
+            levelPlayerView.Initialize($"<color=white>{view.Nick}</color>", view.Kills.ToString());
+            _instances.Add(levelPlayerView);
         }
     }
 

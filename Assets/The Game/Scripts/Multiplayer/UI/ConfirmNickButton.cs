@@ -9,14 +9,19 @@ namespace Shadow_Dominion.UI
     {
         private InputFieldsProvider _inputFieldProvider;
         private WindowsController _windowsController;
+        private TextSO _textSo;
 
         [Inject]
         public void Construct(
             NickInputFieldProvider nickInputFieldProvider,
-            MenuWindowsController windowsController)
+            MenuWindowsController windowsController,
+            TextSO textSo)
         {
             _inputFieldProvider = nickInputFieldProvider;
             _windowsController = windowsController;
+            _textSo = textSo;
+            
+            _inputFieldProvider.TMPInputField.onValueChanged.AddListener(OnValueChanged);
         }
 
         protected override void Awake()
@@ -31,6 +36,7 @@ namespace Shadow_Dominion.UI
             base.OnDestroy();
 
             onClick?.RemoveListener(SetNick);
+            _inputFieldProvider.TMPInputField.onValueChanged.RemoveListener(OnValueChanged);
         }
 
         private void SetNick()
@@ -44,6 +50,12 @@ namespace Shadow_Dominion.UI
             UserData.Instance.Nickname = _inputFieldProvider.TMPInputField.text;
 
             _windowsController.OpenWindow<JoinWindow>();
+        }
+
+        private void OnValueChanged(string text)
+        {
+            string result = text.Length > _textSo.NickLength ? text[.._textSo.NickLength] : text;
+            _inputFieldProvider.TMPInputField.text = result;
         }
     }
 }

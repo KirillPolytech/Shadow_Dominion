@@ -3,10 +3,11 @@ using System.Linq;
 using UnityEngine;
 using WindowsSystem;
 using Zenject;
+using IInitializable = Unity.VisualScripting.IInitializable;
 
 namespace Shadow_Dominion.StateMachine
 {
-    public class LevelStateMachine : IStateMachine, IInitializable
+    public class LevelStateMachine : IStateMachine
     {
         private readonly MirrorLevelSyncer _mirrorLevelSyncer;
 
@@ -31,11 +32,6 @@ namespace Shadow_Dominion.StateMachine
                 initializeStateUI,
                 this,
                 levelSo));
-        }
-
-        public void Initialize()
-        {
-            SetState<LevelInitializeState>();
         }
 
         public sealed override void SetState<T>()
@@ -64,5 +60,6 @@ namespace Shadow_Dominion.StateMachine
 
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
@@ -13,12 +14,11 @@ namespace Shadow_Dominion
         public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
-
         public PlayerViewData[] Players => _playersViewData.ToArray();
         public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
 
         [SyncVar] public int SpawnedPlayersOnLevel;
-        
+
         private new void Awake()
         {
             base.Awake();
@@ -39,7 +39,7 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerDisconnect += UpdateConnections;
             MirrorServer.Instance.ActionOnServerConnect += UpdateViews;
             MirrorServer.Instance.ActionOnServerDisconnect += UpdateViews;
-            MirrorServer.Instance.OnPlayerLoadedOnLevel += UpdateLoadedPlayersOnLevel;
+            MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg += UpdateLoadedPlayersOnLevel;
         }
 
         [Server]
@@ -58,7 +58,7 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerDisconnect -= UpdateConnections;
             MirrorServer.Instance.ActionOnServerConnect -= UpdateViews;
             MirrorServer.Instance.ActionOnServerDisconnect -= UpdateViews;
-            MirrorServer.Instance.OnPlayerLoadedOnLevel -= UpdateLoadedPlayersOnLevel;
+            MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg -= UpdateLoadedPlayersOnLevel;
         }
 
         [Command(requiresAuthority = false)]
@@ -73,16 +73,24 @@ namespace Shadow_Dominion
             _playersViewData.Add(playerViewData);
 
             RpcUpdateReadyState(_playersViewData.ToArray());
-            
+
             Debug.Log($"[Server] Player {nick} has been requested ready.");
         }
 
         [Server]
-        private void UpdateLoadedPlayersOnLevel()
+        private void UpdateLoadedPlayersOnLevel(NetworkConnectionToClient networkConnectionToClient)
         {
-            SpawnedPlayersOnLevel++;
+            StartCoroutine(WaitForInitialize(networkConnectionToClient));
+        }
 
-            if (SpawnedPlayersOnLevel == _playersViewData.Count)
+        private IEnumerator WaitForInitialize(NetworkConnectionToClient networkConnectionToClient)
+        {
+            while (networkConnectionToClient.identity.netId == 0)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            
+            if (++SpawnedPlayersOnLevel == _playersViewData.Count)
             {
                 OnAllPlayersLoadedOnLevel?.Invoke();
             }
@@ -120,7 +128,7 @@ namespace Shadow_Dominion
         #endregion
 
         #region Client
-        
+
         public override void OnStartClient()
         {
             _playersViewData.OnChange += OnSyncListChanged;

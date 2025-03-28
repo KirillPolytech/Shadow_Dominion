@@ -22,4 +22,10 @@ public class PlayerSettings : ScriptableObject
     
     [Space, Range(0,1000)]
     public int RagdollDelay = 3;
+    
+    [Space, Range(0,10)]
+    public int MoveAnimToRagdollTime = 3;
+    
+    [Space, Range(0,1)]
+    public float StopDistance = 0.25f;
 }

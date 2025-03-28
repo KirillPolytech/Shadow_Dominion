@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Mirror;
 using NaughtyAttributes;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
@@ -182,17 +181,20 @@ namespace Shadow_Dominion
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 monoInputHandler.OnInputUpdate += _cachedInputData;
 
-                _cachedOnCollision = (deltaDist, killerName) 
-                    => OnCollision(
-                        ind, 
-                        playerStateMachine, 
-                        playerMovement.IsRunning, 
-                        killerName, 
+                _cachedOnCollision = (deltaDist, killerName) =>
+                {
+                    
+                    OnCollision(
+                        ind,
+                        playerStateMachine,
+                        playerMovement.IsRunning,
+                        killerName,
                         MirrorPlayersSyncer.Instance.LocalPlayer.Nick);
+                };
                 
                 copyTo[i].OnCollision += _cachedOnCollision;
             }
-
+            
             return;
 
             void HandleInput(InputData inputData, BoneController boneController)
@@ -208,12 +210,16 @@ namespace Shadow_Dominion
         private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {
             if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
+            {
                 return;
+            }
             
             if (killerName == null && !isRun)
                 return;
             
-            if (copyTo[ind].BoneType == HumanBodyBones.Head)
+            if (copyTo[ind].BoneType == HumanBodyBones.Head 
+                && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceDownState)
+                && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceUpState))
             {
                 playerStateMachine.SetState<DeathState>();
                 KillFeed.Instance.AddFeed(killerName ?? victimName, victimName);
@@ -260,6 +266,28 @@ namespace Shadow_Dominion
             }
 
             //Gizmos.DrawRay(ragdollRoot.position, ragdollRoot.transform.up * 5);
+        }
+
+        [Button]
+        public void UpdateBoneSettings()
+        {
+            BoneSettings[] boneSettings = new BoneSettings[copyTo.Length];
+
+            for (int i = 0; i < copyTo.Length; i++)
+            {
+                boneSettings[i] = new BoneSettings(copyTo[i].GetComponent<ConfigurableJoint>(), 
+                    copyTo[i].GetComponent<Rigidbody>());
+                
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+
+                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone, boneSettings[i]);
+            }
+        }
+
+        [Button]
+        public void UpdateRig()
+        {
+            rootRig.Build();
         }
 
         private void OnDestroy()

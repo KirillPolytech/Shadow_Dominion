@@ -34,7 +34,7 @@ namespace Shadow_Dominion
 
         private void FixedUpdate()
         {
-            if (_ind >= _objects.Count - 1)
+            if (_ind >= _objects.Count)
                 return;
             
             _timer += Time.fixedDeltaTime;

@@ -15,10 +15,10 @@ namespace Shadow_Dominion
 
         public PositionMessage[] positionMessage =
         {
-            new(new Vector3(25, 0, 0), true),
-            new(new Vector3(-25, 0, 0), true),
-            new(new Vector3(0, 0, 25), true),
-            new(new Vector3(0, 0, -25), true)
+            new(new Vector3(22, 0, 0), true),
+            new(new Vector3(-22, 0, 0), true),
+            new(new Vector3(0, 0, 22), true),
+            new(new Vector3(0, 0, -22), true)
         };
         
         public Quaternion CalculateRotation(Vector3 position)
@@ -47,6 +47,9 @@ namespace Shadow_Dominion
             if (!isServer)
                 return;
             
+            _positionFree.Clear();
+            _positionFree.AddRange(_frees);
+            
             _positionMessages.Clear();
             _positionMessages.AddRange(positionMessage);
         }
@@ -59,9 +62,7 @@ namespace Shadow_Dominion
                     continue;
                 
                 PositionMessage temp = _positionMessages.ElementAt(i);
-
-                temp.IsFree = false;
-
+                
                 UpdateSyncList(i);
 
                 return temp;
@@ -81,6 +82,8 @@ namespace Shadow_Dominion
 
             _positionMessages.Remove(temp);
             _positionMessages.Add(temp);
+
+            _positionFree[ind] = false;
             
             Debug.Log("[Server] PositionSyncer updated.");
         }

@@ -5,52 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c9e15c-a76d-4d67-b223-d30987356212" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/FinishState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/FinishState.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/NickInputFieldProvider.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/NickInputFieldProvider.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/Mirror Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/Mirror Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/RoomPlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/RoomPlayer.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Mirror/GameStateManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Mirror/GameStateManager.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Mirror/Server.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Mirror/Server.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/RoomViewPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/RoomViewPrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/KillFeedViewPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/KillFeedViewPrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/LevelViewPRefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/LevelViewPRefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/SO/LevelSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/SO/LevelSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/SO/PlayerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/SO/PlayerSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Level.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Level.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/NetworkManagerUI.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/NetworkManagerUI.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/NetworkRoomPlayerUI.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/NetworkRoomPlayerUI.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/RoomPlayerUI.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Help/RoomPlayerUI.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Context/BootContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Context/BootContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Context/MenuContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Context/MenuContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/CoroutineExecuter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/CoroutineExecuter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/CameraLook.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/CameraLook.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/LevelObjects.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/LevelObjects.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Gun/GunLineDirectionVisualizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Gun/GunLineDirectionVisualizer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/ActiveRagdollSetUp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/ActiveRagdollSetUp.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/MirrorPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/MirrorPlayer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/InActiveState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/InActiveState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PlayerStateMachine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/MonoSingleton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/MonoSingleton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Window.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/LevelPlayerListing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/LevelPlayerListing.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayerInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayerInstaller.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayersSyncer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayersSyncer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/MirrorRagdollInitializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/MirrorRagdollInitializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/PlayerListing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/PlayerListing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Structs/PlayerViewData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Structs/PlayerViewData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/DisconnectButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/DisconnectButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/HostButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/HostButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/IPInputFieldProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/IPInputFieldProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/InputFieldsProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/InputFieldsProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/JoinButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/JoinButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/PORTInputFieldProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/PORTInputFieldProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/StartButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/StartButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/LevelSO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/LevelSO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/SpawnPointSyncer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/SpawnPointSyncer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/ConfirmNickButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/ConfirmNickButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/KillFeed.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/KillFeed.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/PlayerSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/PlayerSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/TextSO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/SO/TextSO.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +56,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/UserData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/ConfirmNickButton.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/LevelPlayerView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/SO/ApplicationSettingsSO.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/SO/TextSO.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@b2e7bffab772/Runtime/Components/CinemachineOrbitalFollow.cs" root0="SKIP_HIGHLIGHTING" />
@@ -99,23 +78,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "XThreadsFramesViewSplitterKey": "0.70438796",
-    "git-widget-placeholder": "Test",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.70438796&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Test&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$USER_HOME$/Downloads/New folder\Shadow Dominion.exe" />
@@ -151,10 +130,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2392">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="16248">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="2392" />
+      <option name="pid" value="16248" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -273,7 +252,8 @@
       <workItem from="1742931352377" duration="5307000" />
       <workItem from="1742985930998" duration="16312000" />
       <workItem from="1743075041147" duration="11140000" />
-      <workItem from="1743099942307" duration="15816000" />
+      <workItem from="1743099942307" duration="18656000" />
+      <workItem from="1743163972924" duration="17200000" />
     </task>
     <servers />
   </component>
@@ -318,6 +298,58 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/KillFeed.cs</url>
+          <line>15</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Multiplayer\UI\KillFeed.cs" containingFunctionPresentation="Method 'AddFeed'">
+            <startOffsets>
+              <option value="439" />
+            </startOffsets>
+            <endOffsets>
+              <option value="485" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="129" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/InActiveState.cs</url>
+          <line>18</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Main\Humanoid\Player\PlayerStateMachine\InActiveState.cs" containingFunctionPresentation="Method 'Enter'">
+            <startOffsets>
+              <option value="558" />
+            </startOffsets>
+            <endOffsets>
+              <option value="591" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayersSyncer.cs</url>
+          <line>92</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Multiplayer\Mirror\MirrorPlayersSyncer.cs" containingFunctionPresentation="Method 'WaitForInitialize'">
+            <startOffsets>
+              <option value="3141" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3195" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="146" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs</url>
+          <line>36</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Multiplayer\Mirror\GameStateManager.cs" containingFunctionPresentation="Method 'InitializeLevel'">
+            <startOffsets>
+              <option value="1203" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1277" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="149" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
