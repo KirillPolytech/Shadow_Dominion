@@ -19,6 +19,8 @@ namespace Shadow_Dominion
 
         [SyncVar] public int SpawnedPlayersOnLevel;
 
+        [SyncVar] private int _playerid = 0;
+
         private new void Awake()
         {
             base.Awake();
@@ -134,7 +136,7 @@ namespace Shadow_Dominion
             _playersViewData.OnChange += OnSyncListChanged;
 
             AddToSyncList(
-                new PlayerViewData(UserData.Instance.Nickname, false, 0));
+                new PlayerViewData(_playerid++ , UserData.Instance.Nickname, false, 0));
 
             UpdateViews();
         }

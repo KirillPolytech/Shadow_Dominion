@@ -54,7 +54,7 @@ namespace Shadow_Dominion.Player.StateMachine
                 _currentCoroutine = null;
                 _playerStateMachine.SetState<DefaultState>();
             });
-            _coroutineExecuter.Execute(_currentCoroutine);
+            _coroutineExecuter.Execute(_currentCoroutine.ToString(), _currentCoroutine);
         }
 
         public override bool CanExit() => _currentCoroutine == null;

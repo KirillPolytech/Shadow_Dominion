@@ -54,21 +54,21 @@ public class MirrorRagdollInitializer : MonoBehaviour
             if (child == null)
                 Debug.LogError($"Cant find: {bone.name}");
             
-            NetworkTransformReliable ntr = child.GetComponent<NetworkTransformReliable>();
+            NetworkTransformUnreliable ntr = child.GetComponent<NetworkTransformUnreliable>();
             
             if (ntr == null)
-                child.AddComponent<NetworkTransformReliable>();
+                child.AddComponent<NetworkTransformUnreliable>();
         }
     }
 
     [Button]
     public void Delete()
     {
-        BoneController[] bones = ragdollRoot.GetComponentsInChildren<BoneController>();
+        NetworkTransformUnreliable[] bones = animRoot.GetComponentsInChildren<NetworkTransformUnreliable>();
 
         foreach (var bone in bones)
         {
-            NetworkRigidbodyReliable networkRigidbodyReliable = bone.GetComponent<NetworkRigidbodyReliable>();
+            NetworkTransformUnreliable networkRigidbodyReliable = bone.GetComponent<NetworkTransformUnreliable>();
             if (networkRigidbodyReliable)
                 DestroyImmediate(networkRigidbodyReliable);
         }

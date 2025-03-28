@@ -17,13 +17,15 @@ namespace Shadow_Dominion.Main
         private Transform _ragdollTransform;
         private Rigidbody _ragdollRb;
         private CameraLook _cameraLook;
+        private BoneController[] _bones;
 
         public void Construct(
             Transform animTransform,
             Rigidbody animRb,
             Transform ragdollTransform,
             PlayerStateMachine playerStateMachine,
-            CameraLook cameraLook)
+            CameraLook cameraLook,
+            BoneController[] bones)
         {
             AnimTransform = animTransform;
             _ragdollTransform = ragdollTransform;
@@ -31,6 +33,7 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
+            _bones = bones;
             
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }
@@ -60,10 +63,12 @@ namespace Shadow_Dominion.Main
 
         public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
         {
-            _ragdollRb.gameObject.SetActive(false);
+            SetRagdollVisibility(false);
+            
             _ragdollRb.transform.position = pos;
             _ragdollRb.transform.rotation = rot;
-            _ragdollRb.gameObject.SetActive(true);
+            
+            SetRagdollVisibility(true);
             
             Debug.Log($"Ragdoll new pos: {_ragdollRb.transform.position}");
         }

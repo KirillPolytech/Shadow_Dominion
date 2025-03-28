@@ -22,7 +22,10 @@ namespace Shadow_Dominion.StateMachine
             InitializeStateUI initializeStateUI,
             LevelSO levelSo)
         {
-            _mirrorLevelSyncer = new MirrorLevelSyncer(this);
+            if (MirrorLevelSyncer.Instance == null)
+                _mirrorLevelSyncer = new MirrorLevelSyncer(this);
+            else
+                MirrorLevelSyncer.Instance.Initialize(this);
 
             _states.Add(new GameplayState(windowsController));
             _states.Add(new FinishState(windowsController));
@@ -60,6 +63,5 @@ namespace Shadow_Dominion.StateMachine
 
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
-
     }
 }

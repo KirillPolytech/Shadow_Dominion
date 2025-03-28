@@ -7,16 +7,26 @@ namespace Shadow_Dominion
 {
     public class MirrorLevelSyncer : Singleton<MirrorLevelSyncer>
     {
-        private readonly LevelStateMachine _levelStateMachine;
+        private LevelStateMachine _levelStateMachine;
         
         public MirrorLevelSyncer(LevelStateMachine levelStateMachine)
         {
             _levelStateMachine = levelStateMachine;
-
+            
             if (Instance == null)
                 Instance = this;
             else
                 throw new Exception("Second instance of MirrorLevelSyncer.");
+        }
+
+        public void Initialize(LevelStateMachine levelStateMachine)
+        {
+            _levelStateMachine = levelStateMachine;
+        }
+
+        ~MirrorLevelSyncer()
+        {
+            Instance = null;
         }
         
         public void CmdSetState(LevelState newState)

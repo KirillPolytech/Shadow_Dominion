@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Mirror;
+﻿using Mirror;
 using Multiplayer.Structs;
 using UnityEngine;
 
@@ -9,16 +7,14 @@ namespace Shadow_Dominion
     public class SpawnPointSyncer : MirrorSingleton<SpawnPointSyncer>
     {
         private readonly SyncList<PositionMessage> _positionMessages = new();
-        private readonly SyncList<bool> _positionFree = new();
-        private readonly bool[] _frees = {true,true,true,true };
         private Vector3 Center => Vector3.zero;
 
         public PositionMessage[] positionMessage =
         {
             new(new Vector3(22, 0, 0), true),
             new(new Vector3(-22, 0, 0), true),
-            new(new Vector3(0, 0, 22), true),
-            new(new Vector3(0, 0, -22), true)
+            new(new Vector3(0, 0, 15), true),
+            new(new Vector3(0, 0, -15), true)
         };
         
         public Quaternion CalculateRotation(Vector3 position)
@@ -38,8 +34,6 @@ namespace Shadow_Dominion
                 return;
             
             _positionMessages.AddRange(positionMessage);
-            
-            _positionFree.AddRange(_frees);
         }
 
         public void Reset()
@@ -47,45 +41,11 @@ namespace Shadow_Dominion
             if (!isServer)
                 return;
             
-            _positionFree.Clear();
-            _positionFree.AddRange(_frees);
-            
             _positionMessages.Clear();
             _positionMessages.AddRange(positionMessage);
         }
 
-        public PositionMessage GetFreePosition()
-        {
-            for (int i = 0; i < _positionFree.Count; i++)
-            {
-                if (!_positionFree.ElementAt(i)) 
-                    continue;
-                
-                PositionMessage temp = _positionMessages.ElementAt(i);
-                
-                UpdateSyncList(i);
-
-                return temp;
-            }
-
-            throw new Exception("Can't find free position.");
-        }
-
-        [Command(requiresAuthority = false)]
-        private void UpdateSyncList(int ind)
-        {
-            _positionFree[ind] = false;
-            
-            PositionMessage temp = _positionMessages.ElementAt(ind);
-
-            temp.IsFree = false;
-
-            _positionMessages.Remove(temp);
-            _positionMessages.Add(temp);
-
-            _positionFree[ind] = false;
-            
-            Debug.Log("[Server] PositionSyncer updated.");
-        }
+        public PositionMessage GetFreePosition(PlayerViewData playerViewData)=> _positionMessages[playerViewData.ID];
+        public PositionMessage GetFreePosition(int ind)=> _positionMessages[ind];
     }
 }

@@ -5,12 +5,14 @@ namespace Shadow_Dominion
     [Serializable]
     public struct PlayerViewData : IEquatable<PlayerViewData>
     {
+        public int ID;
         public string Nick;
         public bool IsReady;
         public ushort Kills;
 
-        public PlayerViewData(string nick, bool isReady, ushort kills)
+        public PlayerViewData(int id, string nick, bool isReady, ushort kills)
         {
+            ID = id;
             Nick = nick;
             IsReady = isReady;
             Kills = kills;

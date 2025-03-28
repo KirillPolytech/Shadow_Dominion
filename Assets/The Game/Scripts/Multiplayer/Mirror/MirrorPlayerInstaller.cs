@@ -169,7 +169,7 @@ namespace Shadow_Dominion
                 playerSettings);
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation);
-            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
+            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook, copyTo);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
             ak47.Construct(aim, weaponSO);

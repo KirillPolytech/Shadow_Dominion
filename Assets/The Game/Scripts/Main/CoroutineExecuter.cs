@@ -1,20 +1,49 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CoroutineExecuter : MonoBehaviour
 {
-    public Coroutine Execute(IEnumerator coroutine) => StartCoroutine(coroutine);
+    private readonly Dictionary<string, Coroutine> _activeCoroutines = new Dictionary<string, Coroutine>();
 
-    public void Stop(IEnumerator coroutine)
+    public Coroutine Execute(string key, IEnumerator routine)
     {
-        try
+        if (_activeCoroutines.ContainsKey(key))
+        {
+            Debug.LogWarning($"Coroutine with key '{key}' is already running.");
+            return _activeCoroutines[key];
+        }
+
+        Coroutine coroutine = StartCoroutine(WrapCoroutine(key, routine));
+        _activeCoroutines[key] = coroutine;
+        return coroutine;
+    }
+
+    public void Stop(string key)
+    {
+        if (!_activeCoroutines.TryGetValue(key, out Coroutine coroutine))
+            return;
+
+        StopCoroutine(coroutine);
+        _activeCoroutines.Remove(key);
+    }
+
+    public void Stop(Coroutine coroutine)
+    {
+        foreach (var pair in _activeCoroutines.Where(pair => pair.Value == coroutine))
         {
             StopCoroutine(coroutine);
+            _activeCoroutines.Remove(pair.Key);
+            return;
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning(e.Message);
-        }
+    }
+
+    public bool IsRunning(string key) => _activeCoroutines.ContainsKey(key);
+
+    private IEnumerator WrapCoroutine(string key, IEnumerator routine)
+    {
+        yield return StartCoroutine(routine);
+        _activeCoroutines.Remove(key);
     }
 }

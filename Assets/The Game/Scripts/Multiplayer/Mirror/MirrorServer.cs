@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using Shadow_Dominion.Main;
 using UnityEngine;
@@ -175,6 +176,8 @@ namespace Shadow_Dominion
             Debug.LogError($"[Server] OnServerTransportException {exception.Message}");
         }
 
+
+        private int _posInd;
         [Server]
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer, GameObject gamePlayer)
@@ -182,6 +185,11 @@ namespace Shadow_Dominion
             SpawnedPlayerInstances.Add(gamePlayer.GetComponent<MirrorPlayer>());
 
             gamePlayer.name = conn.connectionId.ToString();
+
+            Vector3 pos = SpawnPointSyncer.Instance.GetFreePosition(_posInd++).Position;
+            Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(pos);
+            SpawnedPlayerInstances.Last().SetRigidbodyPositionAndRotation(pos, rot);
+            SpawnedPlayerInstances.Last().SetRagdollPositionAndRotation(pos, rot);
             
             OnPlayerLoadedOnLevel?.Invoke();
             OnPlayerLoadedOnLevelWithArg?.Invoke(conn);

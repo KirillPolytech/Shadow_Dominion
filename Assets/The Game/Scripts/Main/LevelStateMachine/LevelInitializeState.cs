@@ -29,7 +29,7 @@ namespace Shadow_Dominion.StateMachine
 
         ~LevelInitializeState()
         {
-            _coroutineExecuter.Stop(WaitForSeconds());
+            _coroutineExecuter.Stop(WaitForSeconds().ToString());
         }
 
         public override void Enter()
@@ -42,7 +42,7 @@ namespace Shadow_Dominion.StateMachine
                 player.PlayerStateMachine.SetState<InActiveState>();
             }
 
-            _coroutineExecuter.Execute(WaitForSeconds());
+            _coroutineExecuter.Execute(WaitForSeconds().ToString(),WaitForSeconds());
         }
 
         private IEnumerator WaitForSeconds()

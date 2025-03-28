@@ -65,7 +65,7 @@ namespace Shadow_Dominion.Player.StateMachine
            
             _mirrorPlayer.IsKinematic(true);
 
-            _coroutineExecuter.Execute(WaitForSeconds());
+            _coroutineExecuter.Execute(WaitForSeconds().ToString(), WaitForSeconds());
         }
         
         private IEnumerator WaitForSeconds()

@@ -37,7 +37,7 @@ namespace Shadow_Dominion.Player
             if (_lastValue != currentValue)
             {
                 if (_coroutine != null)
-                    _coroutineExecuter.StopCoroutine(_coroutine);
+                    ((MonoBehaviour) _coroutineExecuter).StopCoroutine(_coroutine);
 
                 _coroutine = _coroutineExecuter.StartCoroutine(ChangeWeight(_aimRig, currentValue));
             }
