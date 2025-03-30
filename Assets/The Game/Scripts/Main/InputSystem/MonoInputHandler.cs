@@ -9,12 +9,12 @@ namespace Shadow_Dominion.InputSystem
         public event Action<InputData> OnInputUpdate;
 
         private InputData _inputData;
-
+        
         private void Update()
         {
             if (!isLocalPlayer)
                 return;
-            
+                    
             HandleInput();
         }
         
@@ -46,7 +46,11 @@ namespace Shadow_Dominion.InputSystem
             
             _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
             
-            _inputData.ESC = Input.GetKey(KeyCode.Escape);
+            _inputData.LeftALT = Input.GetKey(KeyCode.LeftAlt);
+            
+            _inputData.LeftCTRL = Input.GetKey(KeyCode.LeftControl);
+            
+            _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);
         }

@@ -1,79 +1,138 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using UnityEngine;
 
 namespace Shadow_Dominion
 {
     public class MirrorPlayersSyncer : MirrorSingleton<MirrorPlayersSyncer>
     {
-        private readonly SyncList<PlayerViewData> _players = new SyncList<PlayerViewData>();
+        private readonly SyncList<PlayerViewData> _playersViewData = new();
+
+        public readonly List<NetworkConnectionToClient> Connections = new();
+
+        public event Action OnAllPlayersLoadedOnLevel;
+        public PlayerViewData[] Players => _playersViewData.ToArray();
+        public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
+
+        private int _spawnedPlayersOnLevel;
+
+        [SyncVar] private int _playerid;
+
+        private new void Awake()
+        {
+            base.Awake();
+
+            DontDestroyOnLoad(gameObject);
+        }
 
         #region Server
+
         [Server]
         public override void OnStartServer()
         {
             base.OnStartServer();
 
-            _players.OnChange += OnSyncListChanged;
+            _playersViewData.OnChange += OnSyncListChanged;
 
-            MirrorServer.Instance.ActionOnServerConnectWithArg += AddAddress;
-            MirrorServer.Instance.ActionOnServerDisconnectWithArg += RemoveAddress;
-            MirrorServer.Instance.OnPlayerReadyChanged += UpdateReadyState;
-
-            foreach (var networkConnection in MirrorServer.Instance.Connections)
-            {
-                _players.Add(new PlayerViewData(networkConnection.address, false));
-            }
+            MirrorServer.Instance.ActionOnServerConnect += UpdateConnections;
+            MirrorServer.Instance.ActionOnServerDisconnect += UpdateConnections;
+            MirrorServer.Instance.ActionOnServerConnect += UpdateViews;
+            MirrorServer.Instance.ActionOnServerDisconnect += UpdateViews;
+            MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg += UpdateLoadedPlayersOnLevel;
         }
-        
+
+        [Server]
+        private void UpdateConnections()
+        {
+            Connections.Clear();
+            Connections.AddRange(MirrorServer.Instance.Connections);
+        }
+
         [Server]
         public override void OnStopServer()
         {
-            _players.OnChange -= OnSyncListChanged;
+            _playersViewData.OnChange -= OnSyncListChanged;
 
-            MirrorServer.Instance.ActionOnServerConnectWithArg -= AddAddress;
-            MirrorServer.Instance.ActionOnServerDisconnectWithArg -= RemoveAddress;
-            MirrorServer.Instance.OnPlayerReadyChanged -= UpdateReadyState;
+            MirrorServer.Instance.ActionOnServerConnect -= UpdateConnections;
+            MirrorServer.Instance.ActionOnServerDisconnect -= UpdateConnections;
+            MirrorServer.Instance.ActionOnServerConnect -= UpdateViews;
+            MirrorServer.Instance.ActionOnServerDisconnect -= UpdateViews;
+            MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg -= UpdateLoadedPlayersOnLevel;
         }
 
-        [Client]
-        public override void OnStartClient()
+        [Command(requiresAuthority = false)]
+        public void UpdateReadyState(bool isReady, string nick)
         {
-            UpdateViews();
+            PlayerViewData playerViewData = _playersViewData.First(x => x.Nick == nick);
+
+            _playersViewData.Remove(playerViewData);
+
+            playerViewData.IsReady = isReady;
+
+            _playersViewData.Add(playerViewData);
+
+            RpcUpdateReadyState(_playersViewData.ToArray());
+
+            Debug.Log($"[Server] Player {nick} has been requested ready.");
         }
 
         [Server]
-        private void AddAddress(NetworkConnectionToClient networkConnectionToClient)
+        private void UpdateLoadedPlayersOnLevel(NetworkConnectionToClient networkConnectionToClient)
         {
-            _players.Add(new PlayerViewData(networkConnectionToClient.address, false));
+            StartCoroutine(WaitForInitialize(networkConnectionToClient));
         }
 
-        [Server]
-        private void RemoveAddress(NetworkConnectionToClient networkConnectionToClient)
+        private IEnumerator WaitForInitialize(NetworkConnectionToClient networkConnectionToClient)
         {
-            int ind = _players.IndexOf(_players.FirstOrDefault(x => x.Address == networkConnectionToClient.address));
-            _players.RemoveAt(ind);
-        }
-        
-        [Server]
-        private void UpdateReadyState(HashSet<NetworkRoomPlayer> networkConnectionToClient)
-        {
-            foreach (var networkRoomPlayer in networkConnectionToClient)
+            while (networkConnectionToClient.identity.netId == 0)
             {
-                UpdateReadyState(new PlayerViewData(networkRoomPlayer.connectionToClient.address, networkRoomPlayer.readyToBegin));
+                yield return new WaitForFixedUpdate();
+            }
+            
+            if (++_spawnedPlayersOnLevel == _playersViewData.Count)
+            {
+                OnAllPlayersLoadedOnLevel?.Invoke();
             }
         }
-        
-        [Server]
-        [ClientRpc]
-        private void UpdateReadyState(PlayerViewData playerViewData)
+
+        [Command(requiresAuthority = false)]
+        private void AddToSyncList(PlayerViewData playerViewData)
         {
-            PlayerListing.Instance.IsReady(playerViewData.Address, playerViewData.IsReady);
+            _playersViewData.Add(playerViewData);
         }
-        
+
+        [Command(requiresAuthority = false)]
+        public void UpdateView(string killerName)
+        {
+            PlayerViewData playerViewData = _playersViewData.First(x => x.Nick == killerName);
+            _playersViewData.Remove(playerViewData);
+            playerViewData.Kills += 1;
+            
+            _playersViewData.Add(playerViewData);
+        }
+
         #endregion
 
         #region Client
+
+        public override void OnStartClient()
+        {
+            _playersViewData.OnChange += OnSyncListChanged;
+
+            AddToSyncList(
+                new PlayerViewData(_playerid++ , UserData.Instance.Nickname, false, 0));
+
+            UpdateViews();
+        }
+
+        public override void OnStopClient()
+        {
+            _playersViewData.OnChange -= OnSyncListChanged;
+        }
+
         [Client]
         private void OnSyncListChanged(SyncList<PlayerViewData>.Operation operation, int value, PlayerViewData str)
         {
@@ -83,9 +142,20 @@ namespace Shadow_Dominion
         [Client]
         private void UpdateViews()
         {
-            PlayerListing.Instance.SpawnView(_players.ToArray());
+            PlayerListing.Instance.SpawnView(_playersViewData.ToArray());
+            LevelPlayerListing.Instance?.AddView(_playersViewData.ToArray());
         }
-        
+
+        [Client]
+        [ClientRpc]
+        private void RpcUpdateReadyState(PlayerViewData[] playerViewData)
+        {
+            foreach (var viewData in playerViewData)
+            {
+                PlayerListing.Instance.IsReady(viewData.Nick, viewData.IsReady);
+            }
+        }
+
         #endregion
     }
 }

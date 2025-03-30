@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Multiplayer.Structs;
 using NaughtyAttributes;
 using Shadow_Dominion.AnimStateMachine;
 using Shadow_Dominion.InputSystem;
@@ -8,12 +7,11 @@ using Shadow_Dominion.Main;
 using Shadow_Dominion.Network;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
-using Shadow_Dominion.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Serialization;
 using WindowsSystem;
-using Zenject;
 
 namespace Shadow_Dominion
 {
@@ -35,17 +33,18 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private PlayerSettings playerSettings;
-        
+
         [SerializeField]
         private WeaponSO weaponSO;
 
+        [FormerlySerializedAs("player")]
         [Space]
         [Header("Limits")]
         [SerializeField]
-        private Main.Player player;
-        
+        private MirrorPlayer mirrorPlayer;
+
         [SerializeField]
-        private Transform playerTransform;
+        private Transform animTransform;
 
         [SerializeField]
         private CameraLook cameraLook;
@@ -54,7 +53,13 @@ namespace Shadow_Dominion
         private AimTarget aimTarget;
 
         [SerializeField]
-        private CinemachineThirdPersonFollow cinemachineThirdPersonFollow;
+        private CinemachineOrbitalFollow cinemachinePosition;
+
+        [SerializeField]
+        private CinemachineRotationComposer cinemachineRotation;
+        
+        [SerializeField]
+        private CinemachineInputAxisController cinemachineInputAxisController;
 
         [SerializeField]
         private Renderer rend;
@@ -76,7 +81,7 @@ namespace Shadow_Dominion
         private MonoInputHandler monoInputHandler;
 
         [SerializeField]
-        private Rigidbody charRigidbody;
+        private Rigidbody AnimRigidbody;
 
         [Space]
         [Header("Motion")]
@@ -114,39 +119,45 @@ namespace Shadow_Dominion
         [Header("Network")]
         [SerializeField]
         private MirrorShootHandler mirrorShootHandler;
-        
+
         [Space]
         [SerializeField]
         private AnimationClip standUpFaceUpClip;
+        
         [SerializeField]
         private AnimationClip standUpFaceDownClip;
-        
+
         [Space]
         [Header("Debug")]
         [SerializeField]
         private bool debug;
 
-        private Action<Vector3> _cachedOnCollision;
+        private Action<Vector3, string> _cachedOnCollision;
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
-        
-        // todo: refactor
+        private Action _cachedSetBonesState;
+
         private void Awake()
         {
-            PositionMessage[] positionMessage = new PositionMessage[4]
+            BoneSettings[] boneSettings = new BoneSettings[copyTo.Length];
+
+            for (int i = 0; i < copyTo.Length; i++)
             {
-                new PositionMessage(new Vector3(20,0,0), true),
-                new PositionMessage(new Vector3(-20,0,0), true),
-                new PositionMessage(new Vector3(0,0,20), true),
-                new PositionMessage(new Vector3(0,0,-20), true)
-            };
+                boneSettings[i] = new BoneSettings(copyTo[i].GetComponent<ConfigurableJoint>(), 
+                    copyTo[i].GetComponent<Rigidbody>());
+                
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+
+                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone, boneSettings[i]);
+            }
             
             WindowsController windowsController = FindAnyObjectByType<WindowsController>();
             PlayerMovement playerMovement = new PlayerMovement();
             PlayerAnimation playerAnimation = new PlayerAnimation();
             AnimationStateMachine animationStateMachine = new AnimationStateMachine(animator);
+            playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
             PlayerStateMachine playerStateMachine = new PlayerStateMachine(
-                player,
+                mirrorPlayer,
                 cameraLook,
                 ragdollRoot.transform,
                 playerAnimation,
@@ -158,30 +169,40 @@ namespace Shadow_Dominion
                 standUpFaceUpClip,
                 standUpFaceDownClip,
                 windowsController,
-                positionMessage );
-            
-            player.Construct(playerTransform, playerStateMachine);
-            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachineThirdPersonFollow);
-            aimTarget.Construct(cameraLook);
-            playerAnimation.Construct(animationStateMachine, aimRig, coroutineExecuter, playerSettings);
-            playerMovement.Construct(playerSettings, charRigidbody, cameraLook, playerAnimation);
-            ak47.Construct(monoInputHandler, aim, weaponSO);
-            mirrorShootHandler.Construct(ak47);
+                ak47,
+                playerSettings);
 
+            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation, cinemachineInputAxisController);
+            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook, copyTo);
+            aimTarget.Construct(cameraLook);
+            playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
+            ak47.Construct(aim, weaponSO);
+            mirrorShootHandler.Construct(ak47);
+            
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
-
-                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone);
-
                 int ind = i;
                 _cachedInputData = inp => HandleInput(inp, copyTo[ind]);
                 monoInputHandler.OnInputUpdate += _cachedInputData;
 
-                _cachedOnCollision = deltaDist => OnCollision(deltaDist, ind, playerStateMachine);
+                _cachedOnCollision = (deltaDist, killerName) =>
+                {
+                    
+                    OnCollision(
+                        ind,
+                        playerStateMachine,
+                        playerMovement.IsRunning,
+                        killerName,
+                        MirrorPlayersSyncer.Instance.LocalPlayer.Nick);
+                };
+                
                 copyTo[i].OnCollision += _cachedOnCollision;
+
+                copyTo[i].enabled = mirrorPlayer.isLocalPlayer;
             }
 
+            SetControllersState(true);
+            
             return;
 
             void HandleInput(InputData inputData, BoneController boneController)
@@ -193,11 +214,41 @@ namespace Shadow_Dominion
                 boneController.IsRotationApplying(!inputData.T);
             }
         }
-
-        private void OnCollision(Vector3 deltaDist, int ind, IStateMachine playerStateMachine)
+        
+        private void OnDestroy()
         {
-            if(copyTo[ind].BoneType == HumanBodyBones.Head)
+            for (int i = 0; i < copyFrom.Length; i++)
+            {
+                copyTo[i].OnCollision -= _cachedOnCollision;
+            }
+        }
+
+        private void SetControllersState(bool state)
+        {
+            foreach (var bone in copyTo)
+            {
+                bone.enabled = state;
+            }
+        }
+        
+
+        private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
+        {
+            if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
+                return;
+            
+            
+            if (killerName == null && !isRun)
+                return;
+            
+            if (copyTo[ind].BoneType == HumanBodyBones.Head 
+                && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceDownState)
+                && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceUpState))
+            {
                 playerStateMachine.SetState<DeathState>();
+                KillFeed.Instance.AddFeed(killerName ?? victimName, victimName);
+                MirrorPlayersSyncer.Instance.UpdateView(killerName);
+            }
 
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
                 || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
@@ -242,12 +293,26 @@ namespace Shadow_Dominion
             //Gizmos.DrawRay(ragdollRoot.position, ragdollRoot.transform.up * 5);
         }
 
-        private void OnDestroy()
+        [Button]
+        public void UpdateBoneSettings()
         {
-            for (int i = 0; i < copyFrom.Length; i++)
+            BoneSettings[] boneSettings = new BoneSettings[copyTo.Length];
+
+            for (int i = 0; i < copyTo.Length; i++)
             {
-                copyTo[i].OnCollision -= _cachedOnCollision;
+                boneSettings[i] = new BoneSettings(copyTo[i].GetComponent<ConfigurableJoint>(), 
+                    copyTo[i].GetComponent<Rigidbody>());
+                
+                HumanBodyBones humanBodyBone = bones.BoneData.First(x => x.Name == copyTo[i].name).humanBodyBone;
+
+                copyTo[i].Construct(copyFrom[i], pidData, rend, humanBodyBone, boneSettings[i]);
             }
+        }
+
+        [Button]
+        public void UpdateRig()
+        {
+            rootRig.Build();
         }
     }
 }

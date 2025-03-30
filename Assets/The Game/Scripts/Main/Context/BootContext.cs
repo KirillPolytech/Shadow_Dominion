@@ -1,8 +1,8 @@
 using Mirror;
-using Multiplayer.Structs;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Shadow_Dominion
@@ -11,18 +11,21 @@ namespace Shadow_Dominion
     {
         [Header("Configs")]
         [SerializeField]
+        private ApplicationSettingsSO applicationSettingsSo;
+        
+        [SerializeField]
         private RoomSettings roomSettings;
         
         [SerializeField]
         private LevelSO levelSO;
-
+        
+        [SerializeField]
+        private TextSO textSo;
+        
+        [FormerlySerializedAs("playerPrefab")]
         [Space]
         [SerializeField]
-        private MirrorServer mirrorServer;
-
-        [Space]
-        [SerializeField]
-        private Main.Player playerPrefab;
+        private Main.MirrorPlayer mirrorPlayerPrefab;
         
         [SerializeField]
         private NetworkRoomPlayer networkRoomPlayerPrefab;
@@ -30,28 +33,26 @@ namespace Shadow_Dominion
         [Space]
         [SerializeField]
         private CoroutineExecuter coroutineExecuter;
-
-        [SerializeField]
-        private PositionMessage[] spawnPositions;
+        
+        private UserData _userData;
         
         public override void InstallBindings()
         {
+            _userData = new UserData();
+            
             Container.BindInstance(roomSettings).AsSingle();
             Container.BindInstance(levelSO).AsSingle();
+            Container.BindInstance(applicationSettingsSo).AsSingle();
+            Container.BindInstance(textSo).AsSingle();
             
-            Container.BindInstance(mirrorServer).AsSingle();
-
             Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle();
 
             Container.Bind<CursorService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
-
-            Container.Bind<PlayerFactory>().AsSingle().WithArguments(playerPrefab);
-            Container.Bind<RoomPlayerFactory>().AsSingle().WithArguments(networkRoomPlayerPrefab);
-
+            
             Container.BindInstance(coroutineExecuter).AsSingle();
             
-            Container.Bind<PositionMessage[]>().FromInstance(spawnPositions);
+            
         }
     }
 }

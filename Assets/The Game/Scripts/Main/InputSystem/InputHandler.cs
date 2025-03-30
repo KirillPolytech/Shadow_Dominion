@@ -43,6 +43,10 @@ namespace Shadow_Dominion.InputSystem
             
             _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
             
+            _inputData.LeftALT = Input.GetKey(KeyCode.LeftAlt);
+            
+            _inputData.LeftCTRL = Input.GetKey(KeyCode.LeftControl);
+            
             _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);

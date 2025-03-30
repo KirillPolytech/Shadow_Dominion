@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -7,35 +8,39 @@ namespace Shadow_Dominion
 {
     public class StartButton : Button
     {
-        private MirrorServer _mirrorServer;
+        private UnityAction _onServerChangeScene;
+        private Action _setState;
         private bool _isInitialized;
-        private UnityAction _action;
 
         [Inject]
-        public void Construct(MirrorServer mirrorServer, RoomSettings roomSettings)
+        public void Construct(RoomSettings roomSettings)
         {
-            _mirrorServer = mirrorServer;
+            _onServerChangeScene = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
+            
+            _setState = () => gameObject.SetActive(true);
+            
+            MirrorServer.Instance.ActionOnHostStart += _setState.Invoke;
+            MirrorServer.Instance.ActionOnHostStart += Subscribe;
+            MirrorServer.Instance.ActionOnHostStop += Unsubscribe;
 
-            _mirrorServer.ActionOnHostStart += Subscribe;
-            _mirrorServer.ActionOnHostStop += Unsubscribe;
-
-            _action = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
-
+            gameObject.SetActive(false);
+            
             _isInitialized = true;
         }
 
-        private void Subscribe() => onClick.AddListener(_action.Invoke);
-        private void Unsubscribe() => onClick.RemoveListener(_action.Invoke);
+        private void Subscribe() => onClick.AddListener(_onServerChangeScene.Invoke);
+        private void Unsubscribe() => onClick.RemoveListener(_onServerChangeScene.Invoke);
 
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
-            base.OnDisable();
-
+            base.OnDestroy();
+            
             if (!_isInitialized)
                 return;
-
-            _mirrorServer.ActionOnHostStart -= Subscribe;
-            _mirrorServer.ActionOnHostStop -= Unsubscribe;
+            
+            MirrorServer.Instance.ActionOnHostStart -= _setState.Invoke;
+            MirrorServer.Instance.ActionOnHostStart -= Subscribe;
+            MirrorServer.Instance.ActionOnHostStop -= Unsubscribe;
         }
     }
 }

@@ -3,11 +3,11 @@ using Zenject;
 
 public abstract class InputFieldsProvider
 {
-    public TMP_InputField TMPInputFields;
-
+    public readonly TMP_InputField TMPInputField;
+    
     [Inject]
-    public InputFieldsProvider(TMP_InputField tmpInputFields)
+    public InputFieldsProvider(TMP_InputField tmpInputField)
     {
-        TMPInputFields = tmpInputFields;
+        TMPInputField = tmpInputField;
     }
 }

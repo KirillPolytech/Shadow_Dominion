@@ -7,18 +7,14 @@ namespace Shadow_Dominion
 {
     public class HostButton : Button
     {
-        private MirrorServer _mirrorServer;
         private IPInputFieldProvider _ipInputFieldProvider;
         private PORTInputFieldProvider _portInputFieldProvider;
 
         [Inject]
         public void Construct(
-            MirrorServer mirrorServer,
             IPInputFieldProvider ipInputFieldProvider,
             PORTInputFieldProvider portInputFieldProvider)
         {
-            _mirrorServer = mirrorServer;
-
             _ipInputFieldProvider = ipInputFieldProvider;
             _portInputFieldProvider = portInputFieldProvider;
         }
@@ -37,18 +33,18 @@ namespace Shadow_Dominion
 
         private void StartHost()
         {
-            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputFields.text))
+            if (!IPChecker.IsIPCorrect(_ipInputFieldProvider.TMPInputField.text))
             {
-                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputFields.text}");
+                Debug.LogWarning($"Ip incorrect: {_ipInputFieldProvider.TMPInputField.text}");
                 return;
             }
 
-            _mirrorServer.networkAddress = _ipInputFieldProvider.TMPInputFields.text;
+            MirrorServer.Instance.networkAddress = _ipInputFieldProvider.TMPInputField.text;
             
             if (!NetworkServer.active)
-                _mirrorServer.StartHost();
+                MirrorServer.Instance.StartHost();
             else
-                _mirrorServer.StartClient();
+                MirrorServer.Instance.StartClient();
         }
     }
 }

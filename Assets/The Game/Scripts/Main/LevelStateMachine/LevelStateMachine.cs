@@ -1,45 +1,45 @@
 using System;
 using System.Linq;
-using Shadow_Dominion.InputSystem;
 using UnityEngine;
 using WindowsSystem;
 using Zenject;
 
 namespace Shadow_Dominion.StateMachine
 {
-    public class LevelStateMachine : IStateMachine, IInitializable
+    public class LevelStateMachine : IStateMachine, ITickable
     {
-        private readonly InputHandler _inputHandler;
         private readonly MirrorLevelSyncer _mirrorLevelSyncer;
 
         public Action<IState> OnStateChanged;
+
+        public Action OnUpdate;
 
         private IState _lastState;
 
         [Inject]
         public LevelStateMachine(
             WindowsController windowsController,
-            InputHandler inputHandler,
-            MirrorServer mirrorServer,
             CoroutineExecuter coroutineExecuter,
             InitializeStateUI initializeStateUI,
             LevelSO levelSo)
         {
-            _inputHandler = inputHandler;
-            _mirrorLevelSyncer = new MirrorLevelSyncer(this);
+            if (MirrorLevelSyncer.Instance == null)
+                _mirrorLevelSyncer = new MirrorLevelSyncer(this);
+            else
+                MirrorLevelSyncer.Instance.Initialize(this);
 
             _states.Add(new GameplayState(windowsController));
+            _states.Add(new FinishState(windowsController));
             _states.Add(new LevelInitializeState(
                 windowsController,
-                coroutineExecuter,
                 initializeStateUI,
                 this,
                 levelSo));
         }
-
-        public void Initialize()
+        
+        public void Tick()
         {
-            SetState<LevelInitializeState>();
+            OnUpdate?.Invoke();
         }
 
         public sealed override void SetState<T>()
@@ -49,12 +49,12 @@ namespace Shadow_Dominion.StateMachine
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-            
+
             OnStateChanged?.Invoke(state);
 
             Debug.Log($"Current level state: {CurrentState.GetType()}");
         }
-        
+
         public void SetState(string stateName)
         {
             IState state = _states.First(x => x.GetType().ToString() == stateName);
@@ -65,7 +65,7 @@ namespace Shadow_Dominion.StateMachine
             CurrentState?.Exit();
             CurrentState = state;
             CurrentState.Enter();
-            
+
             Debug.Log($"Current player state: {CurrentState.GetType()}");
         }
     }

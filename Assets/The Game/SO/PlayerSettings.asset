@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   WalkSpeed: 1500
-  RunSpeed: 3000
+  RunSpeed: 1700
   MaxWalkSpeed: 3
-  MaxRunSpeed: 6
+  MaxRunSpeed: 4
   RotSpeed: 5
   AimRigWeightChange: 3.5
   CanMove: 1
   CanRotate: 1
   Approximation: 0.01
+  RagdollDelay: 2
+  MoveAnimToRagdollTime: 1
+  StopDistance: 0.25

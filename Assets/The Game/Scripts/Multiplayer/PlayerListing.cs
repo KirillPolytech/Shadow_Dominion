@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Shadow_Dominion
 {
-    public class PlayerListing : Singleton<PlayerListing>
+    public class PlayerListing : MonoSingleton<PlayerListing>
     {
-        private readonly Dictionary<string, RoomPlayerView> _views = new Dictionary<string, RoomPlayerView>();
+        private readonly Dictionary<string, RoomPlayerView> _views = new();
 
         [SerializeField]
         private RectTransform content;
@@ -14,48 +15,64 @@ namespace Shadow_Dominion
         [SerializeField]
         private RoomPlayerView roomViewPrefab;
 
-        public void SpawnView(string address)
+        private IInstantiator _instantiator;
+
+        [Inject]
+        public void Construct(IInstantiator instantiator)
         {
-            var keyValuePairs = _views.FirstOrDefault(x => x.Key == address);
+            _instantiator = instantiator;
+        }
+        
+        public void SpawnView(PlayerViewData[] playerViewData)
+        {
+            DispawnView();
+            
+            foreach (var viewData in playerViewData)
+            {
+                SpawnView(viewData.Nick);
+            }
+        }
+
+        private void SpawnView(string nick)
+        {
+            var keyValuePairs = _views.FirstOrDefault(x => x.Key == nick);
 
             if (keyValuePairs.Equals(null))
                 return;
 
-            RoomPlayerView instance = Instantiate(roomViewPrefab, content);
+            RoomPlayerView instance = _instantiator.InstantiatePrefab(roomViewPrefab).GetComponent<RoomPlayerView>();
+            instance.gameObject.transform.SetParent(content);
 
-            instance.SetName(address);
+            RectTransform rectTransform = (RectTransform) instance.transform;
+            rectTransform.localScale = Vector3.one;
+            rectTransform.anchoredPosition3D = Vector3.zero;
+            rectTransform.position = Vector3.zero;
+            rectTransform.localPosition = Vector3.zero;
 
-            bool isAdded = _views.TryAdd(address, instance);
+            instance.SetName(nick);
+
+            bool isAdded = _views.TryAdd(nick, instance);
 
             if (!isAdded)
-                Debug.LogWarning($"Cant add value by key: {address}");
+                Debug.LogWarning($"Cant add value by key: {nick}");
         }
-        
-        public void SpawnView(PlayerViewData[] addresses)
+
+        private void DispawnView()
         {
             for (int i = 0; i < _views.Count; i++)
             {
-                Destroy(_views.ElementAt(i).Value.gameObject);
+                if (_views.ElementAt(i).Value)
+                    Destroy(_views.ElementAt(i).Value.gameObject);
             }
             
             _views.Clear();
+        }
+
+        public void IsReady(string nick, bool state)
+        {   
+            _views[nick].SetButtonState(state);
             
-            foreach (var address in addresses)
-            {
-                SpawnView(address.Address);
-            }
-        }
-
-        public void DispawView(string address)
-        {
-            RoomPlayerView instance = _views[address];
-            _views.Remove(address);
-            Destroy(instance.gameObject);
-        }
-
-        public void IsReady(string address, bool state)
-        {
-            _views[address].SetCheckMarkState(state);
+            Debug.Log($"{nick} IsReady: {state}");
         }
     }
 }

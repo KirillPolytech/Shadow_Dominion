@@ -1,28 +1,35 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
-using Multiplayer.Structs;
-using Shadow_Dominion.Player.StateMachine;
+using Shadow_Dominion.Main;
 using UnityEngine;
-using Zenject;
+using UnityEngine.Serialization;
 
 namespace Shadow_Dominion
 {
     public class MirrorServer : NetworkRoomManager
     {
-        public static MirrorServer Instance;
-
+        public static MirrorServer Instance { get; private set; }
+        
         // Server only
-        public readonly List<NetworkConnectionToClient> Connections = new List<NetworkConnectionToClient>();
+        public readonly List<NetworkConnectionToClient> Connections = new();
+        public readonly List<PlayerViewData> PlayerViewData = new();
+        public readonly List<MirrorPlayer> SpawnedPlayerInstances = new();
+        //
+        public event Action<List<NetworkConnectionToClient>> OnPlayerReadyChanged;
+        public event Action OnPlayerLoadedOnLevel;
+        public event Action<NetworkConnectionToClient> OnPlayerLoadedOnLevelWithArg;
         
-        public event Action<HashSet<NetworkRoomPlayer>> OnPlayerReadyChanged;
-
         [SerializeField]
-        private MirrorPlayersSyncer mirrorPlayerStateSyncer;
+        private MirrorPlayersSyncer mirrorPlayerStateSyncerPrefab;
         
-        public event Action OnAllPlayersLoaded;
-
+        [SerializeField]
+        private SpawnPointSyncer spawnPointSyncerPrefab;
+        
+        [FormerlySerializedAs("gameStateManager")] [SerializeField]
+        private GameStateManager gameStateManagerPrefab;
+        
         public event Action ActionOnHostStart;
         public event Action ActionOnHostStop;
         public event Action ActionOnServerAddPlayer;
@@ -31,37 +38,23 @@ namespace Shadow_Dominion
         public event Action<NetworkConnectionToClient> ActionOnServerDisconnectWithArg;
         public event Action ActionOnServerDisconnect;
         public event Action ActionOnServerSceneChanged;
-        public event Action ActionOnServerReady;
-        public event Action<NetworkConnectionToClient> ActionOnServerReadyWithArg;
-        public event Action<NetworkConnectionToClient> ActionReadyStatusChangedWithArg;
-
+        
         public event Action ActionOnStartClient;
         public event Action ActionOnStopClient;
         public event Action ActionOnClientConnect;
         public event Action ActionOnClientDisconnect;
-        public event Action ActionOnClientChangedScene;
-        public event Action<NetworkConnection> ActionOnClientChangedSceneWithArg;
 
-        public event Action<NetworkConnectionToClient> ActionOnRoomServerAddedPlayerWithArg;
-        public event Action<NetworkConnectionToClient> ActionOnRoomServerSceneLoadedForPlayerWithArg;
-        public event Action ActionOnRoomServerSceneLoadedForPlayer;
-        
         public event Action ActionOnAnyChange;
 
         private Action<NetworkConnection> _cachedRemove;
 
-        private PositionMessage[] _positionMessages;
         private int _ind;
-
-        [Inject]
-        public void Construct(PositionMessage[] positionMessages)
-        {
-            _positionMessages = positionMessages;
-        }
         
         public override void Awake()
         {
             base.Awake();
+            
+            Cursor.lockState = CursorLockMode.Confined;
 
             if (!Instance)
                 Instance = this;
@@ -71,7 +64,7 @@ namespace Shadow_Dominion
             DontDestroyOnLoad(gameObject);
 
             ActionOnHostStart += SpawnBehaviours;
-            
+
             ActionOnHostStart += OnAnyChange;
             ActionOnHostStop += OnAnyChange;
             ActionOnServerAddPlayer += OnAnyChange;
@@ -86,15 +79,19 @@ namespace Shadow_Dominion
 
         private void SpawnBehaviours()
         {
-            NetworkServer.Spawn(Instantiate(mirrorPlayerStateSyncer.gameObject));
+            GameObject mirrorPlayerStateSyncer = Instantiate(mirrorPlayerStateSyncerPrefab.gameObject);
+            GameObject spawnPointSyncer = Instantiate(spawnPointSyncerPrefab.gameObject);
+            GameObject gameStateManager = Instantiate(gameStateManagerPrefab.gameObject);
+            
+            NetworkServer.Spawn(mirrorPlayerStateSyncer);
+            NetworkServer.Spawn(spawnPointSyncer);
+            NetworkServer.Spawn(gameStateManager);
         }
-        
+
         private void OnAnyChange() => ActionOnAnyChange?.Invoke();
 
         public override void OnDestroy()
         {
-            base.OnDestroy();
-
             ActionOnHostStart -= SpawnBehaviours;
 
             ActionOnHostStart -= OnAnyChange;
@@ -106,18 +103,11 @@ namespace Shadow_Dominion
             ActionOnStopClient -= OnAnyChange;
             ActionOnClientConnect -= OnAnyChange;
             ActionOnClientDisconnect -= OnAnyChange;
+
+            DontDestroyOnLoad(gameObject);
         }
 
         #region Server
-        [Server]
-        public override void OnServerSceneChanged(string sceneName)
-        {
-            base.OnServerSceneChanged(sceneName);
-
-            ActionOnServerSceneChanged?.Invoke();
-
-            Debug.Log($"[Server] OnServerSceneChanged: {sceneName}");
-        }
 
         [Server]
         public override void OnStartHost()
@@ -136,7 +126,7 @@ namespace Shadow_Dominion
 
             ActionOnHostStop?.Invoke();
 
-            Debug.Log($"[Server] OnStopHost");
+            Debug.Log("[Server] OnStopHost");
         }
 
         [Server]
@@ -156,7 +146,7 @@ namespace Shadow_Dominion
 
             ActionOnServerConnect?.Invoke();
             ActionOnServerConnectWithArg?.Invoke(conn);
-            
+
             Connections.Add(conn);
 
             Debug.Log($"[Server] OnServerConnect. {conn.address}");
@@ -166,11 +156,13 @@ namespace Shadow_Dominion
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
+            
+            Connections.Remove(conn);
 
+            SpawnedPlayerInstances.Remove(SpawnedPlayerInstances.FirstOrDefault(x => x.connectionToClient == conn));
+            
             ActionOnServerDisconnect?.Invoke();
             ActionOnServerDisconnectWithArg?.Invoke(conn);
-
-            Connections.Remove(conn);
 
             Debug.Log($"[Server] OnServerDisconnect. {conn.address}");
         }
@@ -189,65 +181,49 @@ namespace Shadow_Dominion
             Debug.LogError($"[Server] OnServerTransportException {exception.Message}");
         }
 
-        [Server]
-        public override void OnRoomServerAddPlayer(NetworkConnectionToClient conn)
-        {
-            base.OnRoomServerAddPlayer(conn);
-            
-            ActionOnRoomServerAddedPlayerWithArg?.Invoke(conn);
 
-            Debug.Log($"[Server] OnRoomServerAddPlayer. {conn.address}");
-        }
-
+        private int _posInd;
         [Server]
-        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, 
+        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn,
             GameObject roomPlayer, GameObject gamePlayer)
         {
-            ActionOnRoomServerSceneLoadedForPlayerWithArg?.Invoke(conn);
-            ActionOnRoomServerSceneLoadedForPlayer?.Invoke();
+            SpawnedPlayerInstances.Add(gamePlayer.GetComponent<MirrorPlayer>());
 
-            Main.Player player = gamePlayer.GetComponent<Main.Player>();
+            NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, ReplacePlayerOptions.Destroy);
+
+            gamePlayer.name = conn.connectionId.ToString();
+
+            // Vector3 pos = SpawnPointSyncer.Instance.GetFreePosition(_posInd++).Position;
+            // Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(pos);
+            // SpawnedPlayerInstances.Last().SetRigidbodyPositionAndRotation(pos, rot);
+            // SpawnedPlayerInstances.Last().SetRagdollPositionAndRotation(pos, rot);
             
-            StartCoroutine(WaitForInitialization(player));
-            
+            OnPlayerLoadedOnLevel?.Invoke();
+            OnPlayerLoadedOnLevelWithArg?.Invoke(conn);
+
             Debug.Log($"[Server] OnRoomServerSceneLoadedForPlayer {conn.address}");
 
             return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
         }
 
-        private IEnumerator WaitForInitialization(Main.Player player)
-        {
-            while (player.PlayerStateMachine == null || !player.GetComponent<MirrorPlayerStateSyncer>())
-            {
-                yield return new WaitForFixedUpdate();
-            }
-
-            MirrorPlayerStateSyncer mirrorPlayerStateSyncer = player.GetComponent<MirrorPlayerStateSyncer>();
-            mirrorPlayerStateSyncer.RegisterHandler();
-            player.PlayerStateMachine.SetState<InActiveState>();
-        }
-        
-        [Server]
-        public override void OnServerReady(NetworkConnectionToClient conn)
-        {
-            base.OnServerReady(conn);
-            
-            ActionOnServerReady?.Invoke();
-            ActionOnServerReadyWithArg?.Invoke(conn);
-            
-            Debug.Log($"[Server] OnServerReady: {conn.address}");
-        }
-
         public override void ReadyStatusChanged()
         {
             base.ReadyStatusChanged();
-            
-            OnPlayerReadyChanged?.Invoke(roomSlots);
+
+            OnPlayerReadyChanged?.Invoke(Connections);
+        }
+
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            base.OnServerSceneChanged(sceneName);
+
+            ActionOnServerSceneChanged?.Invoke();
         }
 
         #endregion
 
         #region Client
+
         [Client]
         public override void OnStartClient()
         {
@@ -255,19 +231,18 @@ namespace Shadow_Dominion
 
             ActionOnStartClient?.Invoke();
 
-            // Debug.Log($"OnStartClient: networkAddress:{networkAddress}");
+            Debug.Log($"[Client] OnStartClient: networkAddress:{networkAddress}");
         }
         
-        [Client]
         public override void OnStopClient()
         {
             base.OnStopClient();
 
             ActionOnStopClient?.Invoke();
 
-            // Debug.Log($"OnStartClient: networkAddress:{networkAddress}");
+            Debug.Log($"OnStartClient: networkAddress:{networkAddress}");
         }
-        
+
         [Client]
         public override void OnClientConnect()
         {
@@ -275,27 +250,26 @@ namespace Shadow_Dominion
 
             ActionOnClientConnect?.Invoke();
 
-            // Debug.Log($"OnClientConnect: networkAddress:{networkAddress}");
+            Debug.Log($"[Client] OnClientConnect: networkAddress:{networkAddress}");
         }
-
-        [Client]
+        
         public override void OnClientDisconnect()
         {
             base.OnClientDisconnect();
 
             ActionOnClientDisconnect?.Invoke();
 
-            // Debug.Log($"OnClientDisconnect: networkAddress:{networkAddress}");
+            Debug.Log($"[Client] OnClientDisconnect: networkAddress:{networkAddress}");
         }
-        
+
         [Client]
         public override void OnClientError(TransportError error, string reason)
         {
             base.OnClientError(error, reason);
-            
-            Debug.LogError($"OnClientError {error}, {reason}");
+
+            Debug.LogError($"[Client] OnClientError {error}, {reason}");
         }
-        
+
         [Client]
         public override void OnClientTransportException(Exception exception)
         {
@@ -303,21 +277,7 @@ namespace Shadow_Dominion
 
             Debug.LogError($"[Client] OnClientTransportException {exception.Message}");
         }
-        
-        /*
-        [Client]
-        public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
-            bool customHandling)
-        {
-            base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
-            ActionOnClientChangedScene?.Invoke();
-            ActionOnClientChangedSceneWithArg?.Invoke(NetworkClient.connection);
-
-            Debug.Log($"OnClientChangeScene: {newSceneName}");
-        }
-        */
-        
         #endregion
     }
 }

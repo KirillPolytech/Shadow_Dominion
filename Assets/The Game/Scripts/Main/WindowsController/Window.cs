@@ -17,8 +17,8 @@ namespace WindowsSystem
 
         public void Close()
         {
-              gameObject.SetActive(false);
-            
+            gameObject.SetActive(false);
+
             isOpened = false;
         }
     }

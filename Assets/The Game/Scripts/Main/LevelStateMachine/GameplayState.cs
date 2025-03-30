@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Mirror;
 using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using WindowsSystem;
@@ -11,8 +8,7 @@ namespace Shadow_Dominion.StateMachine
     {
         private readonly WindowsController _windowsController;
 
-        public GameplayState(
-            WindowsController windowsController)
+        public GameplayState(WindowsController windowsController)
         {
             _windowsController = windowsController;
         }
@@ -21,10 +17,8 @@ namespace Shadow_Dominion.StateMachine
         {
             _windowsController.OpenWindow<MainWindow>();
             CursorService.SetState(CursorLockMode.Locked);
-
-            var players = Object.FindObjectsByType<Main.Player>(FindObjectsSortMode.None);
-
-            foreach (var player in players)
+            
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
             {
                 player.PlayerStateMachine.SetState<DefaultState>();
             }
@@ -32,6 +26,7 @@ namespace Shadow_Dominion.StateMachine
 
         public override void Exit()
         {
+
         }
     }
 }

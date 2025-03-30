@@ -167,21 +167,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd2d0c2bfba4be4cb6a75a7e58ba41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  applicationSettingsSo: {fileID: 11400000, guid: ff5abf205652fbf479dc687e66b251bf, type: 2}
   roomSettings: {fileID: 11400000, guid: 29fdb405c980cd444ba8d840d9775754, type: 2}
   levelSO: {fileID: 11400000, guid: 66c72da04ed521c4aa4c697a0103a06f, type: 2}
-  mirrorServer: {fileID: 3031028799591383809}
+  textSo: {fileID: 11400000, guid: 59f45cb292a632c4596eef899d67183f, type: 2}
   playerPrefab: {fileID: 3110435118676541445, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
   networkRoomPlayerPrefab: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   coroutineExecuter: {fileID: 259350462139003918}
   spawnPositions:
-  - pos: {x: 20, y: 0, z: 0}
-    isFree: 1
-  - pos: {x: -20, y: 0, z: 0}
-    isFree: 1
-  - pos: {x: 0, y: 0, z: 20}
-    isFree: 1
-  - pos: {x: 0, y: 0, z: -20}
-    isFree: 1
+  - Position: {x: 0, y: 0, z: 0}
+    IsFree: 0
+  - Position: {x: 0, y: 0, z: 0}
+    IsFree: 0
+  - Position: {x: 0, y: 0, z: 0}
+    IsFree: 0
+  - Position: {x: 0, y: 0, z: 0}
+    IsFree: 0
 --- !u!1001 &3406245146452827270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -248,14 +249,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2944112962417970438, guid: d6ef8f04941ac784abc5d38ce3a7ce2f, type: 3}
   m_PrefabInstance: {fileID: 3406245146452827270}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3031028799591383809 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 384223563951349639, guid: d6ef8f04941ac784abc5d38ce3a7ce2f, type: 3}
-  m_PrefabInstance: {fileID: 3406245146452827270}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f9e7a7b16f5dad4c80c1feaffc127f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

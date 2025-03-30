@@ -19,6 +19,9 @@ namespace Shadow_Dominion
         [SerializeField]
         private TMP_InputField PORT;
         
+        [SerializeField]
+        private TMP_InputField nick;
+        
         public override void InstallBindings()
         {
             IP.text = "127.0.0.1";
@@ -29,6 +32,7 @@ namespace Shadow_Dominion
 
             Container.Bind<IPInputFieldProvider>().AsSingle().WithArguments(IP);
             Container.Bind<PORTInputFieldProvider>().AsSingle().WithArguments(PORT);
+            Container.Bind<NickInputFieldProvider>().AsSingle().WithArguments(nick);
         }
     }
 }
