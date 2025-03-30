@@ -3,15 +3,16 @@ using System.Linq;
 using UnityEngine;
 using WindowsSystem;
 using Zenject;
-using IInitializable = Unity.VisualScripting.IInitializable;
 
 namespace Shadow_Dominion.StateMachine
 {
-    public class LevelStateMachine : IStateMachine
+    public class LevelStateMachine : IStateMachine, ITickable
     {
         private readonly MirrorLevelSyncer _mirrorLevelSyncer;
 
         public Action<IState> OnStateChanged;
+
+        public Action OnUpdate;
 
         private IState _lastState;
 
@@ -31,10 +32,14 @@ namespace Shadow_Dominion.StateMachine
             _states.Add(new FinishState(windowsController));
             _states.Add(new LevelInitializeState(
                 windowsController,
-                coroutineExecuter,
                 initializeStateUI,
                 this,
                 levelSo));
+        }
+        
+        public void Tick()
+        {
+            OnUpdate?.Invoke();
         }
 
         public sealed override void SetState<T>()

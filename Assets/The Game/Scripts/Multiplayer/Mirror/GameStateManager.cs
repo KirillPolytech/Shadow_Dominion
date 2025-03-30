@@ -1,3 +1,4 @@
+using System.Linq;
 using Mirror;
 using Multiplayer.Structs;
 using Shadow_Dominion.StateMachine;
@@ -18,6 +19,8 @@ namespace Shadow_Dominion
 
             DontDestroyOnLoad(gameObject);
 
+            MirrorServer.Instance.ActionOnServerDisconnect += CheckWin;
+            
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += InitializeLevel;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += Subscribe;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
@@ -26,17 +29,38 @@ namespace Shadow_Dominion
 
         private void OnDestroy()
         {
+            MirrorServer.Instance.ActionOnServerDisconnect -= CheckWin;
+            
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= InitializeLevel;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= Subscribe;
             UnSubscribe();
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= UpdateLevelListing;
         }
 
+        #region Server
+        
+        [Server]
         private void InitializeLevel()
         {
             UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
         }
+        
+        [Server]
+        private void CheckWin()
+        {
+            if (++_currentRound >= levelSo.Rounds)
+            {
+                UpdateLevelState(new LevelState(typeof(FinishState).ToString()));
+                return;
+            }
+            
+            if (++_deadPlayers < MirrorPlayersSyncer.Instance.Players.Length)
+                return;
 
+            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
+        }
+        
+        [Server]
         private void Subscribe()
         {
             foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances)
@@ -45,41 +69,19 @@ namespace Shadow_Dominion
             }
         }
 
+        [Server]
         private void UnSubscribe()
         {
-            foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances)
+            foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances.Where(player => player))
             {
                 player.OnDead -= CheckWin;
             }
         }
 
-        private void CheckWin()
-        {
-            if (++_currentRound >= levelSo.Rounds)
-            {
-                MirrorLevelSyncer.Instance.CmdSetState(new LevelState(typeof(FinishState).ToString()));
-                return;
-            }
-            
-            if (++_deadPlayers < MirrorPlayersSyncer.Instance.SpawnedPlayersOnLevel)
-                return;
-
-            SpawnPointSyncer.Instance.Reset();
-            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
-        }
-
-        #region Server
-
         [Server]
         private void UpdateLevelListing()
         {
             RpcUpdateLevelListing(MirrorPlayersSyncer.Instance.Players);
-        }
-
-        [Server, ClientRpc]
-        private void RpcUpdateLevelListing(PlayerViewData[] players)
-        {
-            LevelPlayerListing.Instance.AddView(players);
         }
 
         #endregion
@@ -89,7 +91,13 @@ namespace Shadow_Dominion
         [ClientRpc]
         private void UpdateLevelState(LevelState levelState)
         {
-            MirrorLevelSyncer.Instance.CmdSetState(levelState);
+            MirrorLevelSyncer.Instance.SetState(levelState);
+        }
+        
+        [ClientRpc]
+        private void RpcUpdateLevelListing(PlayerViewData[] players)
+        {
+            LevelPlayerListing.Instance.AddView(players);
         }
 
         #endregion

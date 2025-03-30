@@ -15,6 +15,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly RigBuilder _rigBuilder;
         private readonly CameraLook _cameraLook;
         private readonly Ak47 _ak47;
+        private readonly PlayerStateMachine _playerStateMachine;
 
         public DefaultState(PlayerAnimation playerAnimation,
             PlayerMovement playerMovement,
@@ -23,7 +24,8 @@ namespace Shadow_Dominion.Player.StateMachine
             BoneController[] boneControllers,
             RigBuilder rigBuilder,
             CameraLook cameraLook,
-            Ak47 ak47) : base(playerAnimation)
+            Ak47 ak47,
+            PlayerStateMachine playerStateMachine) : base(playerAnimation)
         {
             _playerMovement = playerMovement;
             _inputHandler = inputHandler;
@@ -32,6 +34,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _rigBuilder = rigBuilder;
             _cameraLook = cameraLook;
             _ak47 = ak47;
+            _playerStateMachine = playerStateMachine;
         }
 
         public override void Enter()
@@ -52,11 +55,12 @@ namespace Shadow_Dominion.Player.StateMachine
 
             _inputHandler.OnInputUpdate += _playerMovement.HandleInput;
             _inputHandler.OnInputUpdate += _playerAnimation.HandleAimRig;
-            _inputHandler.OnInputUpdate += HandleInput;
+            _inputHandler.OnInputUpdate += HandleTABInput;
+            _inputHandler.OnInputUpdate += HandleDeathKeyInput;
             _inputHandler.OnInputUpdate += _ak47.HandleInput;
         }
 
-        private void HandleInput(InputData inputData)
+        private void HandleTABInput(InputData inputData)
         {
             if (!inputData.TAB)
                 return;
@@ -69,12 +73,21 @@ namespace Shadow_Dominion.Player.StateMachine
 
             _windowsController.OpenWindow<StatisticWindow>();
         }
+        
+        private void HandleDeathKeyInput(InputData inputData)
+        {
+            if (!inputData.F_Down)
+                return;
+
+            _playerStateMachine.SetState<DeathState>();
+        }
 
         public override void Exit()
         {
             _inputHandler.OnInputUpdate -= _playerMovement.HandleInput;
             _inputHandler.OnInputUpdate -= _playerAnimation.HandleAimRig;
-            _inputHandler.OnInputUpdate -= HandleInput;
+            _inputHandler.OnInputUpdate -= HandleTABInput;
+            _inputHandler.OnInputUpdate -= HandleDeathKeyInput;
             _inputHandler.OnInputUpdate -= _ak47.HandleInput;
         }
 

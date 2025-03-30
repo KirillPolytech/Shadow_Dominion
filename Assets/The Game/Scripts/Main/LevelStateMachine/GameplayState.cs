@@ -1,3 +1,4 @@
+using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using WindowsSystem;
 
@@ -16,6 +17,11 @@ namespace Shadow_Dominion.StateMachine
         {
             _windowsController.OpenWindow<MainWindow>();
             CursorService.SetState(CursorLockMode.Locked);
+            
+            foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
+            {
+                player.PlayerStateMachine.SetState<DefaultState>();
+            }
         }
 
         public override void Exit()

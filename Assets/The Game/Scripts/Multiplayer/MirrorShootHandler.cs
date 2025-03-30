@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -8,21 +9,24 @@ namespace Shadow_Dominion.Network
         private const int ShootRange = 500;
 
         private Ak47 _ak47;
+        private Action<Vector3, Vector3> _cachedOnFire;
 
         public void Construct(Ak47 ak47)
         {
             _ak47 = ak47;
 
-            _ak47.OnFired += CmdCastRay;
+            _cachedOnFire = (origin, direction) => CmdCastRay(UserData.Instance.Nickname, origin, direction);
+
+            _ak47.OnFired += _cachedOnFire.Invoke;
         }
 
         private void OnDestroy()
         {
-            _ak47.OnFired -= CmdCastRay;
+            _ak47.OnFired -= _cachedOnFire.Invoke;
         }
 
         [Command]
-        private void CmdCastRay(Vector3 origin, Vector3 direction)
+        private void CmdCastRay(string killerNick, Vector3 origin, Vector3 direction)
         {
             if (!Physics.Raycast(origin, direction, out RaycastHit hit, ShootRange))
                 return;
@@ -36,7 +40,7 @@ namespace Shadow_Dominion.Network
 
             if (boneNetIdentity != null)
             {
-                RpcShowImpact(netIdentity.connectionToClient.address, boneNetIdentity.netId, direction, boneController.name);
+                RpcShowImpact(killerNick, boneNetIdentity.netId, direction, boneController.name);
             }
         }
 

@@ -55,9 +55,9 @@ namespace Shadow_Dominion.Player.StateMachine
             _playerSettings = playerSettings;
 
             DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler,
-                windowsController, boneControllers, rootRig, cameraLook, ak47);
-            InActiveState inActiveState = new InActiveState(mirrorPlayer, playerAnimation);
-            PauseMenuState pauseMenuState = new PauseMenuState(windowsController, playerAnimation);
+                windowsController, boneControllers, rootRig, cameraLook, ak47, this);
+            InActiveState inActiveState = new InActiveState(mirrorPlayer, playerAnimation, cameraLook);
+            PauseMenuState pauseMenuState = new PauseMenuState(windowsController, playerAnimation, this);
             DeathState deathState = new DeathState(playerAnimation, boneControllers, cameraLook);
 
             StandUpFaceUpState standUpFaceUpState =
@@ -203,7 +203,7 @@ namespace Shadow_Dominion.Player.StateMachine
             else
                 _playerAnimation.AnimationStateMachine.SetState<AnimationStandUpFaceDown>();
 
-            _coroutineExecuter.Execute(WaitForSecond(clipLength, onFinish.Invoke).ToString(),
+            _coroutineExecuter.Execute(WaitForSecond(clipLength, onFinish.Invoke).GetHashCode().ToString(),
                 WaitForSecond(clipLength, onFinish.Invoke));
 
             Debug.Log($"MoveAnimToRagdoll finished, Time: {Time.time}");

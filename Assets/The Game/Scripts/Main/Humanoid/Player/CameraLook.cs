@@ -16,6 +16,7 @@ namespace Shadow_Dominion
 
         private CinemachineOrbitalFollow _cinemachinePositionType;
         private CinemachineRotationComposer _cinemachineRotationType;
+        private CinemachineInputAxisController _cinemachineInputAxisController;
         private IInputHandler _monoInputHandler;
         private CameraSettings _cameraSettings;
         private Camera _camera;
@@ -30,14 +31,16 @@ namespace Shadow_Dominion
             CameraSettings camSettings,
             IInputHandler monoInputHandler,
             CinemachineComponentBase cinemachinePositionType,
-            CinemachineComponentBase cinemachineRotationType)
+            CinemachineComponentBase cinemachineRotationType,
+            CinemachineInputAxisController cinemachineInputAxisController)
         {
             _cameraSettings = camSettings;
             CameraTransform = transform;
             _monoInputHandler = monoInputHandler;
             _cinemachinePositionType = cinemachinePositionType as CinemachineOrbitalFollow;
             _cinemachineRotationType = cinemachineRotationType as CinemachineRotationComposer;
-
+            _cinemachineInputAxisController = cinemachineInputAxisController;
+            
             _camera = GetComponent<Camera>();
 
             _monoInputHandler.OnInputUpdate += HandleInput;
@@ -69,6 +72,9 @@ namespace Shadow_Dominion
             _rightMouseValue = inputData.RightMouseButton ? 1 : 0;
         }
 
+        public void CanRotate(bool canRotate)=>
+            _cinemachineInputAxisController.enabled = canRotate;
+        
         private void Zooming()
         {
             if (!CanZooming || !_cinemachinePositionType)

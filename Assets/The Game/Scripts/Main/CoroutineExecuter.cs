@@ -1,23 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Shadow_Dominion;
 using UnityEngine;
 
 public class CoroutineExecuter : MonoBehaviour
 {
-    private readonly Dictionary<string, Coroutine> _activeCoroutines = new Dictionary<string, Coroutine>();
+    private readonly Dictionary<string, Coroutine> _activeCoroutines = new();
 
-    public Coroutine Execute(string key, IEnumerator routine)
+    private void Awake()
+    {
+        MirrorServer.Instance.ActionOnHostStop += StopAll;
+    }
+
+    private void OnDestroy()
+    {
+        MirrorServer.Instance.ActionOnHostStop -= StopAll;
+    }
+
+    public void Execute(string key, IEnumerator routine)
     {
         if (_activeCoroutines.ContainsKey(key))
         {
             Debug.LogWarning($"Coroutine with key '{key}' is already running.");
-            return _activeCoroutines[key];
         }
 
-        Coroutine coroutine = StartCoroutine(WrapCoroutine(key, routine));
-        _activeCoroutines[key] = coroutine;
-        return coroutine;
+        _activeCoroutines[key] = StartCoroutine(routine);
     }
 
     public void Stop(string key)
@@ -38,12 +46,18 @@ public class CoroutineExecuter : MonoBehaviour
             return;
         }
     }
+    
+    public void StopAll()
+    {
+        foreach (var pair in _activeCoroutines.Where(pair => pair.Value != null))
+        {
+            StopCoroutine(pair.Value);
+        }
+        
+        _activeCoroutines.Clear();
+        
+        StopAllCoroutines();
+    }
 
     public bool IsRunning(string key) => _activeCoroutines.ContainsKey(key);
-
-    private IEnumerator WrapCoroutine(string key, IEnumerator routine)
-    {
-        yield return StartCoroutine(routine);
-        _activeCoroutines.Remove(key);
-    }
 }

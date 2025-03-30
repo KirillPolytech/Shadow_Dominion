@@ -45,40 +45,6 @@ public class RoomPlayerView : MonoBehaviour
             
             //Debug.Log("[Client] ButtonPressed");
         };
-
-        readyButton.onClick.AddListener(_onButtonPressed);
-        
-        if (!NetworkClient.activeHost)
-        {
-            removeButton.gameObject.SetActive(false);
-            return;
-        }
-
-        _cachedRemove = () =>
-        {
-            NetworkRoomPlayer roomPlayer =
-                FindObjectsByType<NetworkRoomPlayer>(FindObjectsSortMode.None).First(x => x.isLocalPlayer);
-
-            Remove(roomPlayer);
-        };
-        
-        removeButton.onClick.AddListener(_cachedRemove.Invoke);
-    }
-
-    private void OnDestroy()
-    {
-        readyButton.onClick.RemoveListener(_onButtonPressed);
-        
-        if (!NetworkClient.activeHost)
-            return;
-        
-        removeButton.onClick.RemoveListener(_cachedRemove.Invoke);
-    }
-
-    private void Remove(NetworkRoomPlayer roomPlayer)
-    {
-        NetworkIdentity networkIdentity = roomPlayer.GetComponent<NetworkIdentity>();
-        MirrorPlayersSyncer.Instance.DisconnectPlayer(networkIdentity.connectionToServer.connectionId);
     }
 
     public void SetName(string pName) => playerName.text = pName;

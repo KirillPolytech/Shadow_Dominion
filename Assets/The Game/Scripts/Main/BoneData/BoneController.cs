@@ -12,12 +12,12 @@ namespace Shadow_Dominion
         public Vector3 CurrentPosition => _rigidbody.position;
         public Quaternion CurrentRotation => _rigidbody.rotation;
 
-        public bool CurrentPosState { get; private set; } = true;
-        public bool CurrentRotState { get; private set; } = true;
+        public bool CurrentPositionApplyingState { get; private set; } = true;
+        public bool CurrentRotationApplyingState { get; private set; } = true;
         public bool CurrentSpringState { get; private set; } = true;
 
-        public void IsPositionApplying(bool isPositionApplying) => CurrentPosState = isPositionApplying;
-        public void IsRotationApplying(bool isRotationApplying) => CurrentRotState = isRotationApplying;
+        public void IsPositionApplying(bool isPositionApplying) => CurrentPositionApplyingState = isPositionApplying;
+        public void IsRotationApplying(bool isRotationApplying) => CurrentRotationApplyingState = isRotationApplying;
         public void IsSpringApplying(bool isSpringApplying) => CurrentSpringState = isSpringApplying;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
@@ -71,7 +71,7 @@ namespace Shadow_Dominion
 
         private void UpdatePosition()
         {
-            if (!CurrentPosState)
+            if (!CurrentPositionApplyingState)
                 return;
 
             Vector3 error = _copyTarget.position - _rigidbody.worldCenterOfMass;
@@ -117,7 +117,7 @@ namespace Shadow_Dominion
 
         private void OnCollisionStay(Collision other)
         {
-            if (!CurrentPosState)
+            if (!CurrentPositionApplyingState)
                 return;
 
             if (!other.gameObject.CompareTag(TagStorage.Obstacle))

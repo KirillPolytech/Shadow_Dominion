@@ -63,19 +63,17 @@ namespace Shadow_Dominion.Main
 
         public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
         {
-            SetRagdollVisibility(false);
-            
+            //SetRagdollVisibility(false);
             _ragdollRb.transform.position = pos;
             _ragdollRb.transform.rotation = rot;
-            
-            SetRagdollVisibility(true);
+            //SetRagdollVisibility(true);
             
             Debug.Log($"Ragdoll new pos: {_ragdollRb.transform.position}");
         }
 
         public void SetRagdollVisibility(bool isVisible)
         {
-            _ragdollRb.gameObject.SetActive(isVisible);
+            //_ragdollRb.gameObject.SetActive(isVisible);
         }
 
         #region Server
@@ -100,6 +98,9 @@ namespace Shadow_Dominion.Main
         [ClientRpc]
         private void RpcUpdateState(string newState)
         {
+            if (!isLocalPlayer)
+                return;
+            
             try
             {
                 PlayerStateMachine.SetState(newState);

@@ -15,7 +15,7 @@ namespace Shadow_Dominion.StateMachine
         
         public override void Enter()
         {
-            _windowsController.OpenWindow<StatisticWindow>();
+            _windowsController.OpenWindow<FinishWindow>();
             CursorService.SetState(CursorLockMode.Confined);
 
             foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances)

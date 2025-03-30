@@ -6,8 +6,9 @@ namespace Shadow_Dominion.Player.StateMachine
     public class PauseMenuState : PlayerState
     {
         private readonly WindowsController _windowsController;
+        private readonly PlayerStateMachine _playerStateMachine;
         
-        public PauseMenuState(WindowsController windowsController, PlayerAnimation playerAnimation) : base(playerAnimation)
+        public PauseMenuState(WindowsController windowsController, PlayerAnimation playerAnimation, PlayerStateMachine playerStateMachine) : base(playerAnimation)
         {
             _windowsController = windowsController;
         }

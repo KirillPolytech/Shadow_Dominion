@@ -17,9 +17,9 @@ namespace Shadow_Dominion
         public PlayerViewData[] Players => _playersViewData.ToArray();
         public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
 
-        [SyncVar] public int SpawnedPlayersOnLevel;
+        private int _spawnedPlayersOnLevel;
 
-        [SyncVar] private int _playerid = 0;
+        [SyncVar] private int _playerid;
 
         private new void Awake()
         {
@@ -92,7 +92,7 @@ namespace Shadow_Dominion
                 yield return new WaitForFixedUpdate();
             }
             
-            if (++SpawnedPlayersOnLevel == _playersViewData.Count)
+            if (++_spawnedPlayersOnLevel == _playersViewData.Count)
             {
                 OnAllPlayersLoadedOnLevel?.Invoke();
             }
@@ -105,26 +105,13 @@ namespace Shadow_Dominion
         }
 
         [Command(requiresAuthority = false)]
-        private void RemoveFromSyncList(string nick)
+        public void UpdateView(string killerName)
         {
-            PlayerViewData playerViewData = _playersViewData.FirstOrDefault(x => x.Nick == nick);
-
-            if (playerViewData.Equals(default))
-            {
-                Debug.LogWarning($"Can't remove {nick}");
-                return;
-            }
-
-            int ind = _playersViewData.IndexOf(playerViewData);
-            _playersViewData.RemoveAt(ind);
-        }
-
-        public void DisconnectPlayer(int id)
-        {
-            NetworkConnectionToClient networkConnectionToClient =
-                MirrorServer.Instance.Connections.FirstOrDefault(x => x.connectionId == id);
-
-            networkConnectionToClient.Disconnect();
+            PlayerViewData playerViewData = _playersViewData.First(x => x.Nick == killerName);
+            _playersViewData.Remove(playerViewData);
+            playerViewData.Kills += 1;
+            
+            _playersViewData.Add(playerViewData);
         }
 
         #endregion
@@ -156,6 +143,7 @@ namespace Shadow_Dominion
         private void UpdateViews()
         {
             PlayerListing.Instance.SpawnView(_playersViewData.ToArray());
+            LevelPlayerListing.Instance?.AddView(_playersViewData.ToArray());
         }
 
         [Client]

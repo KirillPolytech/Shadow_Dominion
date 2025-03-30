@@ -57,6 +57,9 @@ namespace Shadow_Dominion
 
         [SerializeField]
         private CinemachineRotationComposer cinemachineRotation;
+        
+        [SerializeField]
+        private CinemachineInputAxisController cinemachineInputAxisController;
 
         [SerializeField]
         private Renderer rend;
@@ -132,6 +135,7 @@ namespace Shadow_Dominion
         private Action<Vector3, string> _cachedOnCollision;
         private Action<HumanBodyBones> _cachedOnBoneDetached;
         private Action<InputData> _cachedInputData;
+        private Action _cachedSetBonesState;
 
         private void Awake()
         {
@@ -168,7 +172,7 @@ namespace Shadow_Dominion
                 ak47,
                 playerSettings);
 
-            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation);
+            cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation, cinemachineInputAxisController);
             mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook, copyTo);
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
@@ -193,7 +197,11 @@ namespace Shadow_Dominion
                 };
                 
                 copyTo[i].OnCollision += _cachedOnCollision;
+
+                copyTo[i].enabled = mirrorPlayer.isLocalPlayer;
             }
+
+            SetControllersState(true);
             
             return;
 
@@ -206,13 +214,29 @@ namespace Shadow_Dominion
                 boneController.IsRotationApplying(!inputData.T);
             }
         }
+        
+        private void OnDestroy()
+        {
+            for (int i = 0; i < copyFrom.Length; i++)
+            {
+                copyTo[i].OnCollision -= _cachedOnCollision;
+            }
+        }
+
+        private void SetControllersState(bool state)
+        {
+            foreach (var bone in copyTo)
+            {
+                bone.enabled = state;
+            }
+        }
+        
 
         private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {
             if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
-            {
                 return;
-            }
+            
             
             if (killerName == null && !isRun)
                 return;
@@ -223,6 +247,7 @@ namespace Shadow_Dominion
             {
                 playerStateMachine.SetState<DeathState>();
                 KillFeed.Instance.AddFeed(killerName ?? victimName, victimName);
+                MirrorPlayersSyncer.Instance.UpdateView(killerName);
             }
 
             if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
@@ -288,14 +313,6 @@ namespace Shadow_Dominion
         public void UpdateRig()
         {
             rootRig.Build();
-        }
-
-        private void OnDestroy()
-        {
-            for (int i = 0; i < copyFrom.Length; i++)
-            {
-                copyTo[i].OnCollision -= _cachedOnCollision;
-            }
         }
     }
 }

@@ -37,7 +37,8 @@ namespace Shadow_Dominion
         public event Action ActionOnServerConnect;
         public event Action<NetworkConnectionToClient> ActionOnServerDisconnectWithArg;
         public event Action ActionOnServerDisconnect;
-
+        public event Action ActionOnServerSceneChanged;
+        
         public event Action ActionOnStartClient;
         public event Action ActionOnStopClient;
         public event Action ActionOnClientConnect;
@@ -52,6 +53,8 @@ namespace Shadow_Dominion
         public override void Awake()
         {
             base.Awake();
+            
+            Cursor.lockState = CursorLockMode.Confined;
 
             if (!Instance)
                 Instance = this;
@@ -153,11 +156,13 @@ namespace Shadow_Dominion
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
+            
+            Connections.Remove(conn);
 
+            SpawnedPlayerInstances.Remove(SpawnedPlayerInstances.FirstOrDefault(x => x.connectionToClient == conn));
+            
             ActionOnServerDisconnect?.Invoke();
             ActionOnServerDisconnectWithArg?.Invoke(conn);
-
-            Connections.Remove(conn);
 
             Debug.Log($"[Server] OnServerDisconnect. {conn.address}");
         }
@@ -184,12 +189,14 @@ namespace Shadow_Dominion
         {
             SpawnedPlayerInstances.Add(gamePlayer.GetComponent<MirrorPlayer>());
 
+            NetworkServer.ReplacePlayerForConnection(conn, gamePlayer, ReplacePlayerOptions.Destroy);
+
             gamePlayer.name = conn.connectionId.ToString();
 
-            Vector3 pos = SpawnPointSyncer.Instance.GetFreePosition(_posInd++).Position;
-            Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(pos);
-            SpawnedPlayerInstances.Last().SetRigidbodyPositionAndRotation(pos, rot);
-            SpawnedPlayerInstances.Last().SetRagdollPositionAndRotation(pos, rot);
+            // Vector3 pos = SpawnPointSyncer.Instance.GetFreePosition(_posInd++).Position;
+            // Quaternion rot = SpawnPointSyncer.Instance.CalculateRotation(pos);
+            // SpawnedPlayerInstances.Last().SetRigidbodyPositionAndRotation(pos, rot);
+            // SpawnedPlayerInstances.Last().SetRagdollPositionAndRotation(pos, rot);
             
             OnPlayerLoadedOnLevel?.Invoke();
             OnPlayerLoadedOnLevelWithArg?.Invoke(conn);
@@ -205,7 +212,14 @@ namespace Shadow_Dominion
 
             OnPlayerReadyChanged?.Invoke(Connections);
         }
-        
+
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            base.OnServerSceneChanged(sceneName);
+
+            ActionOnServerSceneChanged?.Invoke();
+        }
+
         #endregion
 
         #region Client

@@ -29,7 +29,7 @@ namespace Shadow_Dominion
             Instance = null;
         }
         
-        public void CmdSetState(LevelState newState)
+        public void SetState(LevelState newState)
         {
             _levelStateMachine.SetState(newState.StateName);
         }
