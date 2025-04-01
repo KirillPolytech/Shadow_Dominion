@@ -42,10 +42,11 @@ public class LightningChanger : MonoBehaviour
     private void Update()
     {
         TimeOfDay += Time.deltaTime / DayDuration;
-        if (TimeOfDay >= 1) TimeOfDay -= 1;
+        if (TimeOfDay >= 1) 
+            TimeOfDay -= 1;
 
         // Настройки освещения (skybox и основное солнце)
-        RenderSettings.skybox.Lerp(NightSkybox, DaySkybox, SkyboxCurve.Evaluate(TimeOfDay));
+        RenderSettings.skybox.Lerp(DaySkybox, NightSkybox, SkyboxCurve.Evaluate(TimeOfDay));
         RenderSettings.sun = SkyboxCurve.Evaluate(TimeOfDay) > 0.1f ? Sun : Moon;
         DynamicGI.UpdateEnvironment();
 

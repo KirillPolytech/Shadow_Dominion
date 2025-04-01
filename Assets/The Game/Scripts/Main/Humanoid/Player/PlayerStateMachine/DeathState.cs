@@ -18,9 +18,8 @@ namespace Shadow_Dominion.Player.StateMachine
         
         public override void Enter()
         {
-            _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
+            _playerAnimation.AnimationStateMachine.SetState<AnimationLayFaceUp>();
             
-            //_rigBuilder.enabled = false;
             _cameraLook.CanZooming = false;
             
             for (int i = 0; i < _boneControllers.Length; i++)

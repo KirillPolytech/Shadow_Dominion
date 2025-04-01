@@ -12,9 +12,6 @@ namespace Shadow_Dominion
 
         public void AddFeed(string killer, string victim)
         {
-            if (_instances.Count > 10)
-                Debug.Log("There is more than 10 Kill Feeds");
-            
             KillFeedView killFeedView = Instantiate(viewPrefab, content);
             killFeedView.SetKiller(killer == string.Empty
                 ? $"<color=red>{victim}</color>"

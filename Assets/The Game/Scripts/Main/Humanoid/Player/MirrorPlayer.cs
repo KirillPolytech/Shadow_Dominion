@@ -17,15 +17,13 @@ namespace Shadow_Dominion.Main
         private Transform _ragdollTransform;
         private Rigidbody _ragdollRb;
         private CameraLook _cameraLook;
-        private BoneController[] _bones;
 
         public void Construct(
             Transform animTransform,
             Rigidbody animRb,
             Transform ragdollTransform,
             PlayerStateMachine playerStateMachine,
-            CameraLook cameraLook,
-            BoneController[] bones)
+            CameraLook cameraLook)
         {
             AnimTransform = animTransform;
             _ragdollTransform = ragdollTransform;
@@ -33,7 +31,6 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
-            _bones = bones;
             
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }

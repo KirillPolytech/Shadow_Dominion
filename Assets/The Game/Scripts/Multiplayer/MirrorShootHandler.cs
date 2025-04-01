@@ -40,14 +40,14 @@ namespace Shadow_Dominion.Network
 
             if (boneNetIdentity != null)
             {
-                RpcShowImpact(killerNick, boneNetIdentity.netId, direction, boneController.name);
+                RpcShowImpact(boneNetIdentity.netId,killerNick, direction, boneController.name);
             }
         }
 
         [ClientRpc]
-        private void RpcShowImpact(string killerName, uint targetnetID, Vector3 direction, string boneName)
+        private void RpcShowImpact(uint targetNetID, string killerName, Vector3 direction, string boneName)
         {
-            if (!NetworkClient.spawned.TryGetValue(targetnetID, out NetworkIdentity identity)) 
+            if (!NetworkClient.spawned.TryGetValue(targetNetID, out NetworkIdentity identity)) 
                 return;
             
             BoneController[] boneController = identity.GetComponentsInChildren<BoneController>();
@@ -56,7 +56,7 @@ namespace Shadow_Dominion.Network
             {
                 if (bone.name == boneName)
                 {
-                    bone.GetComponent<BoneController>().ReceiveDamage(direction, killerName);
+                    bone.ReceiveDamage(direction, killerName);
                 }
             }
         }

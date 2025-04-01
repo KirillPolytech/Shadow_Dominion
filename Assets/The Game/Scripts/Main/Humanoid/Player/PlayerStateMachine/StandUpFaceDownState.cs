@@ -44,7 +44,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _rigBuilder.enabled = false;
             _cameraLook.CanZooming = false;
 
-            _playerAnimation.AnimationStateMachine.SetState<AnimationLay>();
+            _playerAnimation.AnimationStateMachine.SetState<AnimationLayFaceUp>();
             
             foreach (var boneController in _boneControllers)
             {

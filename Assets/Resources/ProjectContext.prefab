@@ -171,18 +171,9 @@ MonoBehaviour:
   roomSettings: {fileID: 11400000, guid: 29fdb405c980cd444ba8d840d9775754, type: 2}
   levelSO: {fileID: 11400000, guid: 66c72da04ed521c4aa4c697a0103a06f, type: 2}
   textSo: {fileID: 11400000, guid: 59f45cb292a632c4596eef899d67183f, type: 2}
-  playerPrefab: {fileID: 3110435118676541445, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
-  networkRoomPlayerPrefab: {fileID: 7370168153746888435, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
+  mirrorPlayerPrefab: {fileID: 3110435118676541445, guid: f7b60ef23895b8642a556e64e774ee22, type: 3}
+  networkRoomPlayerPrefab: {fileID: 9159404568432101215, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   coroutineExecuter: {fileID: 259350462139003918}
-  spawnPositions:
-  - Position: {x: 0, y: 0, z: 0}
-    IsFree: 0
-  - Position: {x: 0, y: 0, z: 0}
-    IsFree: 0
-  - Position: {x: 0, y: 0, z: 0}
-    IsFree: 0
-  - Position: {x: 0, y: 0, z: 0}
-    IsFree: 0
 --- !u!1001 &3406245146452827270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,6 +182,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5173198842398231476}
     m_Modifications:
+    - target: {fileID: 384223563951349639, guid: d6ef8f04941ac784abc5d38ce3a7ce2f, type: 3}
+      propertyPath: showRoomGUI
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2944112962417970438, guid: d6ef8f04941ac784abc5d38ce3a7ce2f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

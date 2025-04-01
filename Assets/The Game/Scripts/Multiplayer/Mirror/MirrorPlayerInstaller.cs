@@ -173,9 +173,9 @@ namespace Shadow_Dominion
                 playerSettings);
 
             cameraLook.Construct(cameraSettings, monoInputHandler, cinemachinePosition, cinemachineRotation, cinemachineInputAxisController);
-            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook, copyTo);
+            mirrorPlayer.Construct(animTransform, AnimRigidbody, ragdollRoot.transform, playerStateMachine, cameraLook);
             aimTarget.Construct(cameraLook);
-            playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation);
+            playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation, playerStateMachine);
             ak47.Construct(aim, weaponSO);
             mirrorShootHandler.Construct(ak47);
             
@@ -187,6 +187,8 @@ namespace Shadow_Dominion
 
                 _cachedOnCollision = (deltaDist, killerName) =>
                 {
+                    if (!mirrorPlayer.isLocalPlayer)
+                        return;
                     
                     OnCollision(
                         ind,
@@ -237,28 +239,27 @@ namespace Shadow_Dominion
             if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
                 return;
             
-            
-            if (killerName == null && !isRun)
-                return;
-            
-            if (copyTo[ind].BoneType == HumanBodyBones.Head 
+            if (killerName != null &&
+                copyTo[ind].BoneType == HumanBodyBones.Head 
                 && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceDownState)
                 && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceUpState))
             {
                 playerStateMachine.SetState<DeathState>();
-                KillFeed.Instance.AddFeed(killerName ?? victimName, victimName);
+                KillFeed.Instance.AddFeed(killerName, victimName);
+                
                 MirrorPlayersSyncer.Instance.UpdateView(killerName);
             }
 
-            if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
-                || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
-                || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
-                || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
-            {
-                aimRig.weight = 0;
-            }
+            // if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
+            //     || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
+            //     || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
+            //     || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
+            // {
+            //     aimRig.weight = 0;
+            // }
 
-            if (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
+            if (isRun &&
+                copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
                 || copyTo[ind].BoneType == HumanBodyBones.LeftUpperLeg
                 || copyTo[ind].BoneType == HumanBodyBones.RightUpperLeg
                 || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)

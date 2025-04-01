@@ -26,7 +26,7 @@ namespace Shadow_Dominion.AnimStateMachine
 
             _states.Add(new AnimationStandUpFaceDown(animator, StandUp_Face_Down));
             _states.Add(new AnimationStandUpFaceUp(animator, StandUp_Face_Up));
-            _states.Add(new AnimationLay(animator, Laying));
+            _states.Add(new AnimationLayFaceUp(animator, Laying));
             _states.Add(new AnimationIdleState(animator, Idle));
         }
 

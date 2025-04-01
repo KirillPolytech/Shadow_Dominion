@@ -1,4 +1,3 @@
-using Mirror;
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Settings;
 using UnityEngine;
@@ -27,9 +26,6 @@ namespace Shadow_Dominion
         [SerializeField]
         private Main.MirrorPlayer mirrorPlayerPrefab;
         
-        [SerializeField]
-        private NetworkRoomPlayer networkRoomPlayerPrefab;
-
         [Space]
         [SerializeField]
         private CoroutineExecuter coroutineExecuter;
@@ -51,8 +47,6 @@ namespace Shadow_Dominion
             Container.BindInterfacesAndSelfTo<ApplicationSettings>().AsSingle();
             
             Container.BindInstance(coroutineExecuter).AsSingle();
-            
-            
         }
     }
 }

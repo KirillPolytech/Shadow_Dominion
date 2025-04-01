@@ -115,9 +115,10 @@ namespace Shadow_Dominion
                 if (!col)
                 {
                     col = t[i].AddComponent<BoxCollider>();
-                    ((BoxCollider)col).size = new Vector3(0.1f, 0.1f, 0.1f);
-                }else if (col.GetType() == typeof(BoxCollider))
-                    ((BoxCollider)col).size = new Vector3(0.1f, 0.1f, 0.1f);
+                    ((BoxCollider) col).size = new Vector3(0.1f, 0.1f, 0.1f);
+                }
+                else if (col.GetType() == typeof(BoxCollider))
+                    ((BoxCollider) col).size = new Vector3(0.1f, 0.1f, 0.1f);
 
                 if (!t[i].GetComponent<ConfigurableJoint>())
                     t[i].AddComponent<ConfigurableJoint>();
@@ -133,10 +134,11 @@ namespace Shadow_Dominion
                     tr = tr.transform.parent;
                     temp = tr.GetComponent<Rigidbody>();
                 }
+
                 configurableJoints[i].connectedBody = temp;
             }
         }
-        
+
         [Button]
         public void Enable()
         {
@@ -144,7 +146,7 @@ namespace Shadow_Dominion
 
             foreach (var controller in controllers)
                 controller.enabled = true;
-            
+
             positionMaxForce = 1500000000;
             positionSpringDrive = 1500;
             positionDamper = 25;
@@ -152,7 +154,7 @@ namespace Shadow_Dominion
             angularMaxForce = 1500000000;
             angularPositionSpring = 1500;
             angularPositionDamper = 25;
-            
+
             ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
 
             foreach (var joint in joints)
@@ -160,7 +162,7 @@ namespace Shadow_Dominion
                 joint.autoConfigureConnectedAnchor = true;
             }
         }
-        
+
         [Button]
         public void Disable()
         {
@@ -178,7 +180,7 @@ namespace Shadow_Dominion
             angularPositionSpring = 0;
             angularPositionDamper = 0;
             */
-            
+
             ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
             Rigidbody[] rigidbodies = root.GetComponentsInChildren<Rigidbody>();
 
@@ -197,7 +199,7 @@ namespace Shadow_Dominion
                 rigidbody.linearVelocity = Vector3.zero;
                 rigidbody.angularVelocity = Vector3.zero;
             }
-            
+
             UpdateRagdoll();
 
             MirrorPlayerInstaller mirrorPlayerInstaller = GetComponent<MirrorPlayerInstaller>();
@@ -236,6 +238,7 @@ namespace Shadow_Dominion
             ConfigurableJoint[] joints = root.GetComponentsInChildren<ConfigurableJoint>();
             Rigidbody[] rigidbodies = root.GetComponentsInChildren<Rigidbody>();
             Collider[] colliders = root.GetComponentsInChildren<Collider>();
+            BoneController[] controllers = root.GetComponentsInChildren<BoneController>();
 
             for (int i = 0; i < joints.Length; i++)
             {
@@ -250,6 +253,11 @@ namespace Shadow_Dominion
             for (int i = 0; i < colliders.Length; i++)
             {
                 DestroyImmediate(colliders[i]);
+            }
+
+            for (int i = 0; i < controllers.Length; i++)
+            {
+                DestroyImmediate(controllers[i]);
             }
         }
 

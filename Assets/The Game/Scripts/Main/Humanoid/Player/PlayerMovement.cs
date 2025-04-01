@@ -1,17 +1,21 @@
 using Shadow_Dominion.InputSystem;
 using Shadow_Dominion.Player;
+using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 
 namespace Shadow_Dominion.Main
 {
     public class PlayerMovement
     {
+        private const float RayDistance = 1.5f;
+        
         public bool IsRunning { get; private set; }
         
         private PlayerSettings _playerSettings;
         private CameraLook _cameraLook;
         private Rigidbody _charRigidbody;
         private PlayerAnimation _playerAnimation;
+        private PlayerStateMachine _playerStateMachine;
 
         private Transform _transform;
         private Quaternion _cachedRot;
@@ -20,13 +24,15 @@ namespace Shadow_Dominion.Main
             PlayerSettings playerSettings,
             Rigidbody characterController,
             CameraLook cameraLook,
-            PlayerAnimation playerAnimation)
+            PlayerAnimation playerAnimation,
+            PlayerStateMachine playerStateMachine)
         {
             _playerSettings = playerSettings;
             _charRigidbody = characterController;
             _cameraLook = cameraLook;
             _transform = _charRigidbody.transform;
             _playerAnimation = playerAnimation;
+            _playerStateMachine = playerStateMachine;
         }
 
         public void HandleInput(InputData data)
@@ -34,6 +40,7 @@ namespace Shadow_Dominion.Main
             Move(data.LeftShift, data.HorizontalAxisRaw, data.VerticalAxisRaw);
             Rotate(data);
             HandleAnim(data);
+            CheckGround();
         }
 
         private void HandleAnim(InputData data)
@@ -83,7 +90,6 @@ namespace Shadow_Dominion.Main
             Debug.DrawRay(_transform.position, _charRigidbody.linearVelocity * 10, Color.yellow);
         }
 
-        // todo: refactor
         private void Rotate(InputData data)
         {
             if (!_playerSettings.CanRotate || data.LeftALT)
@@ -91,14 +97,25 @@ namespace Shadow_Dominion.Main
 
             Vector3 transformForward =
                 new Vector3(_cameraLook.CameraTransform.forward.x, 0, _cameraLook.CameraTransform.forward.z);
-
-            //transformForward.y = dir == default ? 0 : Mathf.Sign(dir.y) * _playerSettings.tilt;
-
+            
             Quaternion rot = Quaternion.Lerp(_charRigidbody.rotation,
                 Quaternion.LookRotation(transformForward),
                 _playerSettings.RotSpeed * Time.fixedDeltaTime);
 
             _charRigidbody.MoveRotation(rot);
+        }
+
+        private void CheckGround()
+        {
+            Ray ray = new Ray(_charRigidbody.position + Vector3.up, Vector3.down);
+            
+            Debug.DrawRay(ray.origin, Vector3.down, Color.red);
+            
+            LayerMask mask = ~LayerMask.GetMask(_playerSettings.FallRayMask);
+            if (Physics.Raycast(ray, RayDistance, mask))
+                return;
+            
+            _playerStateMachine.SetState<RagdollState>();
         }
     }
 }

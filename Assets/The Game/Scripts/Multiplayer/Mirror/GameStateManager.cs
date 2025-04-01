@@ -54,7 +54,7 @@ namespace Shadow_Dominion
                 return;
             }
             
-            if (++_deadPlayers < MirrorPlayersSyncer.Instance.Players.Length)
+            if (++_deadPlayers < MirrorPlayersSyncer.Instance.Players.Length - 1)
                 return;
 
             UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
