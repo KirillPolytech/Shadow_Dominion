@@ -7660,6 +7660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1343124511}
   - component: {fileID: 1343124512}
+  - component: {fileID: 1343124513}
   m_Layer: 5
   m_Name: MainContent
   m_TagString: Untagged
@@ -7702,6 +7703,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpened: 0
+--- !u!95 &1343124513
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343124510}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1378078706
 GameObject:
   m_ObjectHideFlags: 0
@@ -10186,6 +10209,7 @@ MonoBehaviour:
   - {fileID: 1343124512}
   - {fileID: 1407108558}
   - {fileID: 1916050064}
+  initiallyOpen: {fileID: 0}
 --- !u!1 &2110363742
 GameObject:
   m_ObjectHideFlags: 0
@@ -10479,8 +10503,8 @@ SceneRoots:
   - {fileID: 1113077456}
   - {fileID: 666061542}
   - {fileID: 1817541669}
-  - {fileID: 2107570156}
   - {fileID: 1112392397}
-  - {fileID: 1916050063}
   - {fileID: 1864539940}
   - {fileID: 1671007861}
+  - {fileID: 1916050063}
+  - {fileID: 2107570156}

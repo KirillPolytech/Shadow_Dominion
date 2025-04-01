@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace WindowsSystem
 {
@@ -19,20 +20,14 @@ namespace WindowsSystem
         private int _openParameterId;
         private Animator _open;
         private GameObject _previouslySelected;
-
-
+        
         protected void Start()
         {
             Current = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
             
             _openParameterId = Animator.StringToHash(OpenTransitionName);
-
-            if (initiallyOpen == null)
-                return;
-
-            OpenPanel(initiallyOpen);
-
-            //OpenWindow(Current);
+            
+            OpenWindow(Current);
         }
 
         public void OpenWindow(Window window)
@@ -40,7 +35,7 @@ namespace WindowsSystem
             if (_open == window.Animator)
                 return;
 
-            window.Animator.gameObject.SetActive(true);
+            window.Open();
             GameObject newPreviouslySelected = EventSystem.current.currentSelectedGameObject;
 
             window.Animator.transform.SetAsLastSibling();
@@ -52,17 +47,16 @@ namespace WindowsSystem
             _open = window.Animator;
             _open.SetBool(_openParameterId, true);
 
-            GameObject go = FindFirstEnabledSelectable(anim.gameObject);
+            GameObject go = FindFirstEnabledSelectable(window.Animator.gameObject);
 
             SetSelected(go);
         }
 
         public void OpenWindow<T>() where T : Window
         {
-            foreach (Window m in windows.Where(x => x.IsOpened))
-                m.Close();
-
             Window window = windows.FirstOrDefault(x => x.GetType() == typeof(T));
+            
+            OpenWindow(window);
 
             window.Open();
             Current = window;
@@ -74,7 +68,7 @@ namespace WindowsSystem
 
         public void CloseCurrent()
         {
-            if (_open == null)
+            if (!_open)
                 return;
 
             _open.SetBool(_openParameterId, false);

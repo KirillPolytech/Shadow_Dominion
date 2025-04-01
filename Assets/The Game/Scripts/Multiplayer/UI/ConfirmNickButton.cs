@@ -10,6 +10,7 @@ namespace Shadow_Dominion.UI
         private InputFieldsProvider _inputFieldProvider;
         private WindowsController _windowsController;
         private TextSO _textSo;
+        private bool _isInitialized;
 
         [Inject]
         public void Construct(
@@ -22,6 +23,8 @@ namespace Shadow_Dominion.UI
             _textSo = textSo;
             
             _inputFieldProvider.TMPInputField.onValueChanged.AddListener(OnValueChanged);
+
+            _isInitialized = true;
         }
 
         protected override void Awake()
@@ -34,6 +37,9 @@ namespace Shadow_Dominion.UI
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            
+            if (!_isInitialized)
+                return;
 
             onClick?.RemoveListener(SetNick);
             _inputFieldProvider.TMPInputField.onValueChanged.RemoveListener(OnValueChanged);

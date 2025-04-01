@@ -25,10 +25,10 @@ namespace WindowsSystem
 
         public void Open()
         {
+            gameObject.SetActive(true);
+
             //_animator.SetBool(_openParameterId, false);
-
-            //gameObject.SetActive(true);
-
+            
             isOpened = true;
         }
 

@@ -7,12 +7,10 @@ namespace Shadow_Dominion
 {
     public class MenuWindowsController : WindowsController
     {
-        public new void Start()
+        protected new void Start()
         {
             base.Start();
-
-            OpenWindow(Current);
-
+            
             if (SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
             {
                 MirrorServer.Instance.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
