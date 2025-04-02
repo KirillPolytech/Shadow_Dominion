@@ -2,28 +2,31 @@ using UnityEngine;
 
 public class TiltWindow : MonoBehaviour
 {
-	public Vector2 range = new Vector2(5f, 3f);
+	private const float Half = 0.5f;
+	
+	[SerializeField] private Vector2 range = new(5f, 3f);
+	[SerializeField] private float force = 5f;
 
-	Transform mTrans;
-	Quaternion mStart;
-	Vector2 mRot = Vector2.zero;
+	private Transform _mTrans;
+	private Quaternion _mStart;
+	private Vector2 _mRot;
 
-	void Start ()
+	private void Start ()
 	{
-		mTrans = transform;
-		mStart = mTrans.localRotation;
+		_mTrans = transform;
+		_mStart = _mTrans.localRotation;
 	}
 
-	void Update ()
+	private void Update ()
 	{
 		Vector3 pos = Input.mousePosition;
 
-		float halfWidth = Screen.width * 0.5f;
-		float halfHeight = Screen.height * 0.5f;
+		float halfWidth = Screen.width * Half;
+		float halfHeight = Screen.height * Half;
 		float x = Mathf.Clamp((pos.x - halfWidth) / halfWidth, -1f, 1f);
 		float y = Mathf.Clamp((pos.y - halfHeight) / halfHeight, -1f, 1f);
-		mRot = Vector2.Lerp(mRot, new Vector2(x, y), Time.deltaTime * 5f);
+		_mRot = Vector2.Lerp(_mRot, new Vector2(x, y), Time.deltaTime * force);
 
-		mTrans.localRotation = mStart * Quaternion.Euler(-mRot.y * range.y, mRot.x * range.x, 0f);
+		_mTrans.localRotation = _mStart * Quaternion.Euler(-_mRot.y * range.y, _mRot.x * range.x, 0f);
 	}
 }
