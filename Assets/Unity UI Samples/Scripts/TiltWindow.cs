@@ -4,7 +4,7 @@ public class TiltWindow : MonoBehaviour
 {
 	private const float Half = 0.5f;
 	
-	[SerializeField] private Vector2 range = new(5f, 3f);
+	[SerializeField] private Vector2 range = new(-30f, -15f);
 	[SerializeField] private float force = 5f;
 
 	private Transform _mTrans;
