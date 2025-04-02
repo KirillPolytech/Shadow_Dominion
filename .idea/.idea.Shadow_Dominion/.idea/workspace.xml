@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c9e15c-a76d-4d67-b223-d30987356212" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Menu/MenuWindowsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Menu/MenuWindowsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Window.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/ConfirmNickButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/ConfirmNickButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Unity UI Samples/Animation/Panel/Panel.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Unity UI Samples/Animation/Panel/Panel.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Unity UI Samples/Scripts/PanelManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Unity UI Samples/Scripts/PanelManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Models/20250116_001_RC_LOD0/20250116_001_RC_LOD0.obj.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,10 +116,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="22800">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="22800" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
