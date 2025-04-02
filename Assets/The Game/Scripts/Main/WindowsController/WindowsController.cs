@@ -68,26 +68,26 @@ namespace WindowsSystem
 
             Current.Animator.SetBool(_openParameterId, false);
             SetSelected(_previouslySelected);
-            StartCoroutine(DisablePanelDelayed(Current.Animator));
+            StartCoroutine(DisablePanelDelayed(Current));
             Current = null;
         }
         
-        private IEnumerator DisablePanelDelayed(Animator anim)
+        private IEnumerator DisablePanelDelayed(Window window)
         {
             bool closedStateReached = false;
             bool wantToClose = true;
             while (!closedStateReached && wantToClose)
             {
-                if (!anim.IsInTransition(0))
-                    closedStateReached = anim.GetCurrentAnimatorStateInfo(0).IsName(ClosedStateName);
+                if (!window.Animator.IsInTransition(0))
+                    closedStateReached = window.Animator.GetCurrentAnimatorStateInfo(0).IsName(ClosedStateName);
 
-                wantToClose = !anim.GetBool(_openParameterId);
+                wantToClose = !window.Animator.GetBool(_openParameterId);
 
                 yield return new WaitForEndOfFrame();
             }
 
             if (wantToClose)
-                anim.gameObject.SetActive(false);
+                window.Close();
         }
 
         private void SetSelected(GameObject go)

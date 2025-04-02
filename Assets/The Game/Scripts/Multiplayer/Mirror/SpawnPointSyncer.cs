@@ -9,10 +9,10 @@ namespace Shadow_Dominion
         private readonly SyncList<PositionMessage> _positionMessages = new();
         private readonly PositionMessage[] _positionMessage =
         {
-            new(new Vector3(22, 5, 0), true),
-            new(new Vector3(-22, 5, 0), true),
-            new(new Vector3(0, 5, 15), true),
-            new(new Vector3(0, 5, -15), true)
+            new(new Vector3(22, 1, 0), true),
+            new(new Vector3(-22, 1, 0), true),
+            new(new Vector3(0, 1, 15), true),
+            new(new Vector3(0, 1, -15), true)
         };
         
         private Vector3 Center => Vector3.zero;

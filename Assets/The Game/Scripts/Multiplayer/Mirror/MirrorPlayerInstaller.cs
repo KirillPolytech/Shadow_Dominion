@@ -239,8 +239,7 @@ namespace Shadow_Dominion
             if (playerStateMachine.CurrentState.GetType() == typeof(DeathState))
                 return;
             
-            if (killerName != null &&
-                copyTo[ind].BoneType == HumanBodyBones.Head 
+            if (killerName != null 
                 && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceDownState)
                 && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceUpState))
             {
@@ -249,14 +248,6 @@ namespace Shadow_Dominion
                 
                 MirrorPlayersSyncer.Instance.UpdateView(killerName);
             }
-
-            // if (copyTo[ind].BoneType == HumanBodyBones.RightLowerArm
-            //     || copyTo[ind].BoneType == HumanBodyBones.RightUpperArm
-            //     || copyTo[ind].BoneType == HumanBodyBones.LeftLowerArm
-            //     || copyTo[ind].BoneType == HumanBodyBones.LeftUpperArm)
-            // {
-            //     aimRig.weight = 0;
-            // }
 
             if (isRun &&
                 (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
