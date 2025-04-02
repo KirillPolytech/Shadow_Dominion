@@ -47,6 +47,7 @@ namespace Shadow_Dominion
             rectTransform.localScale = Vector3.one;
             rectTransform.anchoredPosition3D = Vector3.zero;
             rectTransform.position = Vector3.zero;
+            rectTransform.localRotation = Quaternion.identity;
             rectTransform.localPosition = Vector3.zero;
 
             instance.SetName(nick);

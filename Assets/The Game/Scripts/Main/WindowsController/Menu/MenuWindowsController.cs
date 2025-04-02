@@ -15,16 +15,12 @@ namespace Shadow_Dominion
             {
                 MirrorServer.Instance.ActionOnStartClient += OpenWindow<PlayerListingWindow>;
                 MirrorServer.Instance.ActionOnHostStart += OpenWindow<PlayerListingWindow>;
+                
+                OpenWindow<PlayerListingWindow>();
             }
 
             MirrorServer.Instance.ActionOnStopClient += OpenWindow<MainWindow>;
             MirrorServer.Instance.ActionOnHostStop += OpenWindow<MainWindow>;
-
-            if (!NetworkServer.active && NetworkClient.isConnected &&
-                SceneManager.GetActiveScene().name == SceneNamesStorage.OnlineMenuScene)
-            {
-                OpenWindow<PlayerListingWindow>();
-            }
         }
 
         protected void OnDestroy()

@@ -15,18 +15,17 @@ namespace WindowsSystem
         private const string OpenTransitionName = "Open";
         private const string ClosedStateName = "Closed";
     
-        public Animator initiallyOpen;
+        public Window initiallyOpen;
 
         private int _openParameterId;
         private GameObject _previouslySelected;
         
         protected void Start()
         {
-            Window window = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
-            
             _openParameterId = Animator.StringToHash(OpenTransitionName);
             
-            OpenWindow(window);
+            if (initiallyOpen)
+                OpenWindow(initiallyOpen);
         }
 
         public void OpenWindow(Window window)

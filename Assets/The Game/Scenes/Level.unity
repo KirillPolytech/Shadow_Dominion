@@ -4788,7 +4788,7 @@ Animator:
   m_GameObject: {fileID: 827460415}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1a76cb6763ca8a4ab0450fc989edb19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -6531,6 +6531,7 @@ MonoBehaviour:
   - {fileID: 1529268375}
   - {fileID: 827460417}
   - {fileID: 1580424441}
+  initiallyOpen: {fileID: 0}
 --- !u!114 &1147690408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7670,7 +7671,7 @@ Animator:
   m_GameObject: {fileID: 1365668011}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1a76cb6763ca8a4ab0450fc989edb19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -9127,7 +9128,7 @@ Animator:
   m_GameObject: {fileID: 1529268373}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1a76cb6763ca8a4ab0450fc989edb19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -9682,7 +9683,7 @@ Animator:
   m_GameObject: {fileID: 1580424439}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1a76cb6763ca8a4ab0450fc989edb19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

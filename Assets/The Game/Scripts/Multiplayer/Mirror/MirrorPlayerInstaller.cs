@@ -259,10 +259,10 @@ namespace Shadow_Dominion
             // }
 
             if (isRun &&
-                copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
+                (copyTo[ind].BoneType == HumanBodyBones.LeftLowerLeg
                 || copyTo[ind].BoneType == HumanBodyBones.LeftUpperLeg
                 || copyTo[ind].BoneType == HumanBodyBones.RightUpperLeg
-                || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg)
+                || copyTo[ind].BoneType == HumanBodyBones.RightLowerLeg))
             {
                 playerStateMachine.SetState<RagdollState>();
             }
