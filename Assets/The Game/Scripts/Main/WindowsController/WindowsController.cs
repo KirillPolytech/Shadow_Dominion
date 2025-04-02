@@ -30,13 +30,17 @@ namespace WindowsSystem
 
         public void OpenWindow(Window window)
         {
+            if (Current == window)
+                return;
+            
             window.Open();
+            
             GameObject newPreviouslySelected = EventSystem.current.currentSelectedGameObject;
 
             window.Animator.transform.SetAsLastSibling();
 
             CloseCurrent();
-
+            
             _previouslySelected = newPreviouslySelected;
 
             Current = window;
@@ -45,6 +49,10 @@ namespace WindowsSystem
             GameObject go = FindFirstEnabledSelectable(window.Animator.gameObject);
 
             SetSelected(go);
+            
+#if UNITY_EDITOR
+            Debug.Log($"Window open: {window.GetType()}");
+#endif
         }
 
         public void OpenWindow<T>() where T : Window
@@ -52,13 +60,6 @@ namespace WindowsSystem
             Window window = windows.FirstOrDefault(x => x.GetType() == typeof(T));
             
             OpenWindow(window);
-
-            window.Open();
-            Current = window;
-
-#if UNITY_EDITOR
-            Debug.Log($"Window open: {window.GetType()}");
-#endif
         }
 
         public void CloseCurrent()

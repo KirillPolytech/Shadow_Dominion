@@ -1,11 +1,10 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using Directory = UnityEngine.Windows.Directory;
-using File = UnityEngine.Windows.File;
 
 public class AutoApplyTextures : MonoBehaviour
 {
+#if UNITY_EDITOR
     public string texturesFolder; // Путь внутри "Assets"
 
     private void Start()
@@ -29,10 +28,10 @@ public class AutoApplyTextures : MonoBehaviour
             if (!string.IsNullOrEmpty(texturePath))
             {
                 Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
-                
-                if (texture == null) 
+
+                if (texture == null)
                     continue;
-                
+
                 mat.mainTexture = texture;
                 Debug.Log($"✅ Применена текстура {texture.name} к материалу {mat.name}");
             }
@@ -59,4 +58,5 @@ public class AutoApplyTextures : MonoBehaviour
 
         return null;
     }
+#endif
 }

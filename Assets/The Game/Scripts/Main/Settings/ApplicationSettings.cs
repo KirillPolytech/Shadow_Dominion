@@ -40,6 +40,24 @@ namespace Shadow_Dominion.Settings
             Screen.SetResolution(Screen.width, Screen.height, fullScreenMode);
         }
 
+        public void SetQuality(int value)
+        {
+            string[] names = QualitySettings.names;
+
+            if (value < 0 || value >= names.Length)
+                throw new ArgumentOutOfRangeException();
+            
+            QualitySettings.SetQualityLevel(value);
+        }
+        
+        public void SetMSAA(int value)
+        {
+            if (value < 0 || value > 8 && value % 2 != 0)
+                throw new ArgumentOutOfRangeException();
+            
+            QualitySettings.antiAliasing = value;
+        }
+
         public void Quit()
         {
 #if UNITY_EDITOR

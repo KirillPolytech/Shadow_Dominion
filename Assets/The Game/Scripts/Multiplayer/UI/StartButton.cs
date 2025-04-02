@@ -1,6 +1,7 @@
-using System;
 using Mirror;
+using The_Game.Scripts.Main;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -9,17 +10,17 @@ namespace Shadow_Dominion
     public class StartButton : Button
     {
         private UnityAction _onServerChangeScene;
-        private Action _setState;
         private bool _isInitialized;
 
         [Inject]
         public void Construct(RoomSettings roomSettings)
         {
+            if (SceneManager.GetActiveScene().name != SceneNamesStorage.OnlineMenuScene)
+                return;
+            
             _onServerChangeScene = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
             
-            _setState = () => gameObject.SetActive(true);
-            
-            MirrorServer.Instance.ActionOnHostStart += _setState.Invoke;
+            MirrorServer.Instance.ActionOnHostStart += Enable;
             MirrorServer.Instance.ActionOnHostStart += Subscribe;
             MirrorServer.Instance.ActionOnHostStop += Unsubscribe;
 
@@ -31,6 +32,8 @@ namespace Shadow_Dominion
         private void Subscribe() => onClick.AddListener(_onServerChangeScene.Invoke);
         private void Unsubscribe() => onClick.RemoveListener(_onServerChangeScene.Invoke);
 
+        private void Enable() => gameObject.SetActive(true);
+        
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -38,7 +41,7 @@ namespace Shadow_Dominion
             if (!_isInitialized)
                 return;
             
-            MirrorServer.Instance.ActionOnHostStart -= _setState.Invoke;
+            MirrorServer.Instance.ActionOnHostStart -= Enable;
             MirrorServer.Instance.ActionOnHostStart -= Subscribe;
             MirrorServer.Instance.ActionOnHostStop -= Unsubscribe;
         }
