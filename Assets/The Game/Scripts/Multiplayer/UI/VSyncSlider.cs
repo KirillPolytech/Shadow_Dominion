@@ -1,9 +1,8 @@
 using Shadow_Dominion.Settings;
-using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class FullScreenToggle : Toggle
+public class VSyncSlider : Slider
 {
     private ApplicationSettings _applicationSettings;
     
@@ -11,7 +10,6 @@ public class FullScreenToggle : Toggle
     public void Construct(ApplicationSettings applicationSettings)
     {
         _applicationSettings = applicationSettings;
-
         
         onValueChanged.AddListener(OnValueChanged);
     }
@@ -23,9 +21,8 @@ public class FullScreenToggle : Toggle
         onValueChanged.RemoveListener(OnValueChanged);
     }
 
-    private void OnValueChanged(bool value)
+    private void OnValueChanged(float val)
     {
-        FullScreenMode fullScreenMode = value ? FullScreenMode.FullScreenWindow : FullScreenMode.MaximizedWindow;
-        _applicationSettings.SetScreenMode(fullScreenMode);
+        _applicationSettings.SetVSYNC((int)val);
     }
 }

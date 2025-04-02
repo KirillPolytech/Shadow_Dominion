@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5469423025344023888}
   - component: {fileID: 8076761739462144825}
   m_Layer: 0
-  m_Name: PositionSyncer
+  m_Name: SpawnPointSyncer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
