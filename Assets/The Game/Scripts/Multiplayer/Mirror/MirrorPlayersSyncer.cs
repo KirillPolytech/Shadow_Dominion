@@ -73,10 +73,8 @@ namespace Shadow_Dominion
             playerViewData.IsReady = isReady;
 
             _playersViewData.Add(playerViewData);
-
-            RpcUpdateReadyState(_playersViewData.ToArray());
-
-            Debug.Log($"[Server] Player {nick} has been requested ready.");
+            
+            Debug.Log($"[Server] Player {nick} has been requested {isReady}. {Time.time}");
         }
 
         [Server]
@@ -132,28 +130,16 @@ namespace Shadow_Dominion
         {
             _playersViewData.OnChange -= OnSyncListChanged;
         }
-
-        [Client]
+        
         private void OnSyncListChanged(SyncList<PlayerViewData>.Operation operation, int value, PlayerViewData str)
         {
             UpdateViews();
         }
-
-        [Client]
+        
         private void UpdateViews()
         {
             PlayerListing.Instance.SpawnView(_playersViewData.ToArray());
             LevelPlayerListing.Instance?.AddView(_playersViewData.ToArray());
-        }
-
-        [Client]
-        [ClientRpc]
-        private void RpcUpdateReadyState(PlayerViewData[] playerViewData)
-        {
-            foreach (var viewData in playerViewData)
-            {
-                PlayerListing.Instance.IsReady(viewData.Nick, viewData.IsReady);
-            }
         }
 
         #endregion

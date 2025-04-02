@@ -10,6 +10,9 @@ namespace Shadow_Dominion
         [Client]
         public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
         {
+            if (!isLocalPlayer)
+                return;
+            
             MirrorPlayersSyncer.Instance.UpdateReadyState(newReadyState, UserData.Instance.Nickname);
             
             Debug.Log($"[Client] Ready state changed: {newReadyState}");
