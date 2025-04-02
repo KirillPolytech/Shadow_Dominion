@@ -18,23 +18,19 @@ namespace WindowsSystem
         public Animator initiallyOpen;
 
         private int _openParameterId;
-        private Animator _open;
         private GameObject _previouslySelected;
         
         protected void Start()
         {
-            Current = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
+            Window window = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
             
             _openParameterId = Animator.StringToHash(OpenTransitionName);
             
-            OpenWindow(Current);
+            OpenWindow(window);
         }
 
         public void OpenWindow(Window window)
         {
-            if (_open == window.Animator)
-                return;
-
             window.Open();
             GameObject newPreviouslySelected = EventSystem.current.currentSelectedGameObject;
 
@@ -44,8 +40,8 @@ namespace WindowsSystem
 
             _previouslySelected = newPreviouslySelected;
 
-            _open = window.Animator;
-            _open.SetBool(_openParameterId, true);
+            Current = window;
+            Current.Animator.SetBool(_openParameterId, true);
 
             GameObject go = FindFirstEnabledSelectable(window.Animator.gameObject);
 
@@ -68,13 +64,13 @@ namespace WindowsSystem
 
         public void CloseCurrent()
         {
-            if (!_open)
+            if (!Current)
                 return;
 
-            _open.SetBool(_openParameterId, false);
+            Current.Animator.SetBool(_openParameterId, false);
             SetSelected(_previouslySelected);
-            StartCoroutine(DisablePanelDelayed(_open));
-            _open = null;
+            StartCoroutine(DisablePanelDelayed(Current.Animator));
+            Current = null;
         }
         
         private IEnumerator DisablePanelDelayed(Animator anim)
@@ -100,10 +96,10 @@ namespace WindowsSystem
             EventSystem.current.SetSelectedGameObject(go);
         }
         
-        private GameObject FindFirstEnabledSelectable(GameObject gameObject)
+        private GameObject FindFirstEnabledSelectable(GameObject obj)
         {
             GameObject go = null;
-            var selectables = gameObject.GetComponentsInChildren<Selectable>(true);
+            var selectables = obj.GetComponentsInChildren<Selectable>(true);
             foreach (var selectable in selectables)
             {
                 if (selectable.IsActive() && selectable.IsInteractable())

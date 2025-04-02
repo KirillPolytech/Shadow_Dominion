@@ -478,6 +478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3138124163803678936}
   - component: {fileID: 4934581660243768424}
+  - component: {fileID: 1671636906902507219}
   m_Layer: 5
   m_Name: JoinContent
   m_TagString: Untagged
@@ -521,8 +522,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpened: 0
-  fadeInTime: 0.25
-  fadeOutTime: 0.25
+--- !u!95 &1671636906902507219
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3118346563989195222}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3789004048888623968
 GameObject:
   m_ObjectHideFlags: 0
@@ -1701,7 +1722,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5643776875617813926
 MonoBehaviour:
   m_ObjectHideFlags: 0

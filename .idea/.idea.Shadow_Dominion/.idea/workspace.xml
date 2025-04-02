@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c9e15c-a76d-4d67-b223-d30987356212" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Models/20250116_001_RC_LOD0/20250116_001_RC_LOD0.obj.meta" beforeDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Menu/MenuCanvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Menu/MenuCanvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +254,7 @@
       <workItem from="1743437390034" duration="8405000" />
       <workItem from="1743482716340" duration="3046000" />
       <workItem from="1743537708954" duration="2974000" />
-      <workItem from="1743542858527" duration="7544000" />
+      <workItem from="1743542858527" duration="9086000" />
     </task>
     <servers />
   </component>
@@ -281,16 +289,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs</url>
-          <line>40</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Main\WindowsController\WindowsController.cs" containingFunctionPresentation="Method 'OpenWindow'">
+          <line>24</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Main\WindowsController\WindowsController.cs" containingFunctionPresentation="Method 'Start'">
             <startOffsets>
-              <option value="1071" />
+              <option value="634" />
             </startOffsets>
             <endOffsets>
-              <option value="1085" />
+              <option value="713" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="127" />
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
