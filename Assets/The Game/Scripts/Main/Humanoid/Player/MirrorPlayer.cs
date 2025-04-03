@@ -53,24 +53,17 @@ namespace Shadow_Dominion.Main
             // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }
 
-        public void SetCameraRotation(Quaternion rot)
-        {
-            _cameraLook.SetRotation(rot);
-        }
-
         public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
         {
-            //SetRagdollVisibility(false);
             _ragdollRb.transform.position = pos;
             _ragdollRb.transform.rotation = rot;
-            //SetRagdollVisibility(true);
             
             Debug.Log($"Ragdoll new pos: {_ragdollRb.transform.position}");
         }
-
-        public void SetRagdollVisibility(bool isVisible)
+        
+        public void SetCameraRotation(Quaternion rot)
         {
-            //_ragdollRb.gameObject.SetActive(isVisible);
+            _cameraLook.SetRotation(rot);
         }
 
         #region Server

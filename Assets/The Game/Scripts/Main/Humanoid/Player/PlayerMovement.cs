@@ -9,7 +9,7 @@ namespace Shadow_Dominion.Main
     {
         private const float RayDistance = 1.5f;
         
-        public bool IsRunning { get; private set; }
+        public bool IsRunning { get; set; }
         
         private PlayerSettings _playerSettings;
         private CameraLook _cameraLook;

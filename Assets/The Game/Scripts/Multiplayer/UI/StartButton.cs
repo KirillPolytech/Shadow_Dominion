@@ -1,3 +1,4 @@
+using System.Linq;
 using Mirror;
 using The_Game.Scripts.Main;
 using UnityEngine.Events;
@@ -17,15 +18,23 @@ namespace Shadow_Dominion
         {
             if (SceneManager.GetActiveScene().name != SceneNamesStorage.OnlineMenuScene)
                 return;
-            
-            _onServerChangeScene = () => NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
-            
+
+            _onServerChangeScene = () =>
+            {
+                bool isAllReady = MirrorPlayersSyncer.Instance.Players.All(playerViewData => playerViewData.IsReady);
+
+                if (!isAllReady)
+                    return;
+
+                NetworkManager.singleton.ServerChangeScene(roomSettings.mainLevel);
+            };
+
             MirrorServer.Instance.ActionOnHostStart += Enable;
             MirrorServer.Instance.ActionOnHostStart += Subscribe;
             MirrorServer.Instance.ActionOnHostStop += Unsubscribe;
 
             gameObject.SetActive(false);
-            
+
             _isInitialized = true;
         }
 
@@ -33,14 +42,14 @@ namespace Shadow_Dominion
         private void Unsubscribe() => onClick.RemoveListener(_onServerChangeScene.Invoke);
 
         private void Enable() => gameObject.SetActive(true);
-        
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            
+
             if (!_isInitialized)
                 return;
-            
+
             MirrorServer.Instance.ActionOnHostStart -= Enable;
             MirrorServer.Instance.ActionOnHostStart -= Subscribe;
             MirrorServer.Instance.ActionOnHostStop -= Unsubscribe;

@@ -91,7 +91,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
             Vector3 dirUp = new Vector3(_ragdollRoot.up.x, 0, _ragdollRoot.up.z);
             Quaternion rot = Quaternion.LookRotation(dirUp * (isUp ? -1 : 1));
-            float y = _ragdollRoot.position.y;//_mirrorPlayer.AnimTransform.position.y;
+            float y = _ragdollRoot.position.y;
 
             _mirrorPlayer.IsKinematic(true);
 

@@ -179,7 +179,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  showRoomGUI: 1
+  showRoomGUI: 0
   minPlayers: 4
   roomPlayerPrefab: {fileID: 9159404568432101215, guid: d72229ebc6d826c408491fe28b9de569, type: 3}
   RoomScene: Assets/The Game/Scenes/Menu Online.unity

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Shadow_Dominion
 {
@@ -22,6 +23,12 @@ namespace Shadow_Dominion
             DontDestroyOnLoad(gameObject);
         }
 
-        public Vector3 GetFreePosition(int ind) => spawnPoints[ind].position;
+        public Vector3 GetFreePosition(int ind)
+        {
+            if (ind < 0 || ind >= spawnPoints.Length)
+                throw new Exception($"ind: {ind} is out of range");
+
+            return spawnPoints[ind].position;
+        }
     }
 }

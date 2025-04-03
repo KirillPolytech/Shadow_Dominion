@@ -232,7 +232,6 @@ namespace Shadow_Dominion
                 bone.enabled = state;
             }
         }
-        
 
         private void OnCollision(int ind, PlayerStateMachine playerStateMachine, bool isRun, string killerName, string victimName)
         {

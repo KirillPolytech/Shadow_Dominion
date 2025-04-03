@@ -14,6 +14,7 @@ namespace Shadow_Dominion
         public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
+        public event Action OnAllPlayersReady;
         public PlayerViewData[] Players => _playersViewData.ToArray();
         public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
 
@@ -42,13 +43,9 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerConnect += UpdateViews;
             MirrorServer.Instance.ActionOnServerDisconnect += UpdateViews;
             MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg += UpdateLoadedPlayersOnLevel;
-        }
-
-        [Server]
-        private void UpdateConnections()
-        {
-            Connections.Clear();
-            Connections.AddRange(MirrorServer.Instance.Connections);
+            
+            MirrorServer.Instance.ActionOnServerConnect += IncreaseID;
+            MirrorServer.Instance.ActionOnServerDisconnect += DecreaseID;
         }
 
         [Server]
@@ -61,6 +58,21 @@ namespace Shadow_Dominion
             MirrorServer.Instance.ActionOnServerConnect -= UpdateViews;
             MirrorServer.Instance.ActionOnServerDisconnect -= UpdateViews;
             MirrorServer.Instance.OnPlayerLoadedOnLevelWithArg -= UpdateLoadedPlayersOnLevel;
+            
+            MirrorServer.Instance.ActionOnServerConnect -= IncreaseID;
+            MirrorServer.Instance.ActionOnServerDisconnect -= DecreaseID;
+        }
+        
+        [Server]
+        private void IncreaseID() => _playerid++;
+        [Server]
+        private void DecreaseID() => _playerid--;
+        
+        [Server]
+        private void UpdateConnections()
+        {
+            Connections.Clear();
+            Connections.AddRange(MirrorServer.Instance.Connections);
         }
 
         [Command(requiresAuthority = false)]
@@ -73,8 +85,8 @@ namespace Shadow_Dominion
             playerViewData.IsReady = isReady;
 
             _playersViewData.Add(playerViewData);
-            
-            Debug.Log($"[Server] Player {nick} has been requested {isReady}. {Time.time}");
+
+            // Debug.Log($"[Server] Player {nick} has been requested {isReady}. {Time.time}");
         }
 
         [Server]
@@ -89,7 +101,7 @@ namespace Shadow_Dominion
             {
                 yield return new WaitForFixedUpdate();
             }
-            
+
             if (++_spawnedPlayersOnLevel == _playersViewData.Count)
             {
                 OnAllPlayersLoadedOnLevel?.Invoke();
@@ -108,7 +120,7 @@ namespace Shadow_Dominion
             PlayerViewData playerViewData = _playersViewData.First(x => x.Nick == killerName);
             _playersViewData.Remove(playerViewData);
             playerViewData.Kills += 1;
-            
+
             _playersViewData.Add(playerViewData);
         }
 
@@ -121,21 +133,23 @@ namespace Shadow_Dominion
             _playersViewData.OnChange += OnSyncListChanged;
 
             AddToSyncList(
-                new PlayerViewData(_playerid++ , UserData.Instance.Nickname, false, 0));
+                new PlayerViewData(_playerid, UserData.Instance.Nickname, false, 0));
 
             UpdateViews();
+
+            Debug.Log($"[Client] PlayerID: {_playerid}");
         }
 
         public override void OnStopClient()
         {
             _playersViewData.OnChange -= OnSyncListChanged;
         }
-        
+
         private void OnSyncListChanged(SyncList<PlayerViewData>.Operation operation, int value, PlayerViewData str)
         {
             UpdateViews();
         }
-        
+
         private void UpdateViews()
         {
             PlayerListing.Instance.SpawnView(_playersViewData.ToArray());

@@ -68,8 +68,7 @@ namespace Shadow_Dominion
                 player.OnDead += CheckWin;
             }
         }
-
-        [Server]
+        
         private void UnSubscribe()
         {
             foreach (var player in MirrorServer.Instance.SpawnedPlayerInstances.Where(player => player))
