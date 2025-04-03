@@ -1,36 +1,37 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class DebugWindow : MonoBehaviour
 {
-    [Range(0f, 10f)] [SerializeField] private float delayUpdate = 2.5f;
-
-    [SerializeField] private bool IsDontDestroyOnLoad;
-
-    private float _width;
-    private float _height;
-    private float _x;
-    private float _y;
-    private string _myLog = "";
-    private string _output;
-    private bool _isEnabled;
-    private Coroutine _coroutine;
-    private Color _textColor;
+    [Range(0f, 10f)] [SerializeField] 
+    private float delayUpdate = 2.5f;
+    [SerializeField] 
+    private int fontSize = 18;
+    [SerializeField] 
+    private int scrollSpeed = 1;
+    [SerializeField] 
+    private bool isDontDestroyOnLoad;
+    
+    private float width;
+    private float height;
+    private float x;
+    private float y;
+    private string myLog = "";
+    private bool isEnabled;
+    private Vector2 scrollPosition;
+    
+    private readonly object logLock = new();
+    private readonly System.Text.StringBuilder logBuilder = new();
 
     private void OnEnable()
     {
         Application.logMessageReceived += Log;
-
-        _coroutine = StartCoroutine(StartLog());
-
-        if (IsDontDestroyOnLoad)
+        if (isDontDestroyOnLoad)
             DontDestroyOnLoad(gameObject);
 
-        _width = Screen.width / 4;
-        _height = Screen.height / 2;
-        _x = Screen.width / 1.7f;
-        _y = 10;
+        width = Screen.width / 3;
+        height = Screen.height / 2;
+        x = Screen.width - width - 20;
+        y = 10;
     }
 
     private void OnDisable()
@@ -42,68 +43,56 @@ public class DebugWindow : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            _isEnabled = !_isEnabled;
-        }
-    }
-
-    private IEnumerator StartLog()
-    {
-        while (true)
-        {
-            //Debug.Log(_myLog);
-
-            yield return new WaitForSeconds(delayUpdate);
+            isEnabled = !isEnabled;
         }
     }
 
     private void Log(string logString, string stackTrace, LogType type)
     {
-        _output = type switch
+        Color logColor = type switch
         {
-            LogType.Error => $"{logString}",
-            LogType.Assert => $"{logString}",
-            LogType.Warning => $"{logString}",
-            LogType.Log => $"{logString}",
-            LogType.Exception => $"{logString}",
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            LogType.Error => Color.red,
+            LogType.Assert => Color.yellow,
+            LogType.Warning => Color.yellow,
+            LogType.Log => Color.white,
+            LogType.Exception => Color.red,
+            _ => Color.white
         };
 
-        switch (type)
+        lock (logLock)
         {
-            case LogType.Error:
-                _textColor = Color.red;
-                break;
-            case LogType.Assert:
-                _textColor = Color.yellow;
-                break;
-            case LogType.Warning:
-                _textColor = Color.yellow;
-                break;
-            case LogType.Log:
-                _textColor = Color.white;
-                break;
-            case LogType.Exception:
-                _textColor = Color.red;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
-
-        _myLog = $"{_output}\n{_myLog}";
-        if (_myLog.Length > 5000)
-        {
-            _myLog = _myLog[..4000];
+            logBuilder.AppendLine($"<color=#{ColorUtility.ToHtmlStringRGB(logColor)}>{logString}</color>");
+            if (logBuilder.Length > 5000)
+            {
+                logBuilder.Remove(0, logBuilder.Length - 4000);
+            }
+            myLog = logBuilder.ToString();
         }
     }
 
     private void OnGUI()
     {
-        if (!_isEnabled)
+        if (!isEnabled)
             return;
 
-        GUIStyle style = new GUIStyle(GUI.skin.textArea);
-        style.normal.textColor = _textColor;
+        GUIStyle textStyle = new GUIStyle(GUI.skin.label)
+        {
+            richText = true,
+            fontSize = fontSize,
+            alignment = TextAnchor.UpperLeft,
+            wordWrap = true
+        };
 
-        _myLog = GUI.TextArea(new Rect(_x, _y, _width, _height), _myLog, style);
+        GUILayout.BeginArea(new Rect(x, y, width, height), GUI.skin.box);
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Width(width), GUILayout.Height(height));
+        GUILayout.Label(myLog, textStyle);
+        GUILayout.EndScrollView();
+        GUILayout.EndArea();
+
+        // Автопрокрутка вниз без наложения текста
+        if (Event.current.type == EventType.Repaint)
+        {
+            scrollPosition.y = Mathf.Max(0, float.MaxValue);
+        }
     }
 }

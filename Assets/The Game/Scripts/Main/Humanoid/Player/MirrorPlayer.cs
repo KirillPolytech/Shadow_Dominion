@@ -17,15 +17,13 @@ namespace Shadow_Dominion.Main
         private Transform _ragdollTransform;
         private Rigidbody _ragdollRb;
         private CameraLook _cameraLook;
-        private BoneController[] _bones;
 
         public void Construct(
             Transform animTransform,
             Rigidbody animRb,
             Transform ragdollTransform,
             PlayerStateMachine playerStateMachine,
-            CameraLook cameraLook,
-            BoneController[] bones)
+            CameraLook cameraLook)
         {
             AnimTransform = animTransform;
             _ragdollTransform = ragdollTransform;
@@ -33,7 +31,6 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
-            _bones = bones;
             
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }
@@ -56,24 +53,17 @@ namespace Shadow_Dominion.Main
             // Debug.LogWarning($"name: {_rigidbody.gameObject.name}, pos: {_rigidbody.position}, rot: {rot.eulerAngles}");
         }
 
-        public void SetCameraRotation(Quaternion rot)
-        {
-            _cameraLook.SetRotation(rot);
-        }
-
         public void SetRagdollPositionAndRotation(Vector3 pos, Quaternion rot)
         {
-            //SetRagdollVisibility(false);
             _ragdollRb.transform.position = pos;
             _ragdollRb.transform.rotation = rot;
-            //SetRagdollVisibility(true);
             
             Debug.Log($"Ragdoll new pos: {_ragdollRb.transform.position}");
         }
-
-        public void SetRagdollVisibility(bool isVisible)
+        
+        public void SetCameraRotation(Quaternion rot)
         {
-            //_ragdollRb.gameObject.SetActive(isVisible);
+            _cameraLook.SetRotation(rot);
         }
 
         #region Server

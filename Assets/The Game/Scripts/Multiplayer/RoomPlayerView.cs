@@ -45,9 +45,12 @@ public class RoomPlayerView : MonoBehaviour
             
             //Debug.Log("[Client] ButtonPressed");
         };
+        
+        readyButton.onClick.AddListener(_onButtonPressed);
     }
 
     public void SetName(string pName) => playerName.text = pName;
+    public void SetNameColor(Color color) => playerName.color = color;
 
     public void SetButtonState(bool state)
     {

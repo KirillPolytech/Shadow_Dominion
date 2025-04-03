@@ -29,13 +29,13 @@ namespace Shadow_Dominion
             
             foreach (var viewData in playerViewData)
             {
-                SpawnView(viewData.Nick);
+                SpawnView(viewData);
             }
         }
 
-        private void SpawnView(string nick)
+        private void SpawnView(PlayerViewData playerViewData)
         {
-            var keyValuePairs = _views.FirstOrDefault(x => x.Key == nick);
+            var keyValuePairs = _views.FirstOrDefault(x => x.Key == playerViewData.Nick);
 
             if (keyValuePairs.Equals(null))
                 return;
@@ -47,14 +47,17 @@ namespace Shadow_Dominion
             rectTransform.localScale = Vector3.one;
             rectTransform.anchoredPosition3D = Vector3.zero;
             rectTransform.position = Vector3.zero;
+            rectTransform.localRotation = Quaternion.identity;
             rectTransform.localPosition = Vector3.zero;
 
-            instance.SetName(nick);
+            instance.SetName(playerViewData.Nick);
+            instance.SetButtonState(playerViewData.IsReady);
+            instance.SetNameColor(UserData.Instance.Nickname == playerViewData.Nick ? Color.green : Color.white);
 
-            bool isAdded = _views.TryAdd(nick, instance);
+            bool isAdded = _views.TryAdd(playerViewData.Nick, instance);
 
             if (!isAdded)
-                Debug.LogWarning($"Cant add value by key: {nick}");
+                Debug.LogWarning($"Cant add value by key: {playerViewData.Nick}");
         }
 
         private void DispawnView()
@@ -66,13 +69,6 @@ namespace Shadow_Dominion
             }
             
             _views.Clear();
-        }
-
-        public void IsReady(string nick, bool state)
-        {   
-            _views[nick].SetButtonState(state);
-            
-            Debug.Log($"{nick} IsReady: {state}");
         }
     }
 }

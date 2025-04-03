@@ -36,7 +36,6 @@ namespace Shadow_Dominion
         private Vector3 _ragdollPos;
         private Quaternion _ragdollRot;
 
-        private const float _fireDelay = 0.1f;
         private float _fireDelayTimer;
 
         public void Construct(
@@ -60,9 +59,9 @@ namespace Shadow_Dominion
             RotateTo();
             CastRay();
             
-            _fireDelayTimer = Mathf.Clamp(_fireDelayTimer + Time.deltaTime, 0 , _fireDelay + 1);
+            _fireDelayTimer = Mathf.Clamp(_fireDelayTimer + Time.deltaTime, 0 , _weaponSo.FireDelay + 1);
             
-            if (!inputData.LeftMouseButton || _fireDelayTimer < _fireDelay)
+            if (!inputData.LeftMouseButton || _fireDelayTimer < _weaponSo.FireDelay)
                 return;
 
             _fireDelayTimer = 0;

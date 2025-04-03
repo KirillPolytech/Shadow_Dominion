@@ -5,43 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72c9e15c-a76d-4d67-b223-d30987356212" name="Changes" comment="">
+<<<<<<< Updated upstream
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Models/20250116_001_RC_LOD0/20250116_001_RC_LOD0.obj.meta" beforeDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shadow_Dominion/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/Mirror Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Humanoid/Mirror Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/RoomViewPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/PlayerListing/RoomViewPrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/SO/PIDData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/SO/PIDData.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Level.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Level.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Prefab/Menu/MenuCanvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Prefab/Menu/MenuCanvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Offline.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scenes/Menu Online.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/KillFeedView.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/KillFeedView.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/BoneData/BoneController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/BoneData/BoneController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/CoroutineExecuter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/CoroutineExecuter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Gun/Ak47.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Gun/Ak47.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/CameraLook.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/CameraLook.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/MirrorPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/MirrorPlayer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/DefaultState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/DefaultState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/InActiveState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/InActiveState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PauseMenuState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PauseMenuState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PlayerStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/PlayerStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/RagdollState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/RagdollState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/StandUpFaceDownState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/StandUpFaceDownState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/StandUpFaceUpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/Humanoid/Player/PlayerStateMachine/StandUpFaceUpState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/FinishState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/FinishState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/GameplayState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/GameplayState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelInitializeState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelInitializeState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/LevelStateMachine/LevelStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/LevelPlayerListing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/LevelPlayerListing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorLevelSyncer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorLevelSyncer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayerInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayerInstaller.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayersSyncer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorPlayersSyncer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/MirrorServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/SpawnPointSyncer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/SpawnPointSyncer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/MirrorShootHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/MirrorShootHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/RoomPlayerView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/LevelPlayerView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/LevelPlayerView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,13 +29,19 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13c0c460649d4ce49f991e2c222fa63546ae00/82/9569afe1/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13c0c460649d4ce49f991e2c222fa63546ae00/9e/287caf3c/ValueType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13c0c460649d4ce49f991e2c222fa63546ae00/cf/5e8fca21/RuntimeConstructorInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/23/a90699de/Int32.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/41/54895cbc/Void.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/612ea0208cc847f49d539e6511ed3cd51df400/9d/95cbbebe/Object.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/625a8efa9584467e83a7a5516b99a6c92ac00/93/997e3827/ConfigurableJoint.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ae67de414c34a0397e0ee5801c5da5a10fc00/00/644b9caa/Enumerable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/RoundSystem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/Settings/ApplicationSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/Settings/ResolutionDropDown.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/UI/QuitButton.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Level/FinishWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Menu/AudioWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Menu/NickInputWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/Menu/SettingsWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/GameStateManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/LevelPlayerListing.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/Mirror/UserData.cs" root0="FORCE_HIGHLIGHTING" />
@@ -79,6 +56,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@b2e7bffab772/Runtime/Core/CinemachineComponentBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@b2e7bffab772/Runtime/Core/LookaheadSettings.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@b2e7bffab772/Runtime/Helpers/CinemachineInputAxisController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@9496653a3df6/Runtime/TMP/TMP_Dropdown.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@9496653a3df6/Runtime/UGUI/UI/Core/Button.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@9496653a3df6/Runtime/UGUI/UI/Core/Selectable.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -112,7 +90,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$USER_HOME$/Downloads/New folder\Shadow Dominion.exe" />
+      <option name="EXE_PATH" value="$USER_HOME$/Downloads/Shadow_Dominion\Shadow Dominion.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Admin\Downloads\Test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -145,10 +123,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="15872">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="15872" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -272,6 +250,10 @@
       <workItem from="1743198868023" duration="9936000" />
       <workItem from="1743213368187" duration="3073000" />
       <workItem from="1743360584293" duration="2083000" />
+      <workItem from="1743437390034" duration="8405000" />
+      <workItem from="1743482716340" duration="3046000" />
+      <workItem from="1743537708954" duration="2974000" />
+      <workItem from="1743542858527" duration="9086000" />
     </task>
     <servers />
   </component>
@@ -305,17 +287,17 @@
           <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Multiplayer/UI/KillFeed.cs</url>
-          <line>15</line>
-          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Multiplayer\UI\KillFeed.cs" containingFunctionPresentation="Method 'AddFeed'">
+          <url>file://$PROJECT_DIR$/Assets/The Game/Scripts/Main/WindowsController/WindowsController.cs</url>
+          <line>24</line>
+          <properties documentPath="F:\Unity\Shadow_Dominion\Assets\The Game\Scripts\Main\WindowsController\WindowsController.cs" containingFunctionPresentation="Method 'Start'">
             <startOffsets>
-              <option value="439" />
+              <option value="634" />
             </startOffsets>
             <endOffsets>
-              <option value="485" />
+              <option value="713" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="129" />
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -8,7 +8,7 @@ namespace Shadow_Dominion
     public class CameraLook : NetworkBehaviour
     {
         private const int HalfCircleAngle = 180;
-        
+
         public Transform CameraTransform { get; private set; }
         public Vector3 HitPoint { get; private set; }
 
@@ -40,7 +40,7 @@ namespace Shadow_Dominion
             _cinemachinePositionType = cinemachinePositionType as CinemachineOrbitalFollow;
             _cinemachineRotationType = cinemachineRotationType as CinemachineRotationComposer;
             _cinemachineInputAxisController = cinemachineInputAxisController;
-            
+
             _camera = GetComponent<Camera>();
 
             _monoInputHandler.OnInputUpdate += HandleInput;
@@ -72,9 +72,9 @@ namespace Shadow_Dominion
             _rightMouseValue = inputData.RightMouseButton ? 1 : 0;
         }
 
-        public void CanRotate(bool canRotate)=>
+        public void CanRotate(bool canRotate) =>
             _cinemachineInputAxisController.enabled = canRotate;
-        
+
         private void Zooming()
         {
             if (!CanZooming || !_cinemachinePositionType)
@@ -104,7 +104,9 @@ namespace Shadow_Dominion
 
         public void SetRotation(Quaternion rot)
         {
-            _cinemachinePositionType.HorizontalAxis.Value = Quaternion.Angle(transform.rotation, rot) - HalfCircleAngle;
+            float rotAngle = Quaternion.Angle(transform.localRotation, rot);
+            float direction = Mathf.Sign(Vector3.SignedAngle(transform.localRotation * Vector3.forward, rot * Vector3.forward, Vector3.up));
+            _cinemachinePositionType.HorizontalAxis.Value += direction * rotAngle;
         }
 
         private void OnDrawGizmos()

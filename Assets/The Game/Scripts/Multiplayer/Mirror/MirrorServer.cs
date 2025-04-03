@@ -118,8 +118,7 @@ namespace Shadow_Dominion
 
             Debug.Log($"[Server] OnStartHost {networkAddress}");
         }
-
-        [Server]
+        
         public override void OnStopHost()
         {
             base.OnStopHost();

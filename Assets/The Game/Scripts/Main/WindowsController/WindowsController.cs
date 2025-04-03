@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace WindowsSystem
 {
@@ -8,22 +11,45 @@ namespace WindowsSystem
         [SerializeField] protected Window[] windows;
 
         public Window Current { get; private set; }
+        
+        private const string OpenTransitionName = "Open";
+        private const string ClosedStateName = "Closed";
+    
+        public Window initiallyOpen;
 
+        private int _openParameterId;
+        private GameObject _previouslySelected;
+        
         protected void Start()
         {
-            Current = windows.FirstOrDefault(x => x.GetType() == typeof(MainWindow));
-
-            //OpenWindow(Current);
+            _openParameterId = Animator.StringToHash(OpenTransitionName);
+            
+            if (initiallyOpen)
+                OpenWindow(initiallyOpen);
         }
 
         public void OpenWindow(Window window)
         {
-            foreach (Window m in windows.Where(x => x.IsOpened))
-                m.Close();
-
+            if (Current == window)
+                return;
+            
             window.Open();
-            Current = window;
+            
+            GameObject newPreviouslySelected = EventSystem.current.currentSelectedGameObject;
 
+            window.Animator.transform.SetAsLastSibling();
+
+            CloseCurrent();
+            
+            _previouslySelected = newPreviouslySelected;
+
+            Current = window;
+            Current.Animator.SetBool(_openParameterId, true);
+
+            GameObject go = FindFirstEnabledSelectable(window.Animator.gameObject);
+
+            SetSelected(go);
+            
 #if UNITY_EDITOR
             Debug.Log($"Window open: {window.GetType()}");
 #endif
@@ -31,28 +57,59 @@ namespace WindowsSystem
 
         public void OpenWindow<T>() where T : Window
         {
-            foreach (Window m in windows.Where(x => x.IsOpened))
-                m.Close();
-
             Window window = windows.FirstOrDefault(x => x.GetType() == typeof(T));
-
-            window.Open();
-            Current = window;
-
-#if UNITY_EDITOR
-            Debug.Log($"Window open: {window.GetType()}");
-#endif
+            
+            OpenWindow(window);
         }
 
         public void CloseCurrent()
         {
-            if (Current == null)
+            if (!Current)
                 return;
 
-            //Window window = windows.Single(x => x.WindowName == Current);
-            //window.Close();
-
+            Current.Animator.SetBool(_openParameterId, false);
+            SetSelected(_previouslySelected);
+            StartCoroutine(DisablePanelDelayed(Current));
             Current = null;
+        }
+        
+        private IEnumerator DisablePanelDelayed(Window window)
+        {
+            bool closedStateReached = false;
+            bool wantToClose = true;
+            while (!closedStateReached && wantToClose)
+            {
+                if (!window.Animator.IsInTransition(0))
+                    closedStateReached = window.Animator.GetCurrentAnimatorStateInfo(0).IsName(ClosedStateName);
+
+                wantToClose = !window.Animator.GetBool(_openParameterId);
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            if (wantToClose)
+                window.Close();
+        }
+
+        private void SetSelected(GameObject go)
+        {
+            EventSystem.current.SetSelectedGameObject(go);
+        }
+        
+        private GameObject FindFirstEnabledSelectable(GameObject obj)
+        {
+            GameObject go = null;
+            var selectables = obj.GetComponentsInChildren<Selectable>(true);
+            foreach (var selectable in selectables)
+            {
+                if (selectable.IsActive() && selectable.IsInteractable())
+                {
+                    go = selectable.gameObject;
+                    break;
+                }
+            }
+
+            return go;
         }
     }
 }
