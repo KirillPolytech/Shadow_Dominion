@@ -16,11 +16,14 @@ MonoBehaviour:
   RunSpeed: 1700
   MaxWalkSpeed: 3
   MaxRunSpeed: 4
+  JumpForce: 30000
   RotSpeed: 5
   AimRigWeightChange: 3.5
-  CanMove: 1
-  CanRotate: 1
   Approximation: 0.01
   RagdollDelay: 2
   MoveAnimToRagdollTime: 1
   StopDistance: 0.25
+  FallRayMask:
+  - Ragdoll
+  - Animation
+  GroundCheckDistance: 1.5

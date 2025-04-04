@@ -89,8 +89,6 @@ namespace Shadow_Dominion.Player.StateMachine
             _inputHandler.OnInputUpdate -= HandleTABInput;
             _inputHandler.OnInputUpdate -= HandleDeathKeyInput;
             _inputHandler.OnInputUpdate -= _ak47.HandleInput;
-
-            _playerMovement.IsRunning = false;
         }
 
         public override bool CanExit() => true;

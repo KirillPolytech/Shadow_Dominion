@@ -2,12 +2,9 @@ using UnityEngine;
 
 public class DebugWindow : MonoBehaviour
 {
-    [Range(0f, 10f)] [SerializeField] 
-    private float delayUpdate = 2.5f;
     [SerializeField] 
     private int fontSize = 18;
-    [SerializeField] 
-    private int scrollSpeed = 1;
+    
     [SerializeField] 
     private bool isDontDestroyOnLoad;
     

@@ -7,6 +7,7 @@ using Shadow_Dominion.Main;
 using Shadow_Dominion.Network;
 using Shadow_Dominion.Player;
 using Shadow_Dominion.Player.StateMachine;
+using Shadow_Dominion.StateMachine;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -193,7 +194,7 @@ namespace Shadow_Dominion
                     OnCollision(
                         ind,
                         playerStateMachine,
-                        playerMovement.IsRunning,
+                        playerMovement.MovementMachine.CurrentState.GetType() == typeof(RunState),
                         killerName,
                         MirrorPlayersSyncer.Instance.LocalPlayer.Nick);
                 };

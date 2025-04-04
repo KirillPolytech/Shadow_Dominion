@@ -8,15 +8,13 @@ public class PlayerSettings : ScriptableObject
     [Space]
     public float MaxWalkSpeed;
     public float MaxRunSpeed;
+    
+    public float JumpForce = 20;
+    
     [Space]
     public float RotSpeed = 5;
     public float AimRigWeightChange = 3.5f;
-
-    [Space]
-    public bool CanMove = true;
-
-    public bool CanRotate = true;
-
+    
     [Space]
     public float Approximation = 0.01f;
     
@@ -30,4 +28,6 @@ public class PlayerSettings : ScriptableObject
     public float StopDistance = 0.25f;
         
     public string[] FallRayMask = {"Ragdoll", "Animation"};
+    
+    public float GroundCheckDistance = 1.5f;
 }

@@ -27,9 +27,6 @@ namespace Shadow_Dominion.InputSystem
             _inputData.MouseX = Input.GetAxis(VariableNames.MouseY);
 
             _inputData.LeftShift = Input.GetKey(VariableNames.LeftShiftKey);
-            _inputData.E = Input.GetKey(VariableNames.E);
-            _inputData.E_Down = Input.GetKeyDown(VariableNames.E);
-            _inputData.E_Up = Input.GetKeyUp(VariableNames.E);
             
             _inputData.T = Input.GetKey(VariableNames.T);
             _inputData.F_Down = Input.GetKeyDown(VariableNames.F);
@@ -45,11 +42,9 @@ namespace Shadow_Dominion.InputSystem
             _inputData.MouseWheelScroll = Input.mouseScrollDelta.y;
             
             _inputData.TAB = Input.GetKeyDown(KeyCode.Tab);
-            
             _inputData.LeftALT = Input.GetKey(KeyCode.LeftAlt);
-            
             _inputData.LeftCTRL = Input.GetKey(KeyCode.LeftControl);
-            
+            _inputData.SPACE_DOWN = Input.GetKeyDown(KeyCode.Space);
             _inputData.ESC = Input.GetKeyDown(KeyCode.Escape);
 
             OnInputUpdate?.Invoke(_inputData);

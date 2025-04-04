@@ -21,6 +21,8 @@ namespace Shadow_Dominion
         public void IsSpringApplying(bool isSpringApplying) => CurrentSpringState = isSpringApplying;
 
         public float CurrentPositionSpring => _configurableJoint.xDrive.positionSpring;
+        
+        public void IsKinematic(bool isKinematic) => _rigidbody.isKinematic = isKinematic;
 
         public BoneSettings BoneSettings;
 

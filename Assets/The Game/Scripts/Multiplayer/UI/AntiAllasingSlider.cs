@@ -23,6 +23,7 @@ public class AntiAllasingSlider : Slider
 
     private void OnValueChanged(float v)
     {
-        _applicationSettings.SetMSAA((int)(v % 2));
+        value = v - v % 2;
+        _applicationSettings.SetMSAA((int)value);
     }
 }

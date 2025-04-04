@@ -4,7 +4,7 @@ namespace Shadow_Dominion.StateMachine
 {
     public abstract class IStateMachine
     {
-        protected readonly List<IState> _states = new List<IState>();
+        protected readonly List<IState> _states = new();
         
         public IState CurrentState { get; protected set; }
         

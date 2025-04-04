@@ -58,6 +58,8 @@ namespace Shadow_Dominion
                 return;
 
             UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
+
+            _deadPlayers = 0;
         }
         
         [Server]

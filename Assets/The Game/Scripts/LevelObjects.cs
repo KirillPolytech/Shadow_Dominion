@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Shadow_Dominion.StateMachine;
 using UnityEngine;
 using Zenject;
 
@@ -8,15 +9,14 @@ namespace Shadow_Dominion
     public class LevelObjects : MonoBehaviour
     {
         private List<Transform> _objects;
-        private LevelSO _levelSo;
-        private float _timer, _timeToSpawn;
+        private LevelStateMachine _levelStateMachine;
 
         private int _ind;
-        
+
         [Inject]
-        public void Construct(LevelSO levelSo)
+        public void Construct(LevelStateMachine levelStateMachine)
         {
-            _levelSo = levelSo;
+            _levelStateMachine = levelStateMachine;
         }
 
         private void Awake()
@@ -24,27 +24,35 @@ namespace Shadow_Dominion
             _objects = GetComponentsInChildren<Transform>().ToList();
             _objects.Remove(transform);
 
-            _timeToSpawn = (float)_levelSo.InitializeWaitTime / _objects.Count;
-            
             foreach (var o in _objects)
             {
                 o.gameObject.SetActive(false);
             }
+
+            _levelStateMachine.OnStateChanged += OnStateChanged;
         }
 
-        private void FixedUpdate()
+        private void OnDestroy()
         {
-            if (_ind >= _objects.Count)
-                return;
-            
-            _timer += Time.fixedDeltaTime;
-            
-            if (_timer < _timeToSpawn)
-                return;
-            
-            _objects[_ind++].gameObject.SetActive(true);
+            _levelStateMachine.OnStateChanged -= OnStateChanged;
+        }
 
-            _timer = 0;
+        private void OnStateChanged(IState state)
+        {
+            if (state.GetType() == typeof(GameplayState))
+            {
+                foreach (var VARIABLE in _objects)
+                {
+                    VARIABLE.gameObject.SetActive(true);
+                }
+
+                return;
+            }
+
+            foreach (var VARIABLE in _objects)
+            {
+                VARIABLE.gameObject.SetActive(false);
+            }
         }
     }
 }

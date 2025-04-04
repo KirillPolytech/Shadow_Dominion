@@ -13,6 +13,7 @@ namespace Shadow_Dominion.Main
         public PlayerStateMachine PlayerStateMachine;
         
         public Transform AnimTransform { get; private set; }
+        public Transform RagdollTransform { get; private set; }
         private Rigidbody _animRb;
         private Transform _ragdollTransform;
         private Rigidbody _ragdollRb;
@@ -31,6 +32,7 @@ namespace Shadow_Dominion.Main
             PlayerStateMachine = playerStateMachine;
             _cameraLook = cameraLook;
             _ragdollRb = _ragdollTransform.GetComponent<Rigidbody>();
+            RagdollTransform = _ragdollTransform;
             
             PlayerStateMachine.OnStateChanged += CmdSetState;
         }

@@ -50,8 +50,7 @@ namespace Shadow_Dominion.StateMachine
             _currentTime += Time.fixedDeltaTime;
             _initializeStateUI.SetWaitText($"Match starts in {_levelSO.InitializeWaitTime - (int)_currentTime}");
             
-            if (_currentTime < _levelSO.InitializeWaitTime || 
-                MirrorServer.Instance.SpawnedPlayerInstances.Count < MirrorPlayersSyncer.Instance.Connections.Count)
+            if (_currentTime < _levelSO.InitializeWaitTime)
                 return;
             
             _levelStateMachine.SetState<GameplayState>();

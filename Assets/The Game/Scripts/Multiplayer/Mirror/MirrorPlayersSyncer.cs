@@ -14,7 +14,6 @@ namespace Shadow_Dominion
         public readonly List<NetworkConnectionToClient> Connections = new();
 
         public event Action OnAllPlayersLoadedOnLevel;
-        public event Action OnAllPlayersReady;
         public PlayerViewData[] Players => _playersViewData.ToArray();
         public PlayerViewData LocalPlayer => _playersViewData.First(x => UserData.Instance.Nickname == x.Nick);
 

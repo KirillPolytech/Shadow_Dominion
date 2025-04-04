@@ -7,11 +7,20 @@ namespace Shadow_Dominion.Player.StateMachine
     {
         private readonly Main.MirrorPlayer _mirrorPlayer;
         private readonly CameraLook _cameraLook;
+
+        private Vector3 _freePos;
+        private Quaternion _rot;
         
-        public InActiveState(Main.MirrorPlayer mirrorPlayer, PlayerAnimation playerAnimation, CameraLook cameraLook) : base(playerAnimation)
+        public InActiveState(
+            Main.MirrorPlayer mirrorPlayer, 
+            PlayerAnimation playerAnimation, 
+            CameraLook cameraLook) : base(playerAnimation)
         {
             _mirrorPlayer = mirrorPlayer;
             _cameraLook = cameraLook;
+            
+            _freePos = SpawnPointSyncer.Instance.GetFreePosition(MirrorPlayersSyncer.Instance.LocalPlayer.ID);
+            _rot = SpawnPointSyncer.Instance.CalculateRotation(_freePos);
         }
         
         public override void Enter()

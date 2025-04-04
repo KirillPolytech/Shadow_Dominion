@@ -10,10 +10,6 @@ namespace Shadow_Dominion.InputSystem
         public float VerticalAxisRaw;
         public bool LeftShift;
         
-        public bool E_Down;
-        public bool E_Up;
-        public bool E;
-        
         public bool T;
         public bool F_Down;
         
@@ -26,10 +22,9 @@ namespace Shadow_Dominion.InputSystem
         public bool RightMouseButtonUp;
         
         public bool TAB;
-        
         public bool LeftALT;
-        
         public bool LeftCTRL;
+        public bool SPACE_DOWN;
         
         public bool ESC;
     }
