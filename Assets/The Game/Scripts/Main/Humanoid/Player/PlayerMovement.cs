@@ -50,6 +50,21 @@ namespace Shadow_Dominion.Main
             MovementMachine.CurrentState?.Update(data);
         }
         
+        public void Rotate(InputData data)
+        {
+            if (data.LeftALT)
+                return;
+
+            Vector3 transformForward =
+                new Vector3(_cameraLook.CameraTransform.forward.x, 0, _cameraLook.CameraTransform.forward.z);
+
+            Quaternion rot = Quaternion.Lerp(_charRigidbody.rotation,
+                Quaternion.LookRotation(transformForward),
+                _playerSettings.RotSpeed * Time.fixedDeltaTime);
+
+            _charRigidbody.MoveRotation(rot);
+        }
+        
         public bool OnGround()
         {
             Ray ray = new Ray(_charRigidbody.position + Vector3.up, Vector3.down);

@@ -30,6 +30,12 @@ namespace Shadow_Dominion
         [FormerlySerializedAs("gameStateManager")] [SerializeField]
         private GameStateManager gameStateManagerPrefab;
         
+        [SerializeField]
+        private KillFeedSyncer killFeedSyncerPrefab;
+        
+        [SerializeField]
+        private MirrorTimerSyncer mirrorTimerSyncerPrefab;
+        
         public event Action ActionOnHostStart;
         public event Action ActionOnHostStop;
         public event Action ActionOnServerAddPlayer;
@@ -38,6 +44,7 @@ namespace Shadow_Dominion
         public event Action<NetworkConnectionToClient> ActionOnServerDisconnectWithArg;
         public event Action ActionOnServerDisconnect;
         public event Action ActionOnServerSceneChanged;
+        public event Action<string> ActionOnServerSceneChangedWithArg;
         
         public event Action ActionOnStartClient;
         public event Action ActionOnStopClient;
@@ -82,10 +89,14 @@ namespace Shadow_Dominion
             GameObject mirrorPlayerStateSyncer = Instantiate(mirrorPlayerStateSyncerPrefab.gameObject);
             GameObject spawnPointSyncer = Instantiate(spawnPointSyncerPrefab.gameObject);
             GameObject gameStateManager = Instantiate(gameStateManagerPrefab.gameObject);
+            GameObject killFeedSyncer = Instantiate(killFeedSyncerPrefab.gameObject);
+            GameObject mirrorTimerSyncer = Instantiate(mirrorTimerSyncerPrefab.gameObject);
             
             NetworkServer.Spawn(mirrorPlayerStateSyncer);
             NetworkServer.Spawn(spawnPointSyncer);
             NetworkServer.Spawn(gameStateManager);
+            NetworkServer.Spawn(killFeedSyncer);
+            NetworkServer.Spawn(mirrorTimerSyncer);
         }
 
         private void OnAnyChange() => ActionOnAnyChange?.Invoke();
@@ -217,6 +228,7 @@ namespace Shadow_Dominion
             base.OnServerSceneChanged(sceneName);
 
             ActionOnServerSceneChanged?.Invoke();
+            ActionOnServerSceneChangedWithArg?.Invoke(sceneName);
         }
 
         #endregion

@@ -28,6 +28,7 @@ public class PlayerSettings : ScriptableObject
     public float StopDistance = 0.25f;
         
     public string[] FallRayMask = {"Ragdoll", "Animation"};
+    public string ShootMask = "Animation";
     
     public float GroundCheckDistance = 1.5f;
 }

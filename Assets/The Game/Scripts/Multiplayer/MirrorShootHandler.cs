@@ -9,11 +9,13 @@ namespace Shadow_Dominion.Network
         private const int ShootRange = 500;
 
         private Ak47 _ak47;
+        private PlayerSettings _playerSettings;
         private Action<Vector3, Vector3> _cachedOnFire;
 
-        public void Construct(Ak47 ak47)
+        public void Construct(Ak47 ak47, PlayerSettings playerSettings)
         {
             _ak47 = ak47;
+            _playerSettings = playerSettings;
 
             _cachedOnFire = (origin, direction) => CmdCastRay(UserData.Instance.Nickname, origin, direction);
 

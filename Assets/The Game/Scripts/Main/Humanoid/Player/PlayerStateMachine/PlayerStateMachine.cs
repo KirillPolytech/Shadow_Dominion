@@ -23,6 +23,7 @@ namespace Shadow_Dominion.Player.StateMachine
         private readonly BoneController[] _boneControllers;
         private readonly IInputHandler _inputHandler;
         private readonly PlayerSettings _playerSettings;
+        private readonly WindowsController _windowsController;
 
         public new PlayerState CurrentState { get; protected set; }
 
@@ -53,6 +54,7 @@ namespace Shadow_Dominion.Player.StateMachine
             _boneControllers = boneControllers;
             _inputHandler = inputHandler;
             _playerSettings = playerSettings;
+            _windowsController = windowsController;
 
             DefaultState defaultState = new DefaultState(playerAnimation, playerMovement, inputHandler,
                 windowsController, boneControllers, rootRig, cameraLook, ak47, this);
@@ -89,7 +91,7 @@ namespace Shadow_Dominion.Player.StateMachine
 
         private void HandleInput(InputData inputData)
         {
-            if (!inputData.ESC)
+            if (!inputData.ESC || _windowsController.Current.GetType() == typeof(InitializeWindow))
                 return;
 
             if (CurrentState.GetType() != typeof(PauseMenuState))

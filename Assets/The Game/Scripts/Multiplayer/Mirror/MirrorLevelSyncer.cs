@@ -7,6 +7,8 @@ namespace Shadow_Dominion
 {
     public class MirrorLevelSyncer : Singleton<MirrorLevelSyncer>
     {
+        public Action<LevelState> OnUpdate;   
+        
         private LevelStateMachine _levelStateMachine;
         
         public MirrorLevelSyncer(LevelStateMachine levelStateMachine)
@@ -22,11 +24,20 @@ namespace Shadow_Dominion
         public void Initialize(LevelStateMachine levelStateMachine)
         {
             _levelStateMachine = levelStateMachine;
+
+            _levelStateMachine.OnStateChanged += OnStateUpdate;
         }
 
         ~MirrorLevelSyncer()
         {
             Instance = null;
+            
+            _levelStateMachine.OnStateChanged -= OnStateUpdate;
+        }
+
+        private void OnStateUpdate(IState state)
+        {
+            OnUpdate?.Invoke(new LevelState(state.GetType().ToString()));
         }
         
         public void SetState(LevelState newState)

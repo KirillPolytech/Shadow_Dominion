@@ -178,7 +178,7 @@ namespace Shadow_Dominion
             aimTarget.Construct(cameraLook);
             playerMovement.Construct(playerSettings, AnimRigidbody, cameraLook, playerAnimation, playerStateMachine);
             ak47.Construct(aim, weaponSO);
-            mirrorShootHandler.Construct(ak47);
+            mirrorShootHandler.Construct(ak47, playerSettings);
             
             for (int i = 0; i < copyFrom.Length; i++)
             {
@@ -244,8 +244,7 @@ namespace Shadow_Dominion
                 && playerStateMachine.CurrentState.GetType() != typeof(StandUpFaceUpState))
             {
                 playerStateMachine.SetState<DeathState>();
-                KillFeed.Instance.AddFeed(killerName, victimName);
-                
+                KillFeedSyncer.Instance.AddFeed(killerName, victimName);
                 MirrorPlayersSyncer.Instance.UpdateView(killerName);
             }
 

@@ -41,7 +41,7 @@ namespace Shadow_Dominion.StateMachine
         {
             HandleAnim(inputData);
             Walk(inputData.HorizontalAxisRaw, inputData.VerticalAxisRaw);
-            Rotate(inputData);
+            _playerMovement.Rotate(inputData);
             if (!_playerMovement.OnGround())
             {
                 _playerStateMachine.SetState<RagdollState>();
@@ -92,21 +92,6 @@ namespace Shadow_Dominion.StateMachine
             _playerAnimation.AnimationStateMachine.IsCrouching(data.LeftCTRL);
 
             // Debug.Log($"magnitude: {magnitude} " + $"x = {dir.x * magnitude} / {_playerSettings.RunSpeed} " + $"y = {dir.y * magnitude} / {_playerSettings.RunSpeed}");
-        }
-
-        private void Rotate(InputData data)
-        {
-            if (data.LeftALT)
-                return;
-
-            Vector3 transformForward =
-                new Vector3(_cameraLook.CameraTransform.forward.x, 0, _cameraLook.CameraTransform.forward.z);
-
-            Quaternion rot = Quaternion.Lerp(_charRigidbody.rotation,
-                Quaternion.LookRotation(transformForward),
-                _playerSettings.RotSpeed * Time.fixedDeltaTime);
-
-            _charRigidbody.MoveRotation(rot);
         }
 
         public override void Exit()

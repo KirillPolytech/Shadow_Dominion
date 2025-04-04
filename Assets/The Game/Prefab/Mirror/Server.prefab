@@ -164,6 +164,8 @@ MonoBehaviour:
   - {fileID: 877082567820752014, guid: 95f49624fc8387047a832f857fb24c97, type: 3}
   - {fileID: 3653292593419840786, guid: 1d29f6c8f7ef96e41ae59d67f4e03d4d, type: 3}
   - {fileID: 3013529344223534769, guid: 59e0204823655994393955836f1a5aed, type: 3}
+  - {fileID: 6074101709332558442, guid: f879a5887c76c6744a467094512c8168, type: 3}
+  - {fileID: 4517096828199832684, guid: 4f574721fb3b8e44ba5e674bfd54bf0a, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -189,6 +191,8 @@ MonoBehaviour:
   mirrorPlayerStateSyncerPrefab: {fileID: 1854119950054947312, guid: 95f49624fc8387047a832f857fb24c97, type: 3}
   spawnPointSyncerPrefab: {fileID: 8076761739462144825, guid: 1d29f6c8f7ef96e41ae59d67f4e03d4d, type: 3}
   gameStateManagerPrefab: {fileID: 7723140383660258017, guid: 59e0204823655994393955836f1a5aed, type: 3}
+  killFeedSyncerPrefab: {fileID: 1959442740366764272, guid: f879a5887c76c6744a467094512c8168, type: 3}
+  mirrorTimerSyncerPrefab: {fileID: 8101394185846558530, guid: 4f574721fb3b8e44ba5e674bfd54bf0a, type: 3}
 --- !u!114 &427922648950834434
 MonoBehaviour:
   m_ObjectHideFlags: 0

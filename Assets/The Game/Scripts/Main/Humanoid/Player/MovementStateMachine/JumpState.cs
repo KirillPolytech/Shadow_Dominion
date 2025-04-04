@@ -47,6 +47,7 @@ namespace Shadow_Dominion.StateMachine
         public override void Update(InputData inputData)
         {
             Move(inputData);
+            _playerMovement.Rotate(inputData);
 
             _timer = Mathf.Clamp(_timer + Time.deltaTime, 0, _delay + 1);
 

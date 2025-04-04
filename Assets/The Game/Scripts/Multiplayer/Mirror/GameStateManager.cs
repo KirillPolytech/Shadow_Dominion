@@ -2,6 +2,7 @@ using System.Linq;
 using Mirror;
 using Multiplayer.Structs;
 using Shadow_Dominion.StateMachine;
+using The_Game.Scripts.Main;
 using UnityEngine;
 
 namespace Shadow_Dominion
@@ -12,6 +13,8 @@ namespace Shadow_Dominion
         
         private int _deadPlayers;
         private int _currentRound;
+
+        private bool _isSubscribed;
 
         private new void Awake()
         {
@@ -24,7 +27,9 @@ namespace Shadow_Dominion
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += InitializeLevel;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += Subscribe;
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
-            MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel += UpdateLevelListing;
+            
+            MirrorServer.Instance.ActionOnServerSceneChangedWithArg += SubscribeToLevelStateMachine;
+            MirrorServer.Instance.ActionOnServerSceneChangedWithArg += UnSubscribeToLevelStateMachine;
         }
 
         private void OnDestroy()
@@ -35,6 +40,29 @@ namespace Shadow_Dominion
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= Subscribe;
             UnSubscribe();
             MirrorPlayersSyncer.Instance.OnAllPlayersLoadedOnLevel -= UpdateLevelListing;
+            
+            MirrorServer.Instance.ActionOnServerSceneChangedWithArg -= SubscribeToLevelStateMachine;
+            MirrorServer.Instance.ActionOnServerSceneChangedWithArg -= UnSubscribeToLevelStateMachine;
+        }
+
+        private void SubscribeToLevelStateMachine(string sceneName)
+        {
+            if (SceneNamesStorage.GamePlayScene != sceneName)
+                return;
+            
+            MirrorLevelSyncer.Instance.OnUpdate += RpcUpdateLevelState;
+
+            _isSubscribed = true;
+        }
+        
+        private void UnSubscribeToLevelStateMachine(string sceneName)
+        {
+            if (SceneNamesStorage.GamePlayScene == sceneName || !_isSubscribed)
+                return;
+            
+            MirrorLevelSyncer.Instance.OnUpdate -= RpcUpdateLevelState;
+
+            _isSubscribed = false;
         }
 
         #region Server
@@ -42,7 +70,7 @@ namespace Shadow_Dominion
         [Server]
         private void InitializeLevel()
         {
-            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
+            RpcUpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
         }
         
         [Server]
@@ -50,14 +78,14 @@ namespace Shadow_Dominion
         {
             if (++_currentRound >= levelSo.Rounds)
             {
-                UpdateLevelState(new LevelState(typeof(FinishState).ToString()));
+                RpcUpdateLevelState(new LevelState(typeof(FinishState).ToString()));
                 return;
             }
             
             if (++_deadPlayers < MirrorPlayersSyncer.Instance.Players.Length - 1)
                 return;
 
-            UpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
+            RpcUpdateLevelState(new LevelState(typeof(LevelInitializeState).ToString()));
 
             _deadPlayers = 0;
         }
@@ -90,7 +118,7 @@ namespace Shadow_Dominion
         #region Client
 
         [ClientRpc]
-        private void UpdateLevelState(LevelState levelState)
+        private void RpcUpdateLevelState(LevelState levelState)
         {
             MirrorLevelSyncer.Instance.SetState(levelState);
         }

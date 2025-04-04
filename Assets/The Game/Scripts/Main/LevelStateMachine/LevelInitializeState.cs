@@ -1,4 +1,5 @@
-﻿using Shadow_Dominion.Player.StateMachine;
+﻿using Mirror;
+using Shadow_Dominion.Player.StateMachine;
 using UnityEngine;
 using WindowsSystem;
 
@@ -10,11 +11,11 @@ namespace Shadow_Dominion.StateMachine
         private readonly InitializeStateUI _initializeStateUI;
         private readonly LevelStateMachine _levelStateMachine;
         private readonly LevelSO _levelSO;
-        
+
         private float _currentTime;
-        
+
         public LevelInitializeState(
-            WindowsController windowsController, 
+            WindowsController windowsController,
             InitializeStateUI initializeStateUI,
             LevelStateMachine levelStateMachine,
             LevelSO levelSo)
@@ -34,25 +35,34 @@ namespace Shadow_Dominion.StateMachine
         {
             _windowsController.OpenWindow<InitializeWindow>();
             CursorService.SetState(CursorLockMode.Locked);
-            
+
             foreach (var player in Object.FindObjectsByType<Main.MirrorPlayer>(FindObjectsSortMode.None))
             {
                 player.PlayerStateMachine.SetState<InActiveState>();
             }
 
             _currentTime = 0;
-            
+
             _levelStateMachine.OnUpdate += WaitForSeconds;
         }
 
         private void WaitForSeconds()
         {
+            // if (MirrorTimerSyncer.Instance.isClient && !MirrorTimerSyncer.Instance.isServer)
+            // {
+            //     _initializeStateUI.SetWaitText($"Match starts in {MirrorTimerSyncer.Instance.LevelInitializeTimer}");
+            //     return;
+            // }
+
             _currentTime += Time.fixedDeltaTime;
-            _initializeStateUI.SetWaitText($"Match starts in {_levelSO.InitializeWaitTime - (int)_currentTime}");
-            
+
+            MirrorTimerSyncer.Instance.LevelInitializeTimer = _currentTime;
+
+            _initializeStateUI.SetWaitText($"Match starts in {_levelSO.InitializeWaitTime - (int) _currentTime}");
+
             if (_currentTime < _levelSO.InitializeWaitTime)
                 return;
-            
+
             _levelStateMachine.SetState<GameplayState>();
         }
 
